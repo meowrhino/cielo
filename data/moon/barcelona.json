@@ -1,0 +1,7022 @@
+[
+  {
+    "date": "2025-12-28",
+    "phase": 0.29,
+    "phaseName": "cuarto creciente",
+    "illumination": 62,
+    "azimuth": 138,
+    "altitude": 53,
+    "moonrise": "06:48",
+    "moonset": "20:44",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 337,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 356,
+        "altitude": -40,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 14,
+        "altitude": -38,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 31,
+        "altitude": -34,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 46,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 58,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 69,
+        "altitude": -8,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 78,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 88,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 97,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 108,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 121,
+        "altitude": 45,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 138,
+        "altitude": 53,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 162,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 190,
+        "altitude": 60,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 216,
+        "altitude": 56,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 236,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 250,
+        "altitude": 39,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 262,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 272,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 281,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 291,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 302,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 313,
+        "altitude": -20,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2025-12-29",
+    "phase": 0.33,
+    "phaseName": "gibosa creciente",
+    "illumination": 73,
+    "azimuth": 117,
+    "altitude": 51,
+    "moonrise": "07:14",
+    "moonset": "22:02",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 327,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 342,
+        "altitude": -32,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 359,
+        "altitude": -33,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 15,
+        "altitude": -32,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 31,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 44,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 55,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 66,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 75,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 84,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 93,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 104,
+        "altitude": 40,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 117,
+        "altitude": 51,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 135,
+        "altitude": 60,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 162,
+        "altitude": 65,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 196,
+        "altitude": 66,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 225,
+        "altitude": 60,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 244,
+        "altitude": 52,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 258,
+        "altitude": 42,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 268,
+        "altitude": 31,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 278,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 287,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 296,
+        "altitude": 1,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 306,
+        "altitude": -9,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2025-12-30",
+    "phase": 0.36,
+    "phaseName": "gibosa creciente",
+    "illumination": 83,
+    "azimuth": 99,
+    "altitude": 44,
+    "moonrise": "07:47",
+    "moonset": "23:21",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 318,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 331,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 345,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 0,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 15,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 29,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 42,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 53,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 62,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 71,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 80,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 89,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 99,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 111,
+        "altitude": 55,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 130,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 161,
+        "altitude": 71,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 202,
+        "altitude": 71,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 232,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 251,
+        "altitude": 55,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 263,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 273,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 282,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 291,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 300,
+        "altitude": 3,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2025-12-31",
+    "phase": 0.4,
+    "phaseName": "gibosa creciente",
+    "illumination": 91,
+    "azimuth": 85,
+    "altitude": 36,
+    "moonrise": "08:27",
+    "moonset": null,
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 310,
+        "altitude": -5,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 321,
+        "altitude": -13,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 333,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 346,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 1,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 15,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 28,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 40,
+        "altitude": -11,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 50,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 60,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 68,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 76,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 85,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 94,
+        "altitude": 46,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 106,
+        "altitude": 57,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 124,
+        "altitude": 67,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 157,
+        "altitude": 74,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 205,
+        "altitude": 74,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 238,
+        "altitude": 67,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 255,
+        "altitude": 57,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 267,
+        "altitude": 46,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 276,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 285,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 293,
+        "altitude": 15,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-01",
+    "phase": 0.44,
+    "phaseName": "gibosa creciente",
+    "illumination": 96,
+    "azimuth": 74,
+    "altitude": 26,
+    "moonrise": "09:18",
+    "moonset": "00:39",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 302,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 311,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 322,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 334,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 346,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 360,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 13,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 26,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 38,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 48,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 57,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 66,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 74,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 82,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 91,
+        "altitude": 47,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 102,
+        "altitude": 58,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 119,
+        "altitude": 68,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 152,
+        "altitude": 75,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 204,
+        "altitude": 76,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 239,
+        "altitude": 69,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 257,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 268,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 277,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 286,
+        "altitude": 27,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-02",
+    "phase": 0.47,
+    "phaseName": "llena",
+    "illumination": 99,
+    "azimuth": 65,
+    "altitude": 15,
+    "moonrise": "10:20",
+    "moonset": "01:49",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 294,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 302,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 311,
+        "altitude": -1,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 322,
+        "altitude": -9,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 333,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 346,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 359,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 12,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 25,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 37,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 47,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 57,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 65,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 73,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 82,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 90,
+        "altitude": 46,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 101,
+        "altitude": 57,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 118,
+        "altitude": 67,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 149,
+        "altitude": 75,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 200,
+        "altitude": 76,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 237,
+        "altitude": 69,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 255,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 267,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 276,
+        "altitude": 38,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-03",
+    "phase": 0.52,
+    "phaseName": "llena",
+    "illumination": 100,
+    "azimuth": 57,
+    "altitude": 4,
+    "moonrise": "11:32",
+    "moonset": "02:48",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 284,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 292,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 301,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 310,
+        "altitude": -1,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 320,
+        "altitude": -9,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 332,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 345,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 358,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 12,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 25,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 37,
+        "altitude": -11,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 48,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 57,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 66,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 75,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 83,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 93,
+        "altitude": 45,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 104,
+        "altitude": 55,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 121,
+        "altitude": 65,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 151,
+        "altitude": 73,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 197,
+        "altitude": 74,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 232,
+        "altitude": 67,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 251,
+        "altitude": 58,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 263,
+        "altitude": 47,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-04",
+    "phase": 0.55,
+    "phaseName": "gibosa menguante",
+    "illumination": 97,
+    "azimuth": 50,
+    "altitude": -7,
+    "moonrise": "12:48",
+    "moonset": "03:33",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 273,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 282,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 290,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 299,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 308,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 319,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 331,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 344,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 358,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 13,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 26,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 39,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 50,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 60,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 69,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 78,
+        "altitude": 21,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 87,
+        "altitude": 32,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 97,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 110,
+        "altitude": 53,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 128,
+        "altitude": 63,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 157,
+        "altitude": 69,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 196,
+        "altitude": 70,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 227,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 246,
+        "altitude": 55,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-05",
+    "phase": 0.59,
+    "phaseName": "gibosa menguante",
+    "illumination": 93,
+    "azimuth": 43,
+    "altitude": -18,
+    "moonrise": "14:03",
+    "moonset": "04:09",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 259,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 270,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 279,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 287,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 296,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 306,
+        "altitude": -8,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 317,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 330,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 344,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 359,
+        "altitude": -29,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 15,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 29,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 43,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 54,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 64,
+        "altitude": 0,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 74,
+        "altitude": 9,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 83,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 93,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 104,
+        "altitude": 41,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 118,
+        "altitude": 51,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 137,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 165,
+        "altitude": 65,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 197,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 224,
+        "altitude": 58,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-06",
+    "phase": 0.62,
+    "phaseName": "gibosa menguante",
+    "illumination": 86,
+    "azimuth": 35,
+    "altitude": -28,
+    "moonrise": "15:16",
+    "moonset": "04:38",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 242,
+        "altitude": 50,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 255,
+        "altitude": 39,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 266,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 275,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 284,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 294,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 304,
+        "altitude": -13,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 316,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 330,
+        "altitude": -29,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 345,
+        "altitude": -33,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 2,
+        "altitude": -34,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 19,
+        "altitude": -33,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 35,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 48,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 60,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 70,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 80,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 90,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 100,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 112,
+        "altitude": 39,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 127,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 147,
+        "altitude": 56,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 173,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 200,
+        "altitude": 58,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-07",
+    "phase": 0.65,
+    "phaseName": "gibosa menguante",
+    "illumination": 78,
+    "azimuth": 25,
+    "altitude": -38,
+    "moonrise": "16:26",
+    "moonset": "05:02",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 223,
+        "altitude": 52,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 240,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 252,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 263,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 273,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 282,
+        "altitude": 1,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 292,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 303,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 315,
+        "altitude": -29,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 330,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 348,
+        "altitude": -40,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 7,
+        "altitude": -40,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 25,
+        "altitude": -38,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 41,
+        "altitude": -32,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 55,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 67,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 77,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 87,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 97,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 108,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 121,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 136,
+        "altitude": 45,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 156,
+        "altitude": 51,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 180,
+        "altitude": 53,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-08",
+    "phase": 0.69,
+    "phaseName": "gibosa menguante",
+    "illumination": 69,
+    "azimuth": 14,
+    "altitude": -46,
+    "moonrise": "17:32",
+    "moonset": "05:22",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 203,
+        "altitude": 51,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 223,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 238,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 250,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 261,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 270,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 280,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 290,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 301,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 315,
+        "altitude": -36,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 332,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 352,
+        "altitude": -46,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 14,
+        "altitude": -46,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 33,
+        "altitude": -42,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 50,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 63,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 75,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 85,
+        "altitude": -5,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 95,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 105,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 116,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 130,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 146,
+        "altitude": 42,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 165,
+        "altitude": 46,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-09",
+    "phase": 0.72,
+    "phaseName": "cuarto menguante",
+    "illumination": 60,
+    "azimuth": 359,
+    "altitude": -53,
+    "moonrise": "18:36",
+    "moonset": "05:42",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 186,
+        "altitude": 47,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 206,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 223,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 237,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 249,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 259,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 269,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 278,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 289,
+        "altitude": -25,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 301,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 316,
+        "altitude": -44,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 335,
+        "altitude": -50,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 359,
+        "altitude": -53,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 22,
+        "altitude": -51,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 43,
+        "altitude": -46,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 59,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 72,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 83,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 93,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 102,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 113,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 124,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 138,
+        "altitude": 32,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 154,
+        "altitude": 38,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-10",
+    "phase": 0.75,
+    "phaseName": "menguante",
+    "illumination": 50,
+    "azimuth": 340,
+    "altitude": -57,
+    "moonrise": "19:40",
+    "moonset": "06:02",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 172,
+        "altitude": 41,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 191,
+        "altitude": 40,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 209,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 224,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 237,
+        "altitude": 21,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 248,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 258,
+        "altitude": 1,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 267,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 276,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 287,
+        "altitude": -32,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 300,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 317,
+        "altitude": -51,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 340,
+        "altitude": -57,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 7,
+        "altitude": -59,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 33,
+        "altitude": -55,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 53,
+        "altitude": -48,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 68,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 80,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 90,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 100,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 110,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 120,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 132,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 146,
+        "altitude": 29,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-11",
+    "phase": 0.78,
+    "phaseName": "menguante",
+    "illumination": 40,
+    "azimuth": 318,
+    "altitude": -58,
+    "moonrise": "20:43",
+    "moonset": "06:22",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 161,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 178,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 195,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 211,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 225,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 237,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 247,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 256,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 265,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 275,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 286,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 299,
+        "altitude": -49,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 318,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 345,
+        "altitude": -64,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 18,
+        "altitude": -63,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 45,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 63,
+        "altitude": -49,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 77,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 88,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 97,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 107,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 116,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 127,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 139,
+        "altitude": 20,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-12",
+    "phase": 0.81,
+    "phaseName": "menguante",
+    "illumination": 31,
+    "azimuth": 298,
+    "altitude": -56,
+    "moonrise": "21:46",
+    "moonset": "06:46",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 152,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 167,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 183,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 199,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 213,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 225,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 236,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 246,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 255,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 264,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 273,
+        "altitude": -34,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 284,
+        "altitude": -45,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 298,
+        "altitude": -56,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 320,
+        "altitude": -64,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 353,
+        "altitude": -69,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 30,
+        "altitude": -67,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 56,
+        "altitude": -59,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 73,
+        "altitude": -50,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 85,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 94,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 103,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 112,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 122,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 132,
+        "altitude": 10,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-13",
+    "phase": 0.84,
+    "phaseName": "menguante",
+    "illumination": 23,
+    "azimuth": 282,
+    "altitude": -50,
+    "moonrise": "22:49",
+    "moonset": "07:13",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 144,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 157,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 172,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 187,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 201,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 214,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 226,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 236,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 245,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 254,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 262,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 272,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 282,
+        "altitude": -50,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 297,
+        "altitude": -60,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 322,
+        "altitude": -69,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 2,
+        "altitude": -73,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 42,
+        "altitude": -68,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 65,
+        "altitude": -60,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 80,
+        "altitude": -49,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 90,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 100,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 108,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 117,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 126,
+        "altitude": 2,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-14",
+    "phase": 0.87,
+    "phaseName": "menguante",
+    "illumination": 16,
+    "azimuth": 271,
+    "altitude": -43,
+    "moonrise": "23:49",
+    "moonset": "07:47",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 137,
+        "altitude": 9,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 148,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 161,
+        "altitude": 21,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 175,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 189,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 203,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 215,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 226,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 236,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 245,
+        "altitude": -11,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 253,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 262,
+        "altitude": -32,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 271,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 281,
+        "altitude": -54,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 297,
+        "altitude": -64,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 325,
+        "altitude": -72,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 13,
+        "altitude": -75,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 52,
+        "altitude": -69,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 72,
+        "altitude": -59,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 85,
+        "altitude": -49,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 95,
+        "altitude": -38,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 103,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 112,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 120,
+        "altitude": -7,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-15",
+    "phase": 0.9,
+    "phaseName": "menguante",
+    "illumination": 9,
+    "azimuth": 261,
+    "altitude": -35,
+    "moonrise": null,
+    "moonset": "08:29",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 129,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 140,
+        "altitude": 9,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 151,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 164,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 178,
+        "altitude": 21,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 191,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 204,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 216,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 227,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 236,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 245,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 253,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 261,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 270,
+        "altitude": -45,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 281,
+        "altitude": -56,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 298,
+        "altitude": -66,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 329,
+        "altitude": -75,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 22,
+        "altitude": -75,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 58,
+        "altitude": -68,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 76,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 88,
+        "altitude": -48,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 97,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 105,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 114,
+        "altitude": -16,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-16",
+    "phase": 0.93,
+    "phaseName": "menguante",
+    "illumination": 5,
+    "azimuth": 254,
+    "altitude": -25,
+    "moonrise": "00:44",
+    "moonset": "09:19",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 122,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 131,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 142,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 153,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 166,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 180,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 193,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 206,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 218,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 228,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 237,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 246,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 254,
+        "altitude": -25,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 263,
+        "altitude": -36,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 272,
+        "altitude": -47,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 283,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 301,
+        "altitude": -68,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 336,
+        "altitude": -75,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 28,
+        "altitude": -75,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 61,
+        "altitude": -67,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 77,
+        "altitude": -57,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 89,
+        "altitude": -46,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 98,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 106,
+        "altitude": -24,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-17",
+    "phase": 0.96,
+    "phaseName": "nueva",
+    "illumination": 2,
+    "azimuth": 248,
+    "altitude": -16,
+    "moonrise": "01:32",
+    "moonset": "10:17",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 114,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 123,
+        "altitude": -5,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 132,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 143,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 155,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 168,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 182,
+        "altitude": 21,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 195,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 208,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 220,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 230,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 240,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 248,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 257,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 265,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 275,
+        "altitude": -48,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 288,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 308,
+        "altitude": -68,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 344,
+        "altitude": -74,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 31,
+        "altitude": -72,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 60,
+        "altitude": -64,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 77,
+        "altitude": -54,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 88,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 97,
+        "altitude": -32,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-18",
+    "phase": 0.99,
+    "phaseName": "nueva",
+    "illumination": 0,
+    "azimuth": 243,
+    "altitude": -6,
+    "moonrise": "02:12",
+    "moonset": "11:21",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 105,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 114,
+        "altitude": -11,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 123,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 132,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 143,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 156,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 169,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 184,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 198,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 211,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 223,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 233,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 243,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 252,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 261,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 270,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 280,
+        "altitude": -48,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 295,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 317,
+        "altitude": -67,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 353,
+        "altitude": -71,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 33,
+        "altitude": -69,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 58,
+        "altitude": -61,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 74,
+        "altitude": -50,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 86,
+        "altitude": -40,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-19",
+    "phase": 0.03,
+    "phaseName": "nueva",
+    "illumination": 1,
+    "azimuth": 238,
+    "altitude": 5,
+    "moonrise": "02:47",
+    "moonset": "12:29",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 95,
+        "altitude": -29,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 104,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 113,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 122,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 132,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 144,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 157,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 171,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 186,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 201,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 215,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 227,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 238,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 248,
+        "altitude": -5,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 257,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 266,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 276,
+        "altitude": -36,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 288,
+        "altitude": -47,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 303,
+        "altitude": -57,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 327,
+        "altitude": -64,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 1,
+        "altitude": -67,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 33,
+        "altitude": -64,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 56,
+        "altitude": -56,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 72,
+        "altitude": -46,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-20",
+    "phase": 0.06,
+    "phaseName": "creciente",
+    "illumination": 3,
+    "azimuth": 232,
+    "altitude": 15,
+    "moonrise": "03:15",
+    "moonset": "13:38",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 83,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 93,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 102,
+        "altitude": -13,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 111,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 120,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 131,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 144,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 158,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 174,
+        "altitude": 32,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 190,
+        "altitude": 32,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 206,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 220,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 232,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 243,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 253,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 263,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 272,
+        "altitude": -25,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 283,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 296,
+        "altitude": -45,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 313,
+        "altitude": -54,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 337,
+        "altitude": -60,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 7,
+        "altitude": -61,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 34,
+        "altitude": -57,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 54,
+        "altitude": -50,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-21",
+    "phase": 0.09,
+    "phaseName": "creciente",
+    "illumination": 8,
+    "azimuth": 226,
+    "altitude": 26,
+    "moonrise": "03:41",
+    "moonset": "14:49",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 69,
+        "altitude": -40,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 80,
+        "altitude": -29,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 90,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 99,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 109,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 119,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 130,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 144,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 160,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 177,
+        "altitude": 38,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 195,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 212,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 226,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 239,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 250,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 260,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 269,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 280,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 291,
+        "altitude": -33,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 305,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 323,
+        "altitude": -51,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 346,
+        "altitude": -55,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 12,
+        "altitude": -55,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 35,
+        "altitude": -50,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-22",
+    "phase": 0.13,
+    "phaseName": "creciente",
+    "illumination": 15,
+    "azimuth": 219,
+    "altitude": 37,
+    "moonrise": "04:03",
+    "moonset": "15:59",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 52,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 66,
+        "altitude": -33,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 78,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 87,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 97,
+        "altitude": 0,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 106,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 117,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 129,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 144,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 162,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 181,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 201,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 219,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 234,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 246,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 257,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 267,
+        "altitude": 0,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 277,
+        "altitude": -11,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 287,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 299,
+        "altitude": -31,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 314,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 332,
+        "altitude": -46,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 353,
+        "altitude": -49,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 15,
+        "altitude": -48,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-23",
+    "phase": 0.16,
+    "phaseName": "creciente",
+    "illumination": 24,
+    "azimuth": 209,
+    "altitude": 48,
+    "moonrise": "04:26",
+    "moonset": "17:10",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 35,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 51,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 64,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 75,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 85,
+        "altitude": -5,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 94,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 104,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 115,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 128,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 144,
+        "altitude": 45,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 164,
+        "altitude": 50,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 187,
+        "altitude": 51,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 209,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 227,
+        "altitude": 41,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 242,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 254,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 264,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 274,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 284,
+        "altitude": -8,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 295,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 307,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 322,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 339,
+        "altitude": -40,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 358,
+        "altitude": -42,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-24",
+    "phase": 0.2,
+    "phaseName": "creciente",
+    "illumination": 34,
+    "azimuth": 193,
+    "altitude": 57,
+    "moonrise": "04:49",
+    "moonset": "18:24",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 17,
+        "altitude": -41,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 35,
+        "altitude": -36,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 49,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 61,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 72,
+        "altitude": -9,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 82,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 91,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 101,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 112,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 125,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 143,
+        "altitude": 52,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 167,
+        "altitude": 57,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 193,
+        "altitude": 57,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 217,
+        "altitude": 53,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 236,
+        "altitude": 45,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 250,
+        "altitude": 36,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 261,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 271,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 281,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 291,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 302,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 314,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 328,
+        "altitude": -30,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 344,
+        "altitude": -35,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-25",
+    "phase": 0.24,
+    "phaseName": "creciente",
+    "illumination": 46,
+    "azimuth": 169,
+    "altitude": 64,
+    "moonrise": "05:14",
+    "moonset": "19:41",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 1,
+        "altitude": -36,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 19,
+        "altitude": -34,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 34,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 47,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 59,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 69,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 78,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 87,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 97,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 108,
+        "altitude": 40,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 122,
+        "altitude": 50,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 141,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 169,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 200,
+        "altitude": 63,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 226,
+        "altitude": 57,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 244,
+        "altitude": 49,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 257,
+        "altitude": 38,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 268,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 278,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 287,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 296,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 307,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 319,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 332,
+        "altitude": -25,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-26",
+    "phase": 0.27,
+    "phaseName": "cuarto creciente",
+    "illumination": 57,
+    "azimuth": 138,
+    "altitude": 64,
+    "moonrise": "05:45",
+    "moonset": "21:01",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 347,
+        "altitude": -29,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 3,
+        "altitude": -30,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 19,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 33,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 45,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 56,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 66,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 7,
+        "azimuth": 75,
+        "altitude": 13,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 83,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 93,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 103,
+        "altitude": 45,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 117,
+        "altitude": 55,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 138,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 170,
+        "altitude": 69,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 207,
+        "altitude": 68,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 234,
+        "altitude": 61,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 251,
+        "altitude": 51,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 264,
+        "altitude": 41,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 274,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 283,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 291,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 301,
+        "altitude": 0,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 311,
+        "altitude": -8,
+        "isVisible": false
+      },
+      {
+        "hour": 23,
+        "azimuth": 322,
+        "altitude": -16,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-27",
+    "phase": 0.31,
+    "phaseName": "gibosa creciente",
+    "illumination": 69,
+    "azimuth": 111,
+    "altitude": 59,
+    "moonrise": "06:21",
+    "moonset": "22:19",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 335,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 349,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 4,
+        "altitude": -25,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 18,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 31,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 43,
+        "altitude": -11,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 53,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 63,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 8,
+        "azimuth": 71,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 80,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 88,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 98,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 111,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 132,
+        "altitude": 68,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 168,
+        "altitude": 74,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 213,
+        "altitude": 72,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 241,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 257,
+        "altitude": 54,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 268,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 277,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 286,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 294,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 303,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 313,
+        "altitude": -5,
+        "isVisible": false
+      }
+    ]
+  },
+  {
+    "date": "2026-01-28",
+    "phase": 0.35,
+    "phaseName": "gibosa creciente",
+    "illumination": 79,
+    "azimuth": 94,
+    "altitude": 49,
+    "moonrise": "07:07",
+    "moonset": "23:33",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 324,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 336,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 349,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 3,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 17,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 29,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 41,
+        "altitude": -9,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 51,
+        "altitude": -1,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 60,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 9,
+        "azimuth": 69,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 77,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 85,
+        "altitude": 38,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 94,
+        "altitude": 49,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 107,
+        "altitude": 60,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 126,
+        "altitude": 70,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 164,
+        "altitude": 76,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 215,
+        "altitude": 74,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 244,
+        "altitude": 66,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 259,
+        "altitude": 56,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 270,
+        "altitude": 45,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 279,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 287,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 295,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 304,
+        "altitude": 5,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-29",
+    "phase": 0.39,
+    "phaseName": "gibosa creciente",
+    "illumination": 88,
+    "azimuth": 83,
+    "altitude": 38,
+    "moonrise": "08:05",
+    "moonset": null,
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 314,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 1,
+        "azimuth": 324,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 336,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 349,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 2,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 16,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 28,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 39,
+        "altitude": -8,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 50,
+        "altitude": -1,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 59,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 10,
+        "azimuth": 67,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 75,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 83,
+        "altitude": 38,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 93,
+        "altitude": 49,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 104,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 123,
+        "altitude": 69,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 160,
+        "altitude": 76,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 212,
+        "altitude": 75,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 243,
+        "altitude": 67,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 259,
+        "altitude": 57,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 270,
+        "altitude": 46,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 279,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 287,
+        "altitude": 25,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 295,
+        "altitude": 15,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-30",
+    "phase": 0.42,
+    "phaseName": "gibosa creciente",
+    "illumination": 94,
+    "azimuth": 76,
+    "altitude": 26,
+    "moonrise": "09:14",
+    "moonset": "00:36",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 303,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 313,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 2,
+        "azimuth": 323,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 335,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 348,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 1,
+        "altitude": -20,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 15,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 27,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 39,
+        "altitude": -9,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 49,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 59,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 11,
+        "azimuth": 67,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 76,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 84,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 94,
+        "altitude": 47,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 106,
+        "altitude": 58,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 124,
+        "altitude": 68,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 159,
+        "altitude": 75,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 207,
+        "altitude": 74,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 239,
+        "altitude": 66,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 256,
+        "altitude": 56,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 267,
+        "altitude": 46,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 276,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 285,
+        "altitude": 24,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-01-31",
+    "phase": 0.46,
+    "phaseName": "llena",
+    "illumination": 98,
+    "azimuth": 70,
+    "altitude": 14,
+    "moonrise": "10:29",
+    "moonset": "01:27",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 293,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 302,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 311,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 3,
+        "azimuth": 322,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 334,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 347,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 1,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 15,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 28,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 40,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 51,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 61,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 12,
+        "azimuth": 70,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 78,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 87,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 97,
+        "altitude": 46,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 110,
+        "altitude": 56,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 130,
+        "altitude": 65,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 162,
+        "altitude": 71,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 204,
+        "altitude": 71,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 233,
+        "altitude": 64,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 251,
+        "altitude": 54,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 263,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 273,
+        "altitude": 32,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-01",
+    "phase": 0.49,
+    "phaseName": "llena",
+    "illumination": 100,
+    "azimuth": 64,
+    "altitude": 2,
+    "moonrise": "11:46",
+    "moonset": "02:07",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 282,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 290,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 299,
+        "altitude": 1,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 309,
+        "altitude": -8,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 320,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 333,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 347,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 2,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 17,
+        "altitude": -25,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 31,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 43,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 55,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 64,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 13,
+        "azimuth": 74,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 83,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 92,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 103,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 118,
+        "altitude": 54,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 138,
+        "altitude": 62,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 168,
+        "altitude": 67,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 203,
+        "altitude": 66,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 229,
+        "altitude": 59,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 247,
+        "altitude": 50,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 259,
+        "altitude": 39,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-02",
+    "phase": 0.53,
+    "phaseName": "llena",
+    "illumination": 99,
+    "azimuth": 60,
+    "altitude": -10,
+    "moonrise": "12:59",
+    "moonset": "02:39",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 269,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 278,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 287,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 297,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 4,
+        "azimuth": 307,
+        "altitude": -13,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 319,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 332,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 348,
+        "altitude": -31,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 4,
+        "altitude": -32,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 20,
+        "altitude": -30,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 35,
+        "altitude": -25,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 48,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 60,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 70,
+        "altitude": 0,
+        "isVisible": true
+      },
+      {
+        "hour": 14,
+        "azimuth": 79,
+        "altitude": 10,
+        "isVisible": true
+      },
+      {
+        "hour": 15,
+        "azimuth": 89,
+        "altitude": 21,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 99,
+        "altitude": 31,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 111,
+        "altitude": 42,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 126,
+        "altitude": 51,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 148,
+        "altitude": 58,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 175,
+        "altitude": 62,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 204,
+        "altitude": 60,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 227,
+        "altitude": 53,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 243,
+        "altitude": 44,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-03",
+    "phase": 0.57,
+    "phaseName": "gibosa menguante",
+    "illumination": 96,
+    "azimuth": 55,
+    "altitude": -21,
+    "moonrise": "14:11",
+    "moonset": "03:04",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 256,
+        "altitude": 33,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 266,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 275,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 285,
+        "altitude": 1,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 294,
+        "altitude": -9,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 305,
+        "altitude": -19,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 318,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 333,
+        "altitude": -34,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 350,
+        "altitude": -38,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 8,
+        "altitude": -38,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 26,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 41,
+        "altitude": -29,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 55,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 66,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 76,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 86,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 16,
+        "azimuth": 96,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 107,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 120,
+        "altitude": 39,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 136,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 157,
+        "altitude": 54,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 182,
+        "altitude": 55,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 206,
+        "altitude": 52,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 226,
+        "altitude": 46,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-04",
+    "phase": 0.6,
+    "phaseName": "gibosa menguante",
+    "illumination": 90,
+    "azimuth": 49,
+    "altitude": -32,
+    "moonrise": "15:18",
+    "moonset": "03:26",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 241,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 253,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 263,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 273,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 282,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 293,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 304,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 318,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 335,
+        "altitude": -41,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 354,
+        "altitude": -44,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 15,
+        "altitude": -44,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 33,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 49,
+        "altitude": -32,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 62,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 74,
+        "altitude": -14,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 84,
+        "altitude": -3,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 94,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 17,
+        "azimuth": 104,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 115,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 129,
+        "altitude": 37,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 146,
+        "altitude": 44,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 166,
+        "altitude": 48,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 188,
+        "altitude": 49,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 209,
+        "altitude": 45,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-05",
+    "phase": 0.63,
+    "phaseName": "gibosa menguante",
+    "illumination": 84,
+    "azimuth": 42,
+    "altitude": -43,
+    "moonrise": "16:24",
+    "moonset": "03:46",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 226,
+        "altitude": 38,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 240,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 251,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 261,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 271,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 5,
+        "azimuth": 281,
+        "altitude": -13,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 291,
+        "altitude": -24,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 303,
+        "altitude": -34,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 319,
+        "altitude": -42,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 338,
+        "altitude": -48,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 0,
+        "altitude": -51,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 23,
+        "altitude": -49,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 42,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 58,
+        "altitude": -35,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 71,
+        "altitude": -25,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 82,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 92,
+        "altitude": -4,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 101,
+        "altitude": 6,
+        "isVisible": true
+      },
+      {
+        "hour": 18,
+        "azimuth": 112,
+        "altitude": 16,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 124,
+        "altitude": 26,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 138,
+        "altitude": 34,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 154,
+        "altitude": 40,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 173,
+        "altitude": 43,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 193,
+        "altitude": 42,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-06",
+    "phase": 0.66,
+    "phaseName": "gibosa menguante",
+    "illumination": 76,
+    "azimuth": 33,
+    "altitude": -53,
+    "moonrise": "17:28",
+    "moonset": "04:06",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 211,
+        "altitude": 38,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 226,
+        "altitude": 31,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 239,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 250,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 260,
+        "altitude": 1,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 269,
+        "altitude": -10,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 279,
+        "altitude": -21,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 290,
+        "altitude": -31,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 303,
+        "altitude": -41,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 320,
+        "altitude": -50,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 342,
+        "altitude": -56,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 8,
+        "altitude": -57,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 33,
+        "altitude": -53,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 52,
+        "altitude": -46,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 67,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 79,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 89,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 99,
+        "altitude": -5,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 109,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 19,
+        "azimuth": 119,
+        "altitude": 15,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 132,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 146,
+        "altitude": 31,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 162,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 179,
+        "altitude": 37,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-07",
+    "phase": 0.7,
+    "phaseName": "gibosa menguante",
+    "illumination": 67,
+    "azimuth": 19,
+    "altitude": -61,
+    "moonrise": "18:32",
+    "moonset": "04:26",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 197,
+        "altitude": 35,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 213,
+        "altitude": 30,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 227,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 238,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 249,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 258,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 267,
+        "altitude": -17,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 277,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 288,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 302,
+        "altitude": -49,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 321,
+        "altitude": -57,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 348,
+        "altitude": -62,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 19,
+        "altitude": -61,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 44,
+        "altitude": -56,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 62,
+        "altitude": -47,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 76,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 87,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 97,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 106,
+        "altitude": -5,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 116,
+        "altitude": 5,
+        "isVisible": true
+      },
+      {
+        "hour": 20,
+        "azimuth": 126,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 139,
+        "altitude": 21,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 152,
+        "altitude": 28,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 168,
+        "altitude": 31,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-08",
+    "phase": 0.73,
+    "phaseName": "cuarto menguante",
+    "illumination": 58,
+    "azimuth": 356,
+    "altitude": -67,
+    "moonrise": "19:36",
+    "moonset": "04:49",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 184,
+        "altitude": 32,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 200,
+        "altitude": 29,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 214,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 227,
+        "altitude": 17,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 238,
+        "altitude": 8,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 248,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 6,
+        "azimuth": 257,
+        "altitude": -12,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 266,
+        "altitude": -23,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 275,
+        "altitude": -34,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 287,
+        "altitude": -45,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 301,
+        "altitude": -55,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 324,
+        "altitude": -63,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 356,
+        "altitude": -67,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 31,
+        "altitude": -65,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 55,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 72,
+        "altitude": -48,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 84,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 94,
+        "altitude": -27,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 103,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 112,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 122,
+        "altitude": 4,
+        "isVisible": true
+      },
+      {
+        "hour": 21,
+        "azimuth": 132,
+        "altitude": 12,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 144,
+        "altitude": 19,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 158,
+        "altitude": 24,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-09",
+    "phase": 0.76,
+    "phaseName": "menguante",
+    "illumination": 48,
+    "azimuth": 326,
+    "altitude": -68,
+    "moonrise": "20:39",
+    "moonset": "05:14",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 173,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 188,
+        "altitude": 27,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 202,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 216,
+        "altitude": 18,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 227,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 238,
+        "altitude": 2,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 247,
+        "altitude": -7,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 256,
+        "altitude": -18,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 264,
+        "altitude": -28,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 274,
+        "altitude": -39,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 285,
+        "altitude": -50,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 301,
+        "altitude": -60,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 326,
+        "altitude": -68,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 6,
+        "altitude": -71,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 43,
+        "altitude": -67,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 65,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 79,
+        "altitude": -48,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 90,
+        "altitude": -37,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 99,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 108,
+        "altitude": -16,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 117,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 126,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 22,
+        "azimuth": 137,
+        "altitude": 11,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 149,
+        "altitude": 17,
+        "isVisible": true
+      }
+    ]
+  },
+  {
+    "date": "2026-02-10",
+    "phase": 0.79,
+    "phaseName": "menguante",
+    "illumination": 39,
+    "azimuth": 300,
+    "altitude": -64,
+    "moonrise": "21:40",
+    "moonset": "05:46",
+    "hourlyData": [
+      {
+        "hour": 0,
+        "azimuth": 162,
+        "altitude": 22,
+        "isVisible": true
+      },
+      {
+        "hour": 1,
+        "azimuth": 176,
+        "altitude": 24,
+        "isVisible": true
+      },
+      {
+        "hour": 2,
+        "azimuth": 191,
+        "altitude": 23,
+        "isVisible": true
+      },
+      {
+        "hour": 3,
+        "azimuth": 204,
+        "altitude": 20,
+        "isVisible": true
+      },
+      {
+        "hour": 4,
+        "azimuth": 217,
+        "altitude": 14,
+        "isVisible": true
+      },
+      {
+        "hour": 5,
+        "azimuth": 228,
+        "altitude": 7,
+        "isVisible": true
+      },
+      {
+        "hour": 6,
+        "azimuth": 237,
+        "altitude": -2,
+        "isVisible": false
+      },
+      {
+        "hour": 7,
+        "azimuth": 246,
+        "altitude": -11,
+        "isVisible": false
+      },
+      {
+        "hour": 8,
+        "azimuth": 255,
+        "altitude": -22,
+        "isVisible": false
+      },
+      {
+        "hour": 9,
+        "azimuth": 263,
+        "altitude": -33,
+        "isVisible": false
+      },
+      {
+        "hour": 10,
+        "azimuth": 272,
+        "altitude": -43,
+        "isVisible": false
+      },
+      {
+        "hour": 11,
+        "azimuth": 284,
+        "altitude": -54,
+        "isVisible": false
+      },
+      {
+        "hour": 12,
+        "azimuth": 300,
+        "altitude": -64,
+        "isVisible": false
+      },
+      {
+        "hour": 13,
+        "azimuth": 330,
+        "altitude": -72,
+        "isVisible": false
+      },
+      {
+        "hour": 14,
+        "azimuth": 17,
+        "altitude": -74,
+        "isVisible": false
+      },
+      {
+        "hour": 15,
+        "azimuth": 53,
+        "altitude": -68,
+        "isVisible": false
+      },
+      {
+        "hour": 16,
+        "azimuth": 73,
+        "altitude": -58,
+        "isVisible": false
+      },
+      {
+        "hour": 17,
+        "azimuth": 85,
+        "altitude": -47,
+        "isVisible": false
+      },
+      {
+        "hour": 18,
+        "azimuth": 95,
+        "altitude": -36,
+        "isVisible": false
+      },
+      {
+        "hour": 19,
+        "azimuth": 103,
+        "altitude": -26,
+        "isVisible": false
+      },
+      {
+        "hour": 20,
+        "azimuth": 112,
+        "altitude": -15,
+        "isVisible": false
+      },
+      {
+        "hour": 21,
+        "azimuth": 121,
+        "altitude": -6,
+        "isVisible": false
+      },
+      {
+        "hour": 22,
+        "azimuth": 130,
+        "altitude": 3,
+        "isVisible": true
+      },
+      {
+        "hour": 23,
+        "azimuth": 141,
+        "altitude": 10,
+        "isVisible": true
+      }
+    ]
+  }
+]

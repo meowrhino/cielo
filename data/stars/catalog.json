@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Sirius",
+    "ra": 6.75,
+    "dec": -16.72,
+    "mag": -1.46
+  },
+  {
+    "name": "Arcturus",
+    "ra": 14.26,
+    "dec": 19.18,
+    "mag": -0.05
+  },
+  {
+    "name": "Vega",
+    "ra": 18.62,
+    "dec": 38.78,
+    "mag": 0.03
+  },
+  {
+    "name": "Capella",
+    "ra": 5.28,
+    "dec": 45.99,
+    "mag": 0.08
+  },
+  {
+    "name": "Rigel",
+    "ra": 5.24,
+    "dec": -8.2,
+    "mag": 0.18
+  },
+  {
+    "name": "Procyon",
+    "ra": 7.66,
+    "dec": 5.22,
+    "mag": 0.4
+  },
+  {
+    "name": "Betelgeuse",
+    "ra": 5.92,
+    "dec": 7.41,
+    "mag": 0.45
+  },
+  {
+    "name": "Altair",
+    "ra": 19.85,
+    "dec": 8.87,
+    "mag": 0.76
+  },
+  {
+    "name": "Aldebaran",
+    "ra": 4.6,
+    "dec": 16.51,
+    "mag": 0.87
+  },
+  {
+    "name": "Spica",
+    "ra": 13.42,
+    "dec": -11.16,
+    "mag": 0.98
+  },
+  {
+    "name": "Antares",
+    "ra": 16.49,
+    "dec": -26.43,
+    "mag": 1.06
+  },
+  {
+    "name": "Pollux",
+    "ra": 7.76,
+    "dec": 28.03,
+    "mag": 1.16
+  },
+  {
+    "name": "Fomalhaut",
+    "ra": 22.96,
+    "dec": -29.62,
+    "mag": 1.17
+  },
+  {
+    "name": "Deneb",
+    "ra": 20.69,
+    "dec": 45.28,
+    "mag": 1.25
+  },
+  {
+    "name": "Regulus",
+    "ra": 10.14,
+    "dec": 11.97,
+    "mag": 1.36
+  }
+]

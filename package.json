@@ -1,0 +1,15 @@
+{
+  "name": "cielo",
+  "version": "1.0.0",
+  "description": "Visualización astronómica minimalista desde Barcelona con ASCII",
+  "type": "module",
+  "scripts": {
+    "generate-data": "node scripts/generate-astronomical-data.js"
+  },
+  "keywords": ["astronomy", "barcelona", "ascii", "minimal"],
+  "author": "meowrhino.studio",
+  "license": "MIT",
+  "dependencies": {
+    "suncalc": "^1.9.0"
+  }
+}
