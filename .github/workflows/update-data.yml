@@ -36,6 +36,7 @@ jobs:
         env:
           DAYS_TO_GENERATE: ${{ github.event.inputs.days }}
           START_DATE: ${{ github.event.inputs.start_date }}
+          STAR_CATALOG_SOURCE: bsc
         
       - name: Configure Git
         run: |

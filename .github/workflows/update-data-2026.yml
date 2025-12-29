@@ -27,6 +27,7 @@ jobs:
         env:
           START_DATE: '2026-02-01'
           DAYS_TO_GENERATE: '365'
+          STAR_CATALOG_SOURCE: bsc
         
       - name: Configure Git
         run: |

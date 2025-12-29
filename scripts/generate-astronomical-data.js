@@ -7,6 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const DEFAULT_DAYS = 45;
+const DEFAULT_STAR_CATALOG_SOURCE = 'builtin';
+const DEFAULT_BSC_URLS = [
+  'https://cdsarc.u-strasbg.fr/ftp/cats/V/50/catalog',
+  'https://cdsarc.cds.unistra.fr/ftp/cats/V/50/catalog'
+];
 
 function parsePositiveInt(value, fallback) {
   const parsed = Number.parseInt(value, 10);
@@ -22,6 +27,95 @@ function parseStartDate(value) {
   const day = Number(match[3]);
   if (!year || !month || !day) return null;
   return new Date(year, month - 1, day);
+}
+
+function getStarCatalogSource() {
+  const raw = (process.env.STAR_CATALOG_SOURCE || DEFAULT_STAR_CATALOG_SOURCE).toLowerCase();
+  if (raw === 'bsc' || raw === 'yale' || raw === 'bright') return 'bsc';
+  return 'builtin';
+}
+
+function parseBscLine(line) {
+  if (!line || line.length < 110) return null;
+
+  // Columnas según formato fijo del BSC v5 (catalog).
+  const hr = Number.parseInt(line.slice(0, 4), 10);
+  const name = line.slice(4, 14).trim();
+  const raH = Number.parseInt(line.slice(75, 77), 10);
+  const raM = Number.parseInt(line.slice(77, 79), 10);
+  const raS = Number.parseFloat(line.slice(79, 83));
+  const decSign = line.slice(83, 84);
+  const decD = Number.parseInt(line.slice(84, 86), 10);
+  const decM = Number.parseInt(line.slice(86, 88), 10);
+  const decS = Number.parseFloat(line.slice(88, 90));
+  const mag = Number.parseFloat(line.slice(102, 107));
+
+  if (!Number.isFinite(raH) || !Number.isFinite(raM) || !Number.isFinite(raS)) return null;
+  if (!Number.isFinite(decD) || !Number.isFinite(decM) || !Number.isFinite(decS)) return null;
+  if (!Number.isFinite(mag)) return null;
+
+  const ra = raH + raM / 60 + raS / 3600;
+  const decAbs = decD + decM / 60 + decS / 3600;
+  const dec = decSign === '-' ? -decAbs : decAbs;
+
+  return {
+    name: name || `HR ${Number.isFinite(hr) ? hr : ''}`.trim(),
+    ra,
+    dec,
+    mag
+  };
+}
+
+async function downloadBscCatalog(filePath, urls) {
+  let lastError = null;
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`No se pudo descargar BSC (${response.status} ${response.statusText})`);
+      }
+      const text = await response.text();
+      fs.writeFileSync(filePath, text);
+      return;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error('No se pudo descargar BSC');
+}
+
+async function generateStarCatalogFromBsc() {
+  const dataDir = path.join(__dirname, '..', 'data');
+  const starsDir = path.join(dataDir, 'stars');
+  const bscPath = process.env.BSC_PATH || path.join(starsDir, 'bsc5.dat');
+  const bscUrls = process.env.BSC_URL ? [process.env.BSC_URL] : DEFAULT_BSC_URLS;
+
+  if (!fs.existsSync(starsDir)) {
+    fs.mkdirSync(starsDir, { recursive: true });
+  }
+
+  if (!fs.existsSync(bscPath)) {
+    console.log('Descargando Yale Bright Star Catalog...');
+    await downloadBscCatalog(bscPath, bscUrls);
+  }
+
+  const raw = fs.readFileSync(bscPath, 'utf8');
+  const lines = raw.split(/\r?\n/);
+  const catalog = [];
+
+  for (const line of lines) {
+    if (!line || line.startsWith('#')) continue;
+    const star = parseBscLine(line);
+    if (star) catalog.push(star);
+  }
+
+  if (catalog.length < 1000) {
+    throw new Error(`El catálogo BSC parece incompleto (${catalog.length} estrellas parseadas)`);
+  }
+
+  return catalog;
 }
 
 // Configuración de Barcelona
@@ -174,7 +268,7 @@ function generateMoonHourlyData(date, location) {
 /**
  * Genera catálogo de estrellas brillantes (simplificado)
  */
-function generateStarCatalog() {
+function generateStarCatalogBuiltin() {
   // Estrellas más brillantes visibles desde Barcelona
   // Coordenadas en ascensión recta (horas) y declinación (grados)
   return [
@@ -196,6 +290,14 @@ function generateStarCatalog() {
   ];
 }
 
+async function generateStarCatalog() {
+  const source = getStarCatalogSource();
+  if (source === 'bsc') {
+    return generateStarCatalogFromBsc();
+  }
+  return generateStarCatalogBuiltin();
+}
+
 /**
  * Función principal
  */
@@ -215,7 +317,7 @@ async function main() {
   
   // Generar catálogo de estrellas
   console.log('Generando catálogo de estrellas...');
-  const starCatalog = generateStarCatalog();
+  const starCatalog = await generateStarCatalog();
   
   // Crear directorios si no existen
   const dataDir = path.join(__dirname, '..', 'data');

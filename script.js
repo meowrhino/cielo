@@ -43,6 +43,7 @@ let starCatalog = null;
 let currentTime = new Date();
 const DEBUG_TIME = new Date(2025, 11, 28, 8, 4, 0); // new Date(2025, 11, 28, 8, 4, 0)
 const DEFAULT_SUN_RANGE_DEG = 90;
+const DEFAULT_STAR_MAG_LIMIT = 6;
 let debugReadout = null;
 let sunDataAll = null;
 let moonDataAll = null;
@@ -50,6 +51,10 @@ let currentDateKey = null;
 
 if (globalThis.CIELO_SUN_RANGE_DEG == null) {
   globalThis.CIELO_SUN_RANGE_DEG = DEFAULT_SUN_RANGE_DEG;
+}
+
+if (globalThis.CIELO_STAR_MAG_LIMIT == null) {
+  globalThis.CIELO_STAR_MAG_LIMIT = DEFAULT_STAR_MAG_LIMIT;
 }
 
 function getNow() {
@@ -75,6 +80,11 @@ function formatDebugTime(date) {
 function setSunRangeDeg(value) {
   if (!Number.isFinite(value) || value <= 0) return;
   globalThis.CIELO_SUN_RANGE_DEG = value;
+}
+
+function setStarMagLimit(value) {
+  if (!Number.isFinite(value)) return;
+  globalThis.CIELO_STAR_MAG_LIMIT = value;
 }
 
 function setDebugDate(dateString) {
@@ -119,6 +129,7 @@ function updateDebugReadout() {
   }
 
   parts.push(`range ${globalThis.CIELO_SUN_RANGE_DEG}deg`);
+  parts.push(`mag ${globalThis.CIELO_STAR_MAG_LIMIT}`);
   debugReadout.textContent = parts.join(' | ');
 }
 
@@ -175,6 +186,11 @@ function setupDebugControls() {
       <input id="debug-range" type="range" min="15" max="90" step="1" style="width: 100%;">
       <span id="debug-range-value"></span>
     </label>
+    <label style="display: block; margin-bottom: 6px;">
+      mag
+      <input id="debug-mag" type="range" min="-1" max="8" step="0.1" style="width: 100%;">
+      <span id="debug-mag-value"></span>
+    </label>
     <div id="debug-readout" style="margin-top: 6px; line-height: 1.4;"></div>
   `;
 
@@ -184,23 +200,28 @@ function setupDebugControls() {
   const minuteInput = container.querySelector("#debug-minute");
   const dateInput = container.querySelector("#debug-date");
   const rangeInput = container.querySelector("#debug-range");
+  const magInput = container.querySelector("#debug-mag");
   const hourValue = container.querySelector("#debug-hour-value");
   const minuteValue = container.querySelector("#debug-minute-value");
   const rangeValue = container.querySelector("#debug-range-value");
+  const magValue = container.querySelector("#debug-mag-value");
   debugReadout = container.querySelector("#debug-readout");
 
   const apply = () => {
     const hours = Number(hourInput.value);
     const minutes = Number(minuteInput.value);
     const range = Number(rangeInput.value);
+    const mag = Number(magInput.value);
     const dateValue = dateInput.value || formatDebugDate(DEBUG_TIME);
 
     setDebugDate(dateValue);
     setDebugTime(hours, minutes);
     setSunRangeDeg(range);
+    setStarMagLimit(mag);
     hourValue.textContent = pad2(hours);
     minuteValue.textContent = pad2(minutes);
     rangeValue.textContent = `${range}deg`;
+    magValue.textContent = mag.toFixed(1);
     actualizarTiempo();
     renderizarPanelActual();
     updateDebugReadout();
@@ -217,6 +238,7 @@ function setupDebugControls() {
   hourInput.value = DEBUG_TIME.getHours();
   minuteInput.value = DEBUG_TIME.getMinutes();
   rangeInput.value = globalThis.CIELO_SUN_RANGE_DEG;
+  magInput.value = globalThis.CIELO_STAR_MAG_LIMIT;
   dateInput.value = clampedDate;
   if (dateRange) {
     dateInput.min = dateRange.min;
@@ -226,6 +248,7 @@ function setupDebugControls() {
   minuteInput.addEventListener("input", apply);
   dateInput.addEventListener("input", apply);
   rangeInput.addEventListener("input", apply);
+  magInput.addEventListener("input", apply);
 
   apply();
 }

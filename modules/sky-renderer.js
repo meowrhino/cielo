@@ -2,6 +2,11 @@
  * Módulo de renderizado ASCII de cielos nocturnos
  */
 
+function getStarMagLimit() {
+  const value = Number(globalThis.CIELO_STAR_MAG_LIMIT);
+  return Number.isFinite(value) ? value : null;
+}
+
 /**
  * Renderiza el cielo nocturno de Barcelona (panel Norte)
  */
@@ -33,6 +38,7 @@ function renderNightSky(starCatalog, currentTime, lat, lon, locationName) {
   const width = 50;
   const height = 20;
   const canvas = createEmptyCanvas(width, height);
+  const magLimit = getStarMagLimit();
   
   // Calcular hora sidérea local
   const lst = calculateLocalSiderealTime(currentTime, lon);
@@ -40,6 +46,7 @@ function renderNightSky(starCatalog, currentTime, lat, lon, locationName) {
   // Filtrar y proyectar estrellas visibles
   const visibleStars = [];
   for (const star of starCatalog) {
+    if (magLimit !== null && star.mag > magLimit) continue;
     const pos = calculateStarPosition(star, lst, lat);
     if (pos.altitude > 0) { // Solo estrellas sobre el horizonte
       visibleStars.push({ ...star, ...pos });
