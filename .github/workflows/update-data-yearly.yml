@@ -1,9 +1,13 @@
-name: Update Astronomical Data Feb 2026-2027
+name: Update Astronomical Data (Yearly)
+
+# Este workflow genera datos astronómicos para 432 días (14 meses)
+# Se ejecuta automáticamente el 28 de febrero de cada año a las 00:00 UTC
+# También puede ejecutarse manualmente
 
 on:
   schedule:
-    # Ejecutar el 28 de febrero a las 15:50 UTC
-    - cron: '50 15 28 2 *'
+    # Ejecutar el 28 de febrero a las 00:00 UTC
+    - cron: '0 0 28 2 *'
   workflow_dispatch: # Permitir ejecución manual
 
 jobs:
@@ -22,12 +26,8 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Generate astronomical data (Feb 2026 to Feb 2027)
-        run: npm run generate-data
-        env:
-          START_DATE: '2026-02-01'
-          DAYS_TO_GENERATE: '365'
-          STAR_CATALOG_SOURCE: bsc
+      - name: Generate astronomical data (432 days)
+        run: DAYS=432 npm run generate-data
         
       - name: Configure Git
         run: |
@@ -36,5 +36,5 @@ jobs:
           
       - name: Commit and push changes
         run: |
-          git add data/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update astronomical data for Feb 2026 to Feb 2027" && git push)
+          git add data/sun/ data/moon/ data/metadata.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update astronomical data (yearly - 432 days)" && git push)

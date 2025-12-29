@@ -1,0 +1,37 @@
+name: Update Star Catalog
+
+# Este workflow regenera el catálogo de estrellas desde el Yale BSC
+# Solo se ejecuta manualmente (workflow_dispatch)
+# El catálogo NO necesita actualizarse regularmente (estrellas no cambian)
+
+on:
+  workflow_dispatch: # Ejecución manual únicamente
+
+jobs:
+  update-catalog:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Generate star catalog
+        run: node scripts/process-yale-catalog.js
+        
+      - name: Configure Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+      - name: Commit and push changes
+        run: |
+          git add data/stars/catalog.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update star catalog" && git push)
