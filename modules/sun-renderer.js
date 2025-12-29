@@ -2,11 +2,16 @@
  * Módulo de renderizado ASCII del sol
  */
 
+function getSunRangeDeg() {
+  const value = Number(globalThis.CIELO_SUN_RANGE_DEG);
+  return Number.isFinite(value) && value > 0 ? value : 30;
+}
+
 /**
  * Renderiza la trayectoria del sol desde salida hasta mediodía (panel Este)
  */
 export function renderSunEast(sunData, currentTime) {
-  if (!sunData) return '';
+  if (!sunData) return null;
   
   const sunrise = parseTime(sunData.sunrise);
   const solarNoon = parseTime(sunData.solarNoon);
@@ -41,19 +46,19 @@ export function renderSunEast(sunData, currentTime) {
   }
   
   // Añadir información
-  const info = `
-salida: ${sunData.sunrise} (${sunData.azimuthSunrise}°)
-mediodía: ${sunData.solarNoon} (${sunData.azimuthNoon}°)
-  `;
+  const info = [
+    `salida: ${sunData.sunrise} (${sunData.azimuthSunrise}°)`,
+    `mediodía: ${sunData.solarNoon} (${sunData.azimuthNoon}°)`
+  ].join('\n');
   
-  return canvasToString(canvas) + '\n' + info;
+  return { art: canvasToString(canvas), info };
 }
 
 /**
  * Renderiza la trayectoria del sol desde mediodía hasta puesta (panel Oeste)
  */
 export function renderSunWest(sunData, currentTime) {
-  if (!sunData) return '';
+  if (!sunData) return null;
   
   const solarNoon = parseTime(sunData.solarNoon);
   const sunset = parseTime(sunData.sunset);
@@ -88,12 +93,12 @@ export function renderSunWest(sunData, currentTime) {
   }
   
   // Añadir información
-  const info = `
-mediodía: ${sunData.solarNoon} (${sunData.azimuthNoon}°)
-puesta: ${sunData.sunset} (${sunData.azimuthSunset}°)
-  `;
+  const info = [
+    `mediodía: ${sunData.solarNoon} (${sunData.azimuthNoon}°)`,
+    `puesta: ${sunData.sunset} (${sunData.azimuthSunset}°)`
+  ].join('\n');
   
-  return canvasToString(canvas) + '\n' + info;
+  return { art: canvasToString(canvas), info };
 }
 
 /**
@@ -145,6 +150,8 @@ function drawWestMarker(canvas, width, height) {
  */
 function drawSunPath(canvas, width, height, sunrise, solarNoon, sunData) {
   const horizonY = Math.floor(height * 0.7);
+  const rangeDeg = getSunRangeDeg();
+  const halfSpan = (width - 1) / 2;
   
   // Obtener datos de salida y mediodía
   const sunriseData = sunData.hourlyData.find(h => h.hour === Math.floor(sunrise));
@@ -164,7 +171,7 @@ function drawSunPath(canvas, width, height, sunrise, solarNoon, sunData) {
     const altitude = sunriseData.altitude + (noonData.altitude - sunriseData.altitude) * t;
     
     // Mapear a coordenadas del canvas
-    const x = Math.floor(width / 2 + (deviation / 30) * (width / 4));
+    const x = Math.round(halfSpan + (deviation / rangeDeg) * halfSpan);
     const y = horizonY - Math.floor((altitude / 90) * (horizonY - 2));
     
     if (x >= 0 && x < width && y >= 0 && y < height) {
@@ -178,6 +185,8 @@ function drawSunPath(canvas, width, height, sunrise, solarNoon, sunData) {
  */
 function drawSunPathWest(canvas, width, height, solarNoon, sunset, sunData) {
   const horizonY = Math.floor(height * 0.7);
+  const rangeDeg = getSunRangeDeg();
+  const halfSpan = (width - 1) / 2;
   
   // Obtener datos de mediodía y puesta
   const noonData = sunData.hourlyData.find(h => h.hour === Math.floor(solarNoon));
@@ -197,7 +206,7 @@ function drawSunPathWest(canvas, width, height, solarNoon, sunset, sunData) {
     const altitude = noonData.altitude + (sunsetData.altitude - noonData.altitude) * t;
     
     // Mapear a coordenadas del canvas
-    const x = Math.floor(width / 2 + (deviation / 30) * (width / 4));
+    const x = Math.round(halfSpan + (deviation / rangeDeg) * halfSpan);
     const y = horizonY - Math.floor((altitude / 90) * (horizonY - 2));
     
     if (x >= 0 && x < width && y >= 0 && y < height) {
@@ -211,9 +220,11 @@ function drawSunPathWest(canvas, width, height, solarNoon, sunset, sunData) {
  */
 function drawCurrentSun(canvas, width, height, sunData, sunrise, solarNoon) {
   const horizonY = Math.floor(height * 0.7);
+  const rangeDeg = getSunRangeDeg();
+  const halfSpan = (width - 1) / 2;
   const deviation = sunData.azimuth - 90;
   
-  const x = Math.floor(width / 2 + (deviation / 30) * (width / 4));
+  const x = Math.round(halfSpan + (deviation / rangeDeg) * halfSpan);
   const y = horizonY - Math.floor((sunData.altitude / 90) * (horizonY - 2));
   
   if (x >= 0 && x < width && y >= 0 && y < height) {
@@ -226,9 +237,11 @@ function drawCurrentSun(canvas, width, height, sunData, sunrise, solarNoon) {
  */
 function drawCurrentSunWest(canvas, width, height, sunData, solarNoon, sunset) {
   const horizonY = Math.floor(height * 0.7);
+  const rangeDeg = getSunRangeDeg();
+  const halfSpan = (width - 1) / 2;
   const deviation = 270 - sunData.azimuth;
   
-  const x = Math.floor(width / 2 + (deviation / 30) * (width / 4));
+  const x = Math.round(halfSpan + (deviation / rangeDeg) * halfSpan);
   const y = horizonY - Math.floor((sunData.altitude / 90) * (horizonY - 2));
   
   if (x >= 0 && x < width && y >= 0 && y < height) {

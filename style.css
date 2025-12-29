@@ -113,32 +113,38 @@ h2 {
   color: var(--text-color);
 }
 
+@media (min-width: 768px) {
+  .boton-nav {
+    font-size: clamp(0.7rem, 1.1dvw, 1.3rem);
+  }
+}
+
 .btn_arriba {
   top: 3dvh;
   left: 50%;
-  transform: translateX(-50%) rotate(0deg);
-  transform-origin: center;
+  transform: translateX(-50%);
 }
 
 .btn_abajo {
   bottom: 3dvh;
   left: 50%;
-  transform: translateX(-50%) rotate(180deg);
-  transform-origin: center;
+  transform: translateX(-50%);
 }
 
 .btn_derecha {
   right: 1dvw;
   top: 50%;
-  transform: translateY(-50%) rotate(90deg);
-  transform-origin: center;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 
 .btn_izquierda {
   left: 1dvw;
   top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: center;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 
 /* CONTENEDOR DE CONTENIDO */
@@ -168,31 +174,51 @@ h2 {
   font-size: clamp(0.8rem, 2vw, 1.5rem);
 }
 
-/* BRANDING */
-.branding {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  font-size: 0.7rem;
+.ascii-diagram {
+  font-family: 'Courier Prime', monospace;
+  white-space: pre;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.ascii-meta {
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
   color: var(--btn-color);
-  opacity: 0.6;
-  z-index: 0;
+  text-align: center;
+  white-space: pre-line;
 }
 
 /* PANEL CENTRO */
 .centro .contenido {
-  justify-content: center;
-}
-
-.centro-title {
-  font-size: clamp(2rem, 5vw, 4rem);
-  margin-bottom: 1rem;
-  color: var(--text-color);
+  justify-content: flex-start;
+  position: relative;
 }
 
 .centro-subtitle {
   font-size: clamp(0.8rem, 2vw, 1.2rem);
   color: var(--btn-color);
+}
+
+.centro-stack {
+  position: absolute;
+  top: 70dvh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.centro-link {
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
+  color: var(--btn-color);
+}
+
+.centro-link:hover {
+  color: var(--text-color);
 }
 
 /* INFO PANEL */

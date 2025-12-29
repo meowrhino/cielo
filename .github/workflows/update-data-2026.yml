@@ -1,19 +1,10 @@
-name: Update Astronomical Data
+name: Update Astronomical Data Feb 2026-2027
 
 on:
   schedule:
-    # Ejecutar el primer día de cada mes a las 00:00 UTC
-    - cron: '0 0 1 * *'
+    # Ejecutar el 28 de febrero a las 15:50 UTC
+    - cron: '50 15 28 2 *'
   workflow_dispatch: # Permitir ejecución manual
-    inputs:
-      days:
-        description: 'Días a generar (ej: 365)'
-        required: false
-        default: '45'
-      start_date:
-        description: 'Fecha inicio (YYYY-MM-DD)'
-        required: false
-        default: ''
 
 jobs:
   update-data:
@@ -31,11 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Generate astronomical data
+      - name: Generate astronomical data (Feb 2026 to Feb 2027)
         run: npm run generate-data
         env:
-          DAYS_TO_GENERATE: ${{ github.event.inputs.days }}
-          START_DATE: ${{ github.event.inputs.start_date }}
+          START_DATE: '2026-02-01'
+          DAYS_TO_GENERATE: '365'
         
       - name: Configure Git
         run: |
@@ -45,4 +36,4 @@ jobs:
       - name: Commit and push changes
         run: |
           git add data/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update astronomical data for $(date +'%B %Y')" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update astronomical data for Feb 2026 to Feb 2027" && git push)

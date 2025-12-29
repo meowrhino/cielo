@@ -55,15 +55,9 @@ function renderNightSky(starCatalog, currentTime, lat, lon, locationName) {
   }
   
   // Añadir algunas estrellas aleatorias de fondo
-  addBackgroundStars(canvas, width, height, 30);
+  // addBackgroundStars(canvas, width, height, 30);
   
-  const info = `
-${locationName}
-estrellas visibles: ${visibleStars.length}
-hora sidérea: ${lst.toFixed(2)}h
-  `;
-  
-  return canvasToString(canvas) + '\n' + info;
+  return canvasToString(canvas);
 }
 
 /**

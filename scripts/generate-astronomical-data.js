@@ -6,6 +6,24 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const DEFAULT_DAYS = 45;
+
+function parsePositiveInt(value, fallback) {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseStartDate(value) {
+  if (!value) return null;
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (!year || !month || !day) return null;
+  return new Date(year, month - 1, day);
+}
+
 // Configuración de Barcelona
 const BARCELONA = {
   lat: 41.3851,
@@ -184,16 +202,16 @@ function generateStarCatalog() {
 async function main() {
   console.log('Generando datos astronómicos...');
   
-  const today = new Date();
-  const daysToGenerate = 45; // Generar datos para 45 días
+  const startDate = parseStartDate(process.env.START_DATE) || new Date();
+  const daysToGenerate = parsePositiveInt(process.env.DAYS_TO_GENERATE, DEFAULT_DAYS);
   
   // Generar datos del sol para Barcelona
   console.log('Generando datos solares para Barcelona...');
-  const sunDataBarcelona = generateSunData(BARCELONA, today, daysToGenerate);
+  const sunDataBarcelona = generateSunData(BARCELONA, startDate, daysToGenerate);
   
   // Generar datos de la luna para Barcelona
   console.log('Generando datos lunares para Barcelona...');
-  const moonDataBarcelona = generateMoonData(BARCELONA, today, daysToGenerate);
+  const moonDataBarcelona = generateMoonData(BARCELONA, startDate, daysToGenerate);
   
   // Generar catálogo de estrellas
   console.log('Generando catálogo de estrellas...');
@@ -233,8 +251,8 @@ async function main() {
     generatedAt: new Date().toISOString(),
     location: BARCELONA,
     daysGenerated: daysToGenerate,
-    startDate: today.toISOString().split('T')[0],
-    endDate: new Date(today.getTime() + daysToGenerate * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    startDate: startDate.toISOString().split('T')[0],
+    endDate: new Date(startDate.getTime() + daysToGenerate * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
   };
   
   fs.writeFileSync(
