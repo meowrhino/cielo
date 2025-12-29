@@ -1,122 +1,187 @@
 /**
- * Módulo de renderizado ASCII de cielos nocturnos
+ * Módulo de renderizado ASCII del cielo nocturno
+ * Usa Yale Bright Star Catalog con proyección azimutal
  */
 
+/**
+ * Obtiene el límite de magnitud desde configuración global
+ */
 function getStarMagLimit() {
   const value = Number(globalThis.CIELO_STAR_MAG_LIMIT);
-  return Number.isFinite(value) ? value : null;
+  return Number.isFinite(value) ? value : 6;
 }
 
 /**
- * Renderiza el cielo nocturno de Barcelona (panel Norte)
+ * Calcula azimut y altitud de una estrella para una ubicación y tiempo dados
+ * @param {number} ra - Ascensión recta en grados
+ * @param {number} dec - Declinación en grados
+ * @param {number} lat - Latitud del observador en grados
+ * @param {number} lon - Longitud del observador en grados
+ * @param {Date} time - Tiempo de observación
+ * @returns {{azimuth: number, altitude: number}} Coordenadas horizontales
  */
-export function renderNightSkyBarcelona(starCatalog, currentTime) {
-  if (!starCatalog) return '';
-  
-  const lat = 41.3851; // Barcelona
-  const lon = 2.1734;
-  
-  return renderNightSky(starCatalog, currentTime, lat, lon, 'Barcelona');
-}
-
-/**
- * Renderiza el cielo nocturno de la antípoda (panel Sur)
- */
-export function renderNightSkyAntipode(starCatalog, currentTime) {
-  if (!starCatalog) return '';
-  
-  const lat = -41.3851; // Antípoda de Barcelona
-  const lon = 2.1734 - 180;
-  
-  return renderNightSky(starCatalog, currentTime, lat, lon, 'Antípoda');
-}
-
-/**
- * Renderiza un cielo nocturno genérico
- */
-function renderNightSky(starCatalog, currentTime, lat, lon, locationName) {
-  const width = 50;
-  const height = 20;
-  const canvas = createEmptyCanvas(width, height);
-  const magLimit = getStarMagLimit();
-  
-  // Calcular hora sidérea local
-  const lst = calculateLocalSiderealTime(currentTime, lon);
-  
-  // Filtrar y proyectar estrellas visibles
-  const visibleStars = [];
-  for (const star of starCatalog) {
-    if (magLimit !== null && star.mag > magLimit) continue;
-    const pos = calculateStarPosition(star, lst, lat);
-    if (pos.altitude > 0) { // Solo estrellas sobre el horizonte
-      visibleStars.push({ ...star, ...pos });
-    }
-  }
-  
-  // Ordenar por magnitud (más brillantes primero)
-  visibleStars.sort((a, b) => a.mag - b.mag);
-  
-  // Dibujar estrellas
-  for (const star of visibleStars) {
-    drawStar(canvas, width, height, star);
-  }
-  
-  // Añadir algunas estrellas aleatorias de fondo
-  // addBackgroundStars(canvas, width, height, 30);
-  
-  return canvasToString(canvas);
-}
-
-/**
- * Calcula la hora sidérea local
- */
-function calculateLocalSiderealTime(date, lon) {
-  // Simplificación: calcular LST aproximado
-  const J2000 = new Date('2000-01-01T12:00:00Z');
-  const daysSinceJ2000 = (date - J2000) / (1000 * 60 * 60 * 24);
-  
-  // Tiempo sidéreo de Greenwich a medianoche
-  const gst0 = (18.697374558 + 24.06570982441908 * daysSinceJ2000) % 24;
-  
-  // Hora UTC
-  const utHours = date.getUTCHours() + date.getUTCMinutes() / 60;
-  
-  // Tiempo sidéreo de Greenwich
-  const gst = (gst0 + utHours * 1.00273790935) % 24;
-  
-  // Tiempo sidéreo local
-  const lst = (gst + lon / 15) % 24;
-  
-  return lst;
-}
-
-/**
- * Calcula la posición de una estrella en el cielo
- */
-function calculateStarPosition(star, lst, lat) {
-  // Convertir RA y Dec a radianes
-  const ra = star.ra * 15 * Math.PI / 180; // RA en horas -> grados -> radianes
-  const dec = star.dec * Math.PI / 180;
+function calculateHorizontalCoordinates(ra, dec, lat, lon, time) {
+  // Convertir a radianes
   const latRad = lat * Math.PI / 180;
+  const decRad = dec * Math.PI / 180;
   
-  // Calcular ángulo horario
-  const ha = (lst - star.ra) * 15 * Math.PI / 180;
+  // Calcular tiempo sidéreo local (LST) simplificado
+  const J2000 = new Date('2000-01-01T12:00:00Z');
+  const daysSinceJ2000 = (time - J2000) / (1000 * 60 * 60 * 24);
+  const gmst = (280.46061837 + 360.98564736629 * daysSinceJ2000) % 360;
+  const lst = (gmst + lon) % 360;
   
-  // Calcular altitud y azimut
-  const sinAlt = Math.sin(dec) * Math.sin(latRad) + 
-                 Math.cos(dec) * Math.cos(latRad) * Math.cos(ha);
+  // Ángulo horario
+  const ha = (lst - ra) * Math.PI / 180;
+  
+  // Calcular altitud
+  const sinAlt = Math.sin(decRad) * Math.sin(latRad) + 
+                 Math.cos(decRad) * Math.cos(latRad) * Math.cos(ha);
   const altitude = Math.asin(sinAlt) * 180 / Math.PI;
   
-  const cosAz = (Math.sin(dec) - Math.sin(latRad) * sinAlt) / 
+  // Calcular azimut
+  const cosAz = (Math.sin(decRad) - Math.sin(latRad) * sinAlt) / 
                 (Math.cos(latRad) * Math.cos(Math.asin(sinAlt)));
   let azimuth = Math.acos(Math.max(-1, Math.min(1, cosAz))) * 180 / Math.PI;
   
+  // Ajustar azimut según el cuadrante
   if (Math.sin(ha) > 0) {
     azimuth = 360 - azimuth;
   }
   
-  return { altitude, azimuth };
+  return { azimuth, altitude };
 }
+
+/**
+ * Determina el símbolo ASCII según la magnitud de la estrella
+ * @param {number} mag - Magnitud aparente
+ * @returns {string} Símbolo ASCII
+ */
+function getStarSymbol(mag) {
+  if (mag < 1) return '●';
+  if (mag < 3) return '★';
+  if (mag < 5) return '+';
+  if (mag < 6) return '·';
+  return '.';
+}
+
+/**
+ * Renderiza el cielo nocturno desde Barcelona (hemisferio norte celeste)
+ * @param {Array} starCatalog - Catálogo de estrellas
+ * @param {Date} currentTime - Tiempo actual
+ * @returns {Object} Objeto con arte ASCII e información
+ */
+export function renderNightSkyBarcelona(starCatalog, currentTime) {
+  if (!starCatalog || starCatalog.length === 0) {
+    return { 
+      art: 'cargando cielo nocturno...', 
+      info: 'esperando catálogo de estrellas' 
+    };
+  }
+  
+  const magLimit = getStarMagLimit();
+  const lat = 41.3851; // Barcelona
+  const lon = 2.1734;
+  
+  // Filtrar estrellas del hemisferio norte (dec > 0) y por magnitud
+  const visibleStars = starCatalog
+    .filter(star => star.dec > 0 && star.mag <= magLimit)
+    .map(star => {
+      const coords = calculateHorizontalCoordinates(star.ra, star.dec, lat, lon, currentTime);
+      return {
+        ...star,
+        azimuth: coords.azimuth,
+        altitude: coords.altitude,
+        symbol: getStarSymbol(star.mag)
+      };
+    })
+    .filter(star => star.altitude > 0); // Solo estrellas sobre el horizonte
+  
+  // Crear canvas ASCII
+  const width = 80;
+  const height = 30;
+  const canvas = createEmptyCanvas(width, height);
+  
+  // Proyectar estrellas en el canvas
+  for (const star of visibleStars) {
+    // Proyección azimutal: azimut → x, altitud → y
+    const x = Math.floor((star.azimuth / 360) * width);
+    const y = Math.floor(height - 1 - (star.altitude / 90) * height);
+    
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+      canvas[y][x] = star.symbol;
+    }
+  }
+  
+  // Información del cielo
+  const info = [
+    `barcelona (hemisferio norte celeste)`,
+    `${visibleStars.length} estrellas visibles (mag < ${magLimit.toFixed(1)})`,
+    `${formatTime(currentTime)}`
+  ].join('\n');
+  
+  return { art: canvasToString(canvas), info };
+}
+
+/**
+ * Renderiza el cielo nocturno de la antípoda de Barcelona (hemisferio sur celeste)
+ * @param {Array} starCatalog - Catálogo de estrellas
+ * @param {Date} currentTime - Tiempo actual
+ * @returns {Object} Objeto con arte ASCII e información
+ */
+export function renderNightSkyAntipode(starCatalog, currentTime) {
+  if (!starCatalog || starCatalog.length === 0) {
+    return { 
+      art: 'cargando cielo nocturno...', 
+      info: 'esperando catálogo de estrellas' 
+    };
+  }
+  
+  const magLimit = getStarMagLimit();
+  const lat = -41.3851; // Antípoda de Barcelona
+  const lon = 2.1734 + 180; // Longitud opuesta
+  
+  // Filtrar estrellas del hemisferio sur (dec < 0) y por magnitud
+  const visibleStars = starCatalog
+    .filter(star => star.dec < 0 && star.mag <= magLimit)
+    .map(star => {
+      const coords = calculateHorizontalCoordinates(star.ra, star.dec, lat, lon, currentTime);
+      return {
+        ...star,
+        azimuth: coords.azimuth,
+        altitude: coords.altitude,
+        symbol: getStarSymbol(star.mag)
+      };
+    })
+    .filter(star => star.altitude > 0); // Solo estrellas sobre el horizonte
+  
+  // Crear canvas ASCII
+  const width = 80;
+  const height = 30;
+  const canvas = createEmptyCanvas(width, height);
+  
+  // Proyectar estrellas en el canvas
+  for (const star of visibleStars) {
+    // Proyección azimutal: azimut → x, altitud → y
+    const x = Math.floor((star.azimuth / 360) * width);
+    const y = Math.floor(height - 1 - (star.altitude / 90) * height);
+    
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+      canvas[y][x] = star.symbol;
+    }
+  }
+  
+  // Información del cielo
+  const info = [
+    `antípoda (hemisferio sur celeste)`,
+    `${visibleStars.length} estrellas visibles (mag < ${magLimit.toFixed(1)})`,
+    `${formatTime(currentTime)}`
+  ].join('\n');
+  
+  return { art: canvasToString(canvas), info };
+}
+
+// === FUNCIONES AUXILIARES ===
 
 /**
  * Crea un canvas ASCII vacío
@@ -124,60 +189,9 @@ function calculateStarPosition(star, lst, lat) {
 function createEmptyCanvas(width, height) {
   const canvas = [];
   for (let y = 0; y < height; y++) {
-    canvas[y] = [];
-    for (let x = 0; x < width; x++) {
-      canvas[y][x] = ' ';
-    }
+    canvas[y] = new Array(width).fill(' ');
   }
   return canvas;
-}
-
-/**
- * Dibuja una estrella en el canvas
- */
-function drawStar(canvas, width, height, star) {
-  // Mapear azimut a X (0° = Norte arriba, 90° = Este derecha)
-  // Invertimos para que el Norte esté arriba
-  const azimuthRad = (star.azimuth - 180) * Math.PI / 180;
-  
-  // Mapear altitud a distancia desde el centro (90° = centro, 0° = borde)
-  const radius = (90 - star.altitude) / 90;
-  
-  // Calcular posición en el canvas (proyección azimutal)
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const maxRadius = Math.min(centerX, centerY) * 0.9;
-  
-  const x = Math.floor(centerX + Math.sin(azimuthRad) * radius * maxRadius);
-  const y = Math.floor(centerY - Math.cos(azimuthRad) * radius * maxRadius);
-  
-  if (x >= 0 && x < width && y >= 0 && y < height) {
-    // Símbolo según magnitud
-    let symbol = '.';
-    if (star.mag < 0) {
-      symbol = '★'; // Muy brillante
-    } else if (star.mag < 1) {
-      symbol = '*'; // Brillante
-    } else if (star.mag < 2) {
-      symbol = '+'; // Media
-    }
-    
-    canvas[y][x] = symbol;
-  }
-}
-
-/**
- * Añade estrellas de fondo aleatorias
- */
-function addBackgroundStars(canvas, width, height, count) {
-  for (let i = 0; i < count; i++) {
-    const x = Math.floor(Math.random() * width);
-    const y = Math.floor(Math.random() * height);
-    
-    if (canvas[y][x] === ' ') {
-      canvas[y][x] = Math.random() > 0.5 ? '.' : '·';
-    }
-  }
 }
 
 /**
@@ -185,4 +199,13 @@ function addBackgroundStars(canvas, width, height, count) {
  */
 function canvasToString(canvas) {
   return canvas.map(row => row.join('')).join('\n');
+}
+
+/**
+ * Formatea el tiempo para mostrar
+ */
+function formatTime(date) {
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
 }

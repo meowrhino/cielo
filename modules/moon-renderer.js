@@ -1,146 +1,91 @@
 /**
  * Módulo de renderizado ASCII de la luna
+ * Pantalla completa con horizonte en el borde inferior
  */
 
 /**
  * Renderiza la posición de la luna (panel Oeste de noche)
+ * Muestra 180° de azimut (180° Sur → 360° Norte)
  */
 export function renderMoonPosition(moonData, currentTime) {
-  if (!moonData) return '';
+  if (!moonData) return null;
   
   const currentHour = currentTime.getHours();
   const hourData = moonData.hourlyData.find(h => h.hour === currentHour);
   
   if (!hourData || !hourData.isVisible) {
-    return `
-La luna no es visible en este momento
-
-fase: ${moonData.phaseName}
-iluminación: ${moonData.illumination}%
-    `;
+    return {
+      art: 'la luna no es visible',
+      info: `fase: ${moonData.phaseName}\niluminación: ${moonData.illumination}%`
+    };
   }
   
-  // Crear canvas ASCII
-  const width = 40;
-  const height = 15;
+  // Crear canvas ASCII (pantalla completa)
+  const width = 80;
+  const height = 30;
   const canvas = createEmptyCanvas(width, height);
-  
-  // Dibujar horizonte
-  drawHorizon(canvas, width, height);
   
   // Dibujar la luna en su posición
   drawMoon(canvas, width, height, hourData, moonData.phase);
   
-  // Añadir información
-  const info = `
-azimut: ${hourData.azimuth}°
-altitud: ${hourData.altitude}°
-fase: ${moonData.phaseName}
-  `;
+  // Información
+  const info = [
+    `azimut: ${hourData.azimuth.toFixed(1)}°`,
+    `altitud: ${hourData.altitude.toFixed(1)}°`,
+    `fase: ${moonData.phaseName}`
+  ].join('\n');
   
-  return canvasToString(canvas) + '\n' + info;
+  return { art: canvasToString(canvas), info };
 }
 
 /**
  * Renderiza la fase lunar actual (panel Este de noche)
+ * Muestra icono único + información textual
  */
 export function renderMoonPhase(moonData) {
-  if (!moonData) return '';
+  if (!moonData) return null;
   
   const phase = moonData.phase;
-  let moonAscii = '';
+  const moonSymbol = getMoonSymbol(phase);
   
-  // Generar representación ASCII de la fase lunar
+  // Crear canvas simple con el icono centrado
+  const width = 80;
+  const height = 30;
+  const canvas = createEmptyCanvas(width, height);
+  
+  // Dibujar icono de la luna en el centro
+  const centerX = Math.floor(width / 2);
+  const centerY = Math.floor(height / 2);
+  canvas[centerY][centerX] = moonSymbol;
+  
+  // Información textual
+  const info = [
+    `fase: ${moonData.phaseName}`,
+    `iluminación: ${moonData.illumination}%`,
+    `salida: ${moonData.moonrise || 'N/A'}`,
+    `puesta: ${moonData.moonset || 'N/A'}`
+  ].join('\n');
+  
+  return { art: canvasToString(canvas), info };
+}
+
+// === FUNCIONES AUXILIARES ===
+
+/**
+ * Determina el símbolo de la luna según su fase
+ * @param {number} phase - Fase lunar (0-1)
+ * @returns {string} Símbolo ASCII
+ */
+function getMoonSymbol(phase) {
   if (phase < 0.05 || phase > 0.95) {
-    // Luna nueva
-    moonAscii = `
-    .---.
-   /     \\
-  |       |
-  |       |
-   \\     /
-    '---'
-    `;
-  } else if (phase < 0.25) {
-    // Creciente
-    moonAscii = `
-    .---.
-   /    ))
-  |    ))
-  |    ))
-   \\    ))
-    '---'
-    `;
-  } else if (phase < 0.30) {
-    // Cuarto creciente
-    moonAscii = `
-    .---.
-   /   |||
-  |   ||||
-  |   ||||
-   \\   |||
-    '---'
-    `;
-  } else if (phase < 0.45) {
-    // Gibosa creciente
-    moonAscii = `
-    .---.
-   / ● |||
-  | ●● |||
-  | ●● |||
-   \\ ● |||
-    '---'
-    `;
-  } else if (phase < 0.55) {
-    // Luna llena
-    moonAscii = `
-    .---.
-   / ●●● \\
-  | ●●●●● |
-  | ●●●●● |
-   \\ ●●● /
-    '---'
-    `;
-  } else if (phase < 0.70) {
-    // Gibosa menguante
-    moonAscii = `
-    .---.
-   /||| ● \\
-  |||  ●● |
-  |||  ●● |
-   \\||| ● /
-    '---'
-    `;
-  } else if (phase < 0.75) {
-    // Cuarto menguante
-    moonAscii = `
-    .---.
-   /|||   \\
-  ||||   |
-  ||||   |
-   \\|||   /
-    '---'
-    `;
+    return '○'; // Luna nueva
+  } else if (phase >= 0.45 && phase <= 0.55) {
+    return '●'; // Luna llena
+  } else if (phase < 0.5) {
+    return '◐'; // Cuarto creciente
   } else {
-    // Menguante
-    moonAscii = `
-    .---.
-   /((    \\
-  ((    |
-  ((    |
-   \\((    /
-    '---'
-    `;
+    return '◑'; // Cuarto menguante
   }
-  
-  const info = `
-fase: ${moonData.phaseName}
-iluminación: ${moonData.illumination}%
-salida: ${moonData.moonrise || 'N/A'}
-puesta: ${moonData.moonset || 'N/A'}
-  `;
-  
-  return moonAscii + '\n' + info;
 }
 
 /**
@@ -149,49 +94,27 @@ puesta: ${moonData.moonset || 'N/A'}
 function createEmptyCanvas(width, height) {
   const canvas = [];
   for (let y = 0; y < height; y++) {
-    canvas[y] = [];
-    for (let x = 0; x < width; x++) {
-      canvas[y][x] = ' ';
-    }
+    canvas[y] = new Array(width).fill(' ');
   }
   return canvas;
 }
 
 /**
- * Dibuja el horizonte
- */
-function drawHorizon(canvas, width, height) {
-  const horizonY = Math.floor(height * 0.7);
-  for (let x = 0; x < width; x++) {
-    canvas[horizonY][x] = '~';
-  }
-}
-
-/**
- * Dibuja la luna en su posición
+ * Dibuja la luna en su posición (Oeste: 180° → 360°)
  */
 function drawMoon(canvas, width, height, hourData, phase) {
-  const horizonY = Math.floor(height * 0.7);
+  // Solo dibujar si está en el rango Oeste
+  if (hourData.azimuth < 180 || hourData.azimuth > 360) return;
   
-  // Mapear azimut a posición X (0° = Norte, 90° = Este, 180° = Sur, 270° = Oeste)
-  // Normalizamos para que el centro sea el Oeste (270°)
-  const azimuthOffset = hourData.azimuth - 270;
-  const x = Math.floor(width / 2 + (azimuthOffset / 90) * (width / 4));
+  // Mapear azimut (180° → 360°) a X (0 → width)
+  const normalizedAzimuth = hourData.azimuth - 180;
+  const x = Math.floor((normalizedAzimuth / 180) * (width - 1));
   
-  // Mapear altitud a posición Y
-  const y = horizonY - Math.floor((hourData.altitude / 90) * (horizonY - 2));
+  // Mapear altitud (0° → 90°) a Y (bottom → top)
+  const y = Math.floor(height - 1 - (hourData.altitude / 90) * (height - 1));
   
-  // Determinar símbolo de la luna según fase
-  let moonSymbol = '○';
-  if (phase >= 0.45 && phase <= 0.55) {
-    moonSymbol = '●'; // Luna llena
-  } else if (phase < 0.05 || phase > 0.95) {
-    moonSymbol = '○'; // Luna nueva
-  } else if (phase < 0.5) {
-    moonSymbol = '◐'; // Creciente
-  } else {
-    moonSymbol = '◑'; // Menguante
-  }
+  // Obtener símbolo según fase
+  const moonSymbol = getMoonSymbol(phase);
   
   if (x >= 0 && x < width && y >= 0 && y < height) {
     canvas[y][x] = moonSymbol;

@@ -305,7 +305,7 @@ async function main() {
   console.log('Generando datos astronómicos...');
   
   const startDate = parseStartDate(process.env.START_DATE) || new Date();
-  const daysToGenerate = parsePositiveInt(process.env.DAYS_TO_GENERATE, DEFAULT_DAYS);
+  const daysToGenerate = parsePositiveInt(process.env.DAYS || process.env.DAYS_TO_GENERATE, DEFAULT_DAYS);
   
   // Generar datos del sol para Barcelona
   console.log('Generando datos solares para Barcelona...');

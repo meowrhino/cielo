@@ -1,3 +1,12 @@
+/**
+ * CIELO - Visualización astronómica desde Barcelona
+ * meowrhino.studio
+ */
+
+/* ============================================
+   RESET Y CONFIGURACIÓN BASE
+   ============================================ */
+
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
 
 html,
@@ -29,26 +38,39 @@ h2 {
   padding: 0;
 }
 
+/* ============================================
+   LAYOUT PRINCIPAL
+   ============================================ */
+
 #content {
   position: relative;
   width: 100dvw;
   height: 100dvh;
 }
 
+/* ============================================
+   SISTEMA DE CELDAS (PANELES)
+   ============================================ */
+
 .celda {
-  width: 100%;
-  height: 100%;
+  /* Posicionamiento */
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
+  /* Visualización */
   background-color: var(--bg-color);
   color: var(--text-color);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease-in-out;
+  
+  /* Layout interno */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,7 +82,10 @@ h2 {
   pointer-events: auto;
 }
 
-/* VARIABLES DE COLOR POR PANEL */
+/* ============================================
+   VARIABLES DE COLOR POR PANEL
+   ============================================ */
+
 .centro {
   --bg-color: #000000;
   --text-color: #ffffff;
@@ -96,15 +121,21 @@ h2 {
   --theme-color: #1a1423;
 }
 
-/* BOTONES DE NAVEGACIÓN */
+/* ============================================
+   BOTONES DE NAVEGACIÓN
+   ============================================ */
+
 .boton-nav {
+  /* Posicionamiento */
   position: absolute;
+  z-index: 1;
+  
+  /* Estilo */
   font-size: clamp(1rem, 2dvw, 2rem);
   padding: 0;
   border: none;
   background: none;
   cursor: pointer;
-  z-index: 1;
   color: var(--btn-color, inherit);
   transition: color 0.3s ease;
 }
@@ -113,12 +144,7 @@ h2 {
   color: var(--text-color);
 }
 
-@media (min-width: 768px) {
-  .boton-nav {
-    font-size: clamp(0.7rem, 1.1dvw, 1.3rem);
-  }
-}
-
+/* Posiciones específicas de cada botón */
 .btn_arriba {
   top: 3dvh;
   left: 50%;
@@ -147,7 +173,17 @@ h2 {
   text-orientation: mixed;
 }
 
-/* CONTENEDOR DE CONTENIDO */
+/* Responsive: botones más pequeños en desktop */
+@media (min-width: 768px) {
+  .boton-nav {
+    font-size: clamp(0.7rem, 1.1dvw, 1.3rem);
+  }
+}
+
+/* ============================================
+   CONTENEDOR DE CONTENIDO
+   ============================================ */
+
 .contenido {
   width: 100%;
   height: 100%;
@@ -160,7 +196,10 @@ h2 {
   overflow: hidden;
 }
 
-/* ESTILOS ASCII */
+/* ============================================
+   ESTILOS ASCII
+   ============================================ */
+
 .ascii-container {
   font-family: 'Courier Prime', monospace;
   white-space: pre;
@@ -190,7 +229,10 @@ h2 {
   white-space: pre-line;
 }
 
-/* PANEL CENTRO */
+/* ============================================
+   PANEL CENTRO - ESTILOS ESPECÍFICOS
+   ============================================ */
+
 .centro .contenido {
   justify-content: flex-start;
   position: relative;
@@ -221,7 +263,10 @@ h2 {
   color: var(--text-color);
 }
 
-/* INFO PANEL */
+/* ============================================
+   INFO PANEL - COMPONENTE GENÉRICO
+   ============================================ */
+
 .info-panel {
   display: flex;
   flex-direction: column;
@@ -238,3 +283,75 @@ h2 {
   font-size: clamp(0.8rem, 1.5vw, 1rem);
   line-height: 1.6;
 }
+
+/* ============================================
+   DEBUG PANEL - ESTILOS DE DEBUGGING
+   ============================================ */
+
+/* DEBUG: Panel de debugging - Eliminar en versión final */
+.debug-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00ff00;
+  padding: 1rem;
+  font-size: 0.8rem;
+  z-index: 9999;
+  border-top: 1px solid #00ff00;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+/* DEBUG: Controles del panel */
+.debug-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* DEBUG: Grupo de control individual */
+.debug-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* DEBUG: Label de control */
+.debug-control-group label {
+  font-size: 0.7rem;
+  color: #00ff00;
+  text-transform: uppercase;
+}
+
+/* DEBUG: Inputs del panel */
+.debug-control-group input {
+  background: #000;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
+/* DEBUG: Readout de información */
+.debug-readout {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  color: #00ff00;
+  background: #001100;
+  padding: 0.5rem;
+  border: 1px solid #00ff00;
+  border-radius: 2px;
+}
+
+/* DEBUG: Valores numéricos destacados */
+.debug-value {
+  color: #00ffff;
+  font-weight: bold;
+}
+
+/* FIN DEBUG */

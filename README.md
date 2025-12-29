@@ -1,185 +1,212 @@
-# cielo
+# 🌌 cielo
 
-Visualización astronómica minimalista desde Barcelona con ASCII.
+Visualización astronómica minimalista desde Barcelona en ASCII.
 
-Una experiencia web poética que muestra el cielo nocturno, la posición del sol y la luna desde Barcelona, usando solo datos precalculados y representaciones ASCII minimalistas.
+**🔗 [Ver en vivo](https://meowrhino.github.io/cielo/)**
 
-**Por [meowrhino.studio](https://meowrhino.studio)**
+---
 
-## 🌍 Concepto
+## ✨ Características
 
-Esta web muestra diferentes vistas del cielo según la hora del día:
+- **Navegación de 5 paneles** (norte, sur, este, oeste, centro)
+- **Cielo nocturno** con 9096 estrellas del Yale Bright Star Catalog
+- **Posición del sol** en tiempo real con trayectoria diaria
+- **Fases lunares** e información de posición
+- **Cálculos astronómicos** precisos desde Barcelona
+- **Estilo minimalista** con arte ASCII
+- **Sin frameworks** - Solo HTML, CSS y JavaScript vanilla
 
-### Durante el día en Barcelona:
-- **Panel Este (derecha)**: Trayectoria del sol desde la salida hasta el mediodía
-- **Panel Oeste (izquierda)**: Trayectoria del sol desde el mediodía hasta la puesta
-- **Panel Sur (abajo)**: Cielo nocturno de la antípoda de Barcelona
+---
 
-### Durante la noche en Barcelona:
-- **Panel Norte (arriba)**: Cielo nocturno visible desde Barcelona
-- **Panel Este (derecha)**: Fase lunar actual
-- **Panel Oeste (izquierda)**: Posición de la luna en el cielo
+## 🗺️ Paneles
 
-### Siempre visible:
-- **Panel Centro**: Hub de navegación con información básica
+### Centro
+Hub de navegación con información del proyecto.
 
-## 🎨 Características
+### Norte (de noche)
+Cielo nocturno de Barcelona (hemisferio norte celeste, dec > 0°).
 
-- **Navegación tipo cruz**: Sistema de 5 paneles con transiciones suaves
-- **Visualizaciones ASCII**: Todo representado con caracteres minimalistas
-- **Sin cálculos en cliente**: Todos los datos astronómicos están precalculados
-- **Actualización automática**: GitHub Actions regenera los datos mensualmente
-- **Vanilla JavaScript**: Sin frameworks ni dependencias externas en el cliente
-- **Responsive**: Adaptado a diferentes tamaños de pantalla
+### Sur (de día)
+Cielo nocturno de la antípoda de Barcelona (hemisferio sur celeste, dec < 0°).
 
-## 📂 Estructura del proyecto
+### Este
+- **De día**: Trayectoria del sol desde salida hasta mediodía (0° → 180° azimut)
+- **De noche**: Fase lunar actual con información textual
 
-```
-cielo/
-├── index.html              # Página principal
-├── style.css               # Estilos globales
-├── script.js               # Lógica principal y navegación
-├── modules/                # Módulos de renderizado
-│   ├── sun-renderer.js     # Renderizado ASCII del sol
-│   ├── moon-renderer.js    # Renderizado ASCII de la luna
-│   └── sky-renderer.js     # Renderizado ASCII del cielo nocturno
-├── data/                   # Datos astronómicos precalculados
-│   ├── sun/
-│   │   └── barcelona.json  # Datos solares
-│   ├── moon/
-│   │   └── barcelona.json  # Datos lunares
-│   ├── stars/
-│   │   └── catalog.json    # Catálogo de estrellas
-│   └── metadata.json       # Metadata de generación
-├── scripts/                # Scripts de generación
-│   └── generate-astronomical-data.js
-├── .github/workflows/      # GitHub Actions
-│   └── update-data.yml     # Workflow de actualización mensual
-├── package.json
-└── README.md
-```
+### Oeste
+- **De día**: Trayectoria del sol desde mediodía hasta puesta (180° → 360° azimut)
+- **De noche**: Posición de la luna en el cielo
 
-## 🚀 Despliegue en GitHub Pages
+---
 
-1. **Activar GitHub Pages**:
-   - Ve a Settings → Pages
-   - En "Source", selecciona "Deploy from a branch"
-   - Selecciona la rama `main` y la carpeta `/ (root)`
-   - Guarda los cambios
+## 📊 Datos
 
-2. **Esperar el despliegue**:
-   - GitHub Pages construirá y desplegará automáticamente
-   - La web estará disponible en: `https://meowrhino.github.io/cielo/`
+### Catálogo de Estrellas
+- **Fuente**: [Yale Bright Star Catalog (BSC5)](https://github.com/aduboisforge/Bright-Star-Catalog-JSON)
+- **Estrellas**: 9096 estrellas visibles a simple vista (mag < 6.5)
+- **Actualización**: NO requiere actualización (las estrellas no cambian)
+- **Archivo**: `data/stars/catalog.json` (805 KB)
 
-3. **Verificar el workflow**:
-   - El GitHub Action se ejecutará automáticamente el primer día de cada mes
-   - También puedes ejecutarlo manualmente desde la pestaña "Actions"
+### Datos Astronómicos (Sol y Luna)
+- **Generación**: Precalculados con [SunCalc](https://github.com/mourner/suncalc)
+- **Ubicación**: Barcelona (41.3851°N, 2.1734°E)
+- **Actualización**: Automática vía GitHub Actions
+- **Archivos**: 
+  - `data/sun/barcelona.json`
+  - `data/moon/barcelona.json`
+  - `data/metadata.json`
 
-## 🔧 Desarrollo local
+---
+
+## ⚙️ GitHub Actions
+
+### 1. `update-star-catalog.yml` (Manual)
+Regenera el catálogo de estrellas desde el Yale BSC.
+
+- **Ejecución**: Solo manual (workflow_dispatch)
+- **Uso**: Raramente necesario (las estrellas no cambian)
+- **Comando**: Actions → Update Star Catalog → Run workflow
+
+### 2. `update-data-yearly.yml` (Automática)
+Genera datos astronómicos para 432 días (14 meses).
+
+- **Ejecución**: Automática cada 28 de febrero a las 00:00 UTC
+- **También**: Manual vía workflow_dispatch
+- **Configuración**: ✅ **ACTIVA POR DEFECTO**
+
+### 3. `update-data-monthly.yml` (Desactivada)
+Genera datos astronómicos para 45 días.
+
+- **Ejecución**: ❌ **DESACTIVADA** (schedule comentado)
+- **Uso**: Solo manual vía workflow_dispatch
+- **Para activar**: 
+  1. Editar `.github/workflows/update-data-monthly.yml`
+  2. Descomentar el bloque `schedule`
+  3. Comentar `update-data-yearly.yml` para evitar conflictos
+
+---
+
+## 🛠️ Desarrollo Local
 
 ### Requisitos
 - Node.js 22+
 - npm
 
 ### Instalación
-
 ```bash
-# Clonar el repositorio
 git clone https://github.com/meowrhino/cielo.git
 cd cielo
-
-# Instalar dependencias
 npm install
+```
 
-# Generar datos astronómicos
+### Generar Datos
+
+**Catálogo de estrellas** (solo una vez):
+```bash
+node scripts/process-yale-catalog.js
+```
+
+**Datos astronómicos** (45 días por defecto):
+```bash
 npm run generate-data
 ```
 
-### Servidor local
-
-Para probar la web localmente, necesitas un servidor HTTP simple:
-
+**Datos astronómicos** (personalizado):
 ```bash
-# Con Python 3
+DAYS=432 npm run generate-data
+```
+
+### Servidor Local
+```bash
+# Con Python
 python3 -m http.server 8000
 
 # Con Node.js
-npx http-server
+npx serve
 ```
 
-Luego abre `http://localhost:8000` en tu navegador.
-
-## 📊 Datos astronómicos
-
-Los datos se generan usando la librería [SunCalc](https://github.com/mourner/suncalc), que proporciona cálculos precisos de posiciones solares y lunares.
-
-### Datos del sol
-- Hora de salida y puesta
-- Azimut y altitud por hora
-- Mediodía solar
-
-### Datos de la luna
-- Fase lunar
-- Iluminación
-- Posición (azimut y altitud)
-- Hora de salida y puesta
-
-### Catálogo de estrellas
-- 15 estrellas más brillantes visibles desde Barcelona
-- Coordenadas ecuatoriales (ascensión recta y declinación)
-- Magnitud aparente
-
-## 🌐 Lógica día/noche
-
-La web determina automáticamente si es de día o noche en Barcelona basándose en:
-1. La hora actual del sistema del usuario
-2. Los datos de salida y puesta del sol precalculados
-3. Si el sol está sobre el horizonte → **día**
-4. Si el sol está bajo el horizonte → **noche**
-
-Esta lógica controla qué paneles muestran qué contenido.
-
-## 🎯 Navegación
-
-- **Flechas en pantalla**: Haz clic en las flechas para moverte entre paneles
-- **Teclado** (opcional): Se puede implementar navegación con teclas de dirección
-- **Centro**: Siempre puedes volver al centro desde cualquier panel
-
-## 🛠️ Tecnologías
-
-### Frontend
-- HTML5
-- CSS3 (con variables CSS y flexbox)
-- JavaScript ES6+ (módulos)
-
-### Backend (generación de datos)
-- Node.js
-- SunCalc (cálculos astronómicos)
-
-### CI/CD
-- GitHub Actions (actualización mensual automática)
-
-## 📝 Notas técnicas
-
-### ¿Por qué precalcular?
-- **Performance**: El cliente no necesita hacer cálculos complejos
-- **Simplicidad**: Solo lee JSON y renderiza
-- **Offline-friendly**: Los datos están disponibles localmente
-- **Precisión**: Los cálculos se hacen una vez con precisión
-
-### Actualización de datos
-El GitHub Action genera datos para los próximos 45 días, con un margen de seguridad para evitar que los datos se queden obsoletos entre actualizaciones mensuales.
-
-## 📄 Licencia
-
-MIT License - Creado por [meowrhino.studio](https://meowrhino.studio)
-
-## 🌟 Créditos
-
-- Cálculos astronómicos: [SunCalc](https://github.com/mourner/suncalc) por Vladimir Agafonkin
-- Inspiración de navegación: [Rika Michi](https://meowrhino.github.io/rikamichie/)
-- Estilo ASCII: [Villagranota](https://meowrhino.github.io/villagranota/)
+Abrir: http://localhost:8000
 
 ---
 
-**Hecho con ♥ por meowrhino.studio**
+## 📁 Estructura del Proyecto
+
+```
+cielo/
+├── index.html              # Página principal
+├── style.css               # Estilos (refactorizado y comentado)
+├── script.js               # Lógica principal
+├── modules/
+│   ├── sun-renderer.js     # Renderizado del sol (pantalla completa)
+│   ├── moon-renderer.js    # Renderizado de la luna (icono + texto)
+│   └── sky-renderer.js     # Renderizado del cielo nocturno (Yale Catalog)
+├── scripts/
+│   ├── generate-astronomical-data.js  # Generador de datos sol/luna
+│   └── process-yale-catalog.js        # Procesador del catálogo BSC
+├── data/
+│   ├── stars/
+│   │   ├── catalog.json    # Catálogo de 9096 estrellas (permanente)
+│   │   └── bsc5-raw.json   # Catálogo Yale original
+│   ├── sun/
+│   │   └── barcelona.json  # Datos solares
+│   ├── moon/
+│   │   └── barcelona.json  # Datos lunares
+│   └── metadata.json       # Metadatos de generación
+└── .github/workflows/
+    ├── update-star-catalog.yml    # Action: Catálogo (manual)
+    ├── update-data-yearly.yml     # Action: Anual (activa)
+    └── update-data-monthly.yml    # Action: Mensual (desactivada)
+```
+
+---
+
+## 🎨 Símbolos ASCII
+
+### Estrellas (por magnitud)
+- `●` mag < 1 (muy brillantes)
+- `★` mag 1-3 (brillantes)
+- `+` mag 3-5 (medias)
+- `·` mag 5-6 (débiles)
+
+### Sol
+- `☼` Posición actual
+- `·` Trayectoria
+
+### Luna (por fase)
+- `○` Luna nueva
+- `◐` Cuarto creciente
+- `●` Luna llena
+- `◑` Cuarto menguante
+
+---
+
+## 🐛 Debugging
+
+El proyecto incluye un panel de debugging (esquina superior derecha) para desarrollo:
+
+- **Controles**: Hora, fecha, rango azimut, magnitud estelar
+- **Marcado**: Todo el código debug está marcado con comentarios `// DEBUG:`
+- **Para versión final**: Comentar o eliminar las secciones marcadas
+
+---
+
+## 📝 Licencia
+
+MIT License
+
+---
+
+## 👤 Autor
+
+**meowrhino.studio**
+
+🔗 [GitHub](https://github.com/meowrhino) | 🌐 [cielo](https://meowrhino.github.io/cielo/)
+
+---
+
+## 🙏 Créditos
+
+- **Yale Bright Star Catalog**: [BSC5](https://github.com/aduboisforge/Bright-Star-Catalog-JSON)
+- **SunCalc**: [mourner/suncalc](https://github.com/mourner/suncalc)
+- **Fuente**: [Courier Prime](https://fonts.google.com/specimen/Courier+Prime)
+- **Inspiración**: [Rika Michi](https://meowrhino.github.io/rikamichie/) & [Villagranota](https://meowrhino.github.io/villagranota/)
