@@ -1,7 +1,7 @@
 // Importar módulos de renderizado
-import { renderSunEast, renderSunWest } from './modules/sun-renderer.js';
-import { renderMoonPosition, renderMoonPhase } from './modules/moon-renderer.js';
-import { renderNightSkyBarcelona, renderNightSkyAntipode } from './modules/sky-renderer.js';
+import { renderSunEast, renderSunWest } from './modules/sun-renderer-v2.js';
+import { renderMoonPosition, renderMoonPhase } from './modules/moon-renderer-v2.js';
+import { renderNightSkyBarcelona, renderNightSkyAntipode, loadConstellationLines } from './modules/sky-renderer-v2.js';
 
 // Referencia al contenedor principal
 const app = document.getElementById("content");
@@ -405,13 +405,15 @@ function renderizarCentro(wrapper) {
 function renderizarNorte(wrapper) {
   if (!isDaytime) {
     // Mostrar cielo nocturno de Barcelona
-    wrapper.innerHTML = `
-      <div class="ascii-container" id="cielo-norte"></div>
-    `;
+    wrapper.innerHTML = '';
+    const container = document.createElement('div');
+    container.id = 'cielo-norte';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    wrapper.appendChild(container);
     
-    const container = wrapper.querySelector('#cielo-norte');
-    if (container && starCatalog) {
-      container.textContent = renderNightSkyBarcelona(starCatalog, currentTime);
+    if (starCatalog) {
+      renderNightSkyBarcelona(starCatalog, currentTime, container);
     }
   } else {
     wrapper.innerHTML = '';
@@ -421,13 +423,15 @@ function renderizarNorte(wrapper) {
 function renderizarSur(wrapper) {
   if (isDaytime) {
     // Mostrar cielo nocturno de la antípoda
-    wrapper.innerHTML = `
-      <div class="ascii-container" id="cielo-sur"></div>
-    `;
+    wrapper.innerHTML = '';
+    const container = document.createElement('div');
+    container.id = 'cielo-sur';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    wrapper.appendChild(container);
     
-    const container = wrapper.querySelector('#cielo-sur');
-    if (container && starCatalog) {
-      container.textContent = renderNightSkyAntipode(starCatalog, currentTime);
+    if (starCatalog) {
+      renderNightSkyAntipode(starCatalog, currentTime, container);
     }
   } else {
     wrapper.innerHTML = '';
@@ -437,30 +441,65 @@ function renderizarSur(wrapper) {
 function renderizarEste(wrapper) {
   if (isDaytime) {
     // Mostrar trayectoria del sol (mañana)
-    wrapper.innerHTML = `
-      <div class="info-panel">
-        <div class="info-title">sol · mañana</div>
-        <div class="ascii-container ascii-large" id="sol-este"></div>
-      </div>
-    `;
+    wrapper.innerHTML = '';
     
-    const container = wrapper.querySelector('#sol-este');
-    if (container && currentSunData) {
-      const sun = renderSunEast(currentSunData, currentTime);
-      renderAsciiWithInfo(container, sun);
+    const panel = document.createElement('div');
+    panel.className = 'info-panel';
+    panel.style.width = '100%';
+    panel.style.height = '100%';
+    panel.style.position = 'relative';
+    
+    const title = document.createElement('div');
+    title.className = 'info-title';
+    title.textContent = 'sol · mañana';
+    title.style.position = 'absolute';
+    title.style.top = '2rem';
+    title.style.left = '50%';
+    title.style.transform = 'translateX(-50%)';
+    title.style.zIndex = '10';
+    panel.appendChild(title);
+    
+    const container = document.createElement('div');
+    container.id = 'sol-este';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    panel.appendChild(container);
+    
+    wrapper.appendChild(panel);
+    
+    if (currentSunData) {
+      renderSunEast(currentSunData, currentTime, container);
     }
   } else {
     // Mostrar fase lunar
-    wrapper.innerHTML = `
-      <div class="info-panel">
-        <div class="info-title">fase lunar</div>
-        <div class="ascii-container ascii-large" id="luna-fase"></div>
-      </div>
-    `;
+    wrapper.innerHTML = '';
     
-    const container = wrapper.querySelector('#luna-fase');
-    if (container && currentMoonData) {
-      container.textContent = renderMoonPhase(currentMoonData);
+    const panel = document.createElement('div');
+    panel.className = 'info-panel';
+    panel.style.width = '100%';
+    panel.style.height = '100%';
+    panel.style.position = 'relative';
+    
+    const title = document.createElement('div');
+    title.className = 'info-title';
+    title.textContent = 'fase lunar';
+    title.style.position = 'absolute';
+    title.style.top = '2rem';
+    title.style.left = '50%';
+    title.style.transform = 'translateX(-50%)';
+    title.style.zIndex = '10';
+    panel.appendChild(title);
+    
+    const container = document.createElement('div');
+    container.id = 'luna-fase';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    panel.appendChild(container);
+    
+    wrapper.appendChild(panel);
+    
+    if (currentMoonData) {
+      renderMoonPhase(currentMoonData, container);
     }
   }
 }
@@ -468,30 +507,65 @@ function renderizarEste(wrapper) {
 function renderizarOeste(wrapper) {
   if (isDaytime) {
     // Mostrar trayectoria del sol (tarde)
-    wrapper.innerHTML = `
-      <div class="info-panel">
-        <div class="info-title">sol · tarde</div>
-        <div class="ascii-container ascii-large" id="sol-oeste"></div>
-      </div>
-    `;
+    wrapper.innerHTML = '';
     
-    const container = wrapper.querySelector('#sol-oeste');
-    if (container && currentSunData) {
-      const sun = renderSunWest(currentSunData, currentTime);
-      renderAsciiWithInfo(container, sun);
+    const panel = document.createElement('div');
+    panel.className = 'info-panel';
+    panel.style.width = '100%';
+    panel.style.height = '100%';
+    panel.style.position = 'relative';
+    
+    const title = document.createElement('div');
+    title.className = 'info-title';
+    title.textContent = 'sol · tarde';
+    title.style.position = 'absolute';
+    title.style.top = '2rem';
+    title.style.left = '50%';
+    title.style.transform = 'translateX(-50%)';
+    title.style.zIndex = '10';
+    panel.appendChild(title);
+    
+    const container = document.createElement('div');
+    container.id = 'sol-oeste';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    panel.appendChild(container);
+    
+    wrapper.appendChild(panel);
+    
+    if (currentSunData) {
+      renderSunWest(currentSunData, currentTime, container);
     }
   } else {
     // Mostrar posición lunar
-    wrapper.innerHTML = `
-      <div class="info-panel">
-        <div class="info-title">posición lunar</div>
-        <div class="ascii-container ascii-large" id="luna-posicion"></div>
-      </div>
-    `;
+    wrapper.innerHTML = '';
     
-    const container = wrapper.querySelector('#luna-posicion');
-    if (container && currentMoonData) {
-      container.textContent = renderMoonPosition(currentMoonData, currentTime);
+    const panel = document.createElement('div');
+    panel.className = 'info-panel';
+    panel.style.width = '100%';
+    panel.style.height = '100%';
+    panel.style.position = 'relative';
+    
+    const title = document.createElement('div');
+    title.className = 'info-title';
+    title.textContent = 'posición lunar';
+    title.style.position = 'absolute';
+    title.style.top = '2rem';
+    title.style.left = '50%';
+    title.style.transform = 'translateX(-50%)';
+    title.style.zIndex = '10';
+    panel.appendChild(title);
+    
+    const container = document.createElement('div');
+    container.id = 'luna-posicion';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    panel.appendChild(container);
+    
+    wrapper.appendChild(panel);
+    
+    if (currentMoonData) {
+      renderMoonPosition(currentMoonData, currentTime, container);
     }
   }
 }
@@ -513,6 +587,9 @@ async function cargarDatos() {
     // Cargar catálogo de estrellas
     const responseStars = await fetch('data/stars/catalog.json');
     starCatalog = await responseStars.json();
+    
+    // Cargar líneas de constelaciones
+    await loadConstellationLines();
     
     // Determinar si es de día o noche
     currentTime = getNow();
@@ -554,7 +631,7 @@ function actualizarTiempo() {
     syncCurrentDataForDate(dateKey);
   }
   
-  // Verificar si cambió el estado día/noche
+  // Actualizar el estado día/noche
   if (currentSunData) {
     const currentHour = currentTime.getHours();
     const currentMinutes = currentTime.getMinutes();
@@ -563,8 +640,12 @@ function actualizarTiempo() {
     const sunset = parseTime(currentSunData.sunset);
     const newIsDaytime = currentTimeDecimal >= sunrise && currentTimeDecimal < sunset;
     
-    if (newIsDaytime !== isDaytime) {
-      isDaytime = newIsDaytime;
+    // Siempre actualizar isDaytime
+    const changed = newIsDaytime !== isDaytime;
+    isDaytime = newIsDaytime;
+    
+    // Solo re-renderizar si cambió el estado
+    if (changed) {
       renderizarPanelActual();
     }
   }
