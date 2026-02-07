@@ -103,6 +103,28 @@ function getStarSize(mag) {
 }
 
 /**
+ * Proyección equidistante azimutal (zenithal)
+ * Convierte coordenadas horizontales (azimut/altitud) a coordenadas de pantalla (%)
+ * El cenit queda en el centro, el horizonte en el borde del círculo inscrito.
+ * Norte queda abajo (como mirando hacia arriba tumbado mirando al sur).
+ *
+ * @param {number} azimuth - Azimut en grados (0=N, 90=E, 180=S, 270=O)
+ * @param {number} altitude - Altitud en grados (0=horizonte, 90=cenit)
+ * @returns {{x: number, y: number}} Coordenadas en porcentaje (0-100)
+ */
+function azimuthalProject(azimuth, altitude) {
+  const azRad = azimuth * Math.PI / 180;
+  // Distancia normalizada desde el cenit: 0 en cenit, 1 en horizonte
+  const r = (90 - altitude) / 90;
+  // Escala para que quepa en el viewport (usar ~48 para dejar margen)
+  const scale = 48;
+  // x: sin(az) va hacia el este (derecha), y: -cos(az) para que norte quede abajo
+  const x = 50 + r * Math.sin(azRad) * scale;
+  const y = 50 - r * Math.cos(azRad) * scale;
+  return { x, y };
+}
+
+/**
  * Renderiza el cielo nocturno desde Barcelona (hemisferio norte celeste)
  */
 export function renderNightSkyBarcelona(starCatalog, currentTime, container) {
@@ -156,12 +178,10 @@ export function renderNightSkyBarcelona(starCatalog, currentTime, container) {
     drawConstellationLines(svg, constellationLines, lat, lon, currentTime, true);
   }
   
-  // Crear elementos de estrellas
+  // Crear elementos de estrellas con proyección equidistante azimutal
   for (const star of visibleStars) {
-    // Proyección azimutal: azimut → x, altitud → y
-    const x = (star.azimuth / 360) * 100; // Porcentaje
-    const y = 100 - (star.altitude / 90) * 100; // Porcentaje (invertido)
-    
+    const { x, y } = azimuthalProject(star.azimuth, star.altitude);
+
     const starEl = document.createElement('span');
     starEl.textContent = star.symbol;
     starEl.className = 'star-point';
@@ -174,20 +194,22 @@ export function renderNightSkyBarcelona(starCatalog, currentTime, container) {
     starEl.style.zIndex = '2';
     starEl.style.pointerEvents = 'none';
     starEl.style.userSelect = 'none';
-    
-    // Añadir título con información de la estrella
+
     if (star.name) {
       starEl.title = `${star.name} (mag ${star.mag.toFixed(1)})`;
     }
-    
+
     container.appendChild(starEl);
   }
-  
+
+  // Marcas cardinales en el horizonte
+  drawCardinalMarks(container);
+
   // Añadir información del cielo
   const info = document.createElement('div');
   info.className = 'sky-info';
   info.style.position = 'absolute';
-  info.style.bottom = '2rem';
+  info.style.bottom = '1rem';
   info.style.left = '50%';
   info.style.transform = 'translateX(-50%)';
   info.style.fontSize = 'clamp(0.7rem, 1.5vw, 0.9rem)';
@@ -196,13 +218,12 @@ export function renderNightSkyBarcelona(starCatalog, currentTime, container) {
   info.style.zIndex = '3';
   info.style.pointerEvents = 'none';
   info.style.whiteSpace = 'pre-line';
-  
+
   info.textContent = [
-    `barcelona (hemisferio norte celeste)`,
-    `${visibleStars.length} estrellas visibles (mag < ${magLimit.toFixed(1)})`,
+    `barcelona · ${visibleStars.length} estrellas (mag < ${magLimit.toFixed(1)})`,
     `${formatTime(currentTime)}`
   ].join('\n');
-  
+
   container.appendChild(info);
 }
 
@@ -260,12 +281,10 @@ export function renderNightSkyAntipode(starCatalog, currentTime, container) {
     drawConstellationLines(svg, constellationLines, lat, lon, currentTime, false);
   }
   
-  // Crear elementos de estrellas
+  // Crear elementos de estrellas con proyección equidistante azimutal
   for (const star of visibleStars) {
-    // Proyección azimutal: azimut → x, altitud → y
-    const x = (star.azimuth / 360) * 100; // Porcentaje
-    const y = 100 - (star.altitude / 90) * 100; // Porcentaje (invertido)
-    
+    const { x, y } = azimuthalProject(star.azimuth, star.altitude);
+
     const starEl = document.createElement('span');
     starEl.textContent = star.symbol;
     starEl.className = 'star-point';
@@ -278,20 +297,22 @@ export function renderNightSkyAntipode(starCatalog, currentTime, container) {
     starEl.style.zIndex = '2';
     starEl.style.pointerEvents = 'none';
     starEl.style.userSelect = 'none';
-    
-    // Añadir título con información de la estrella
+
     if (star.name) {
       starEl.title = `${star.name} (mag ${star.mag.toFixed(1)})`;
     }
-    
+
     container.appendChild(starEl);
   }
-  
+
+  // Marcas cardinales en el horizonte
+  drawCardinalMarks(container);
+
   // Añadir información del cielo
   const info = document.createElement('div');
   info.className = 'sky-info';
   info.style.position = 'absolute';
-  info.style.bottom = '2rem';
+  info.style.bottom = '1rem';
   info.style.left = '50%';
   info.style.transform = 'translateX(-50%)';
   info.style.fontSize = 'clamp(0.7rem, 1.5vw, 0.9rem)';
@@ -300,71 +321,62 @@ export function renderNightSkyAntipode(starCatalog, currentTime, container) {
   info.style.zIndex = '3';
   info.style.pointerEvents = 'none';
   info.style.whiteSpace = 'pre-line';
-  
+
   info.textContent = [
-    `antípoda (hemisferio sur celeste)`,
-    `${visibleStars.length} estrellas visibles (mag < ${magLimit.toFixed(1)})`,
+    `antípoda · ${visibleStars.length} estrellas (mag < ${magLimit.toFixed(1)})`,
     `${formatTime(currentTime)}`
   ].join('\n');
-  
+
   container.appendChild(info);
 }
 
 /**
- * Dibuja las líneas de constelaciones en el SVG
+ * Dibuja las líneas de constelaciones en el SVG usando proyección azimutal
  */
 function drawConstellationLines(svg, lines, lat, lon, time, isNorthernHemisphere) {
   let linesDrawn = 0;
-  
+
   for (const constellation of lines) {
     const { geometry } = constellation;
-    
+
     if (geometry.type !== 'MultiLineString') continue;
-    
-    // Para cada línea en la constelación
+
     for (const lineCoords of geometry.coordinates) {
       const points = [];
       let allVisible = true;
-      
-      // Convertir cada punto de la línea
+
       for (const [geoLon, geoLat] of lineCoords) {
         const { ra, dec } = geoJsonToRaDec(geoLon, geoLat);
-        
-        // Filtrar por hemisferio
-        if (isNorthernHemisphere && dec < 0) {
-          allVisible = false;
-          break;
-        }
-        if (!isNorthernHemisphere && dec > 0) {
-          allVisible = false;
-          break;
-        }
-        
+
+        if (isNorthernHemisphere && dec < 0) { allVisible = false; break; }
+        if (!isNorthernHemisphere && dec > 0) { allVisible = false; break; }
+
         const coords = calculateHorizontalCoordinates(ra, dec, lat, lon, time);
-        
-        // Si algún punto está bajo el horizonte, no dibujar la línea
-        if (coords.altitude < 0) {
-          allVisible = false;
-          break;
-        }
-        
-        // Convertir a coordenadas de pantalla (porcentaje)
-        const x = (coords.azimuth / 360) * 100;
-        const y = 100 - (coords.altitude / 90) * 100;
-        
-        points.push({ x, y });
+
+        if (coords.altitude < 0) { allVisible = false; break; }
+
+        // Usar la misma proyección equidistante azimutal
+        const pt = azimuthalProject(coords.azimuth, coords.altitude);
+        points.push(pt);
       }
-      
-      // Dibujar la línea si todos los puntos son visibles
+
       if (allVisible && points.length >= 2) {
+        // Descartar líneas que cruzan el cielo entero (artefacto de wrap-around)
+        let hasHugeGap = false;
+        for (let i = 1; i < points.length; i++) {
+          const dx = points[i].x - points[i - 1].x;
+          const dy = points[i].y - points[i - 1].y;
+          if (Math.sqrt(dx * dx + dy * dy) > 40) { hasHugeGap = true; break; }
+        }
+        if (hasHugeGap) continue;
+
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        
-        // Construir el path
+
         let d = `M ${points[0].x} ${points[0].y}`;
         for (let i = 1; i < points.length; i++) {
           d += ` L ${points[i].x} ${points[i].y}`;
         }
-        
+
         path.setAttribute('d', d);
         path.setAttribute('stroke', 'var(--btn-color)');
         path.setAttribute('stroke-width', '0.15');
@@ -372,14 +384,41 @@ function drawConstellationLines(svg, lines, lat, lon, time, isNorthernHemisphere
         path.setAttribute('fill', 'none');
         path.setAttribute('opacity', '0.4');
         path.setAttribute('vector-effect', 'non-scaling-stroke');
-        
+
         svg.appendChild(path);
         linesDrawn++;
       }
     }
   }
-  
-  console.log('Líneas de constelaciones dibujadas:', linesDrawn);
+}
+
+/**
+ * Dibuja marcas cardinales (N, S, E, O) en el horizonte de la proyección azimutal
+ */
+function drawCardinalMarks(container) {
+  const cardinals = [
+    { label: 'N', azimuth: 0 },
+    { label: 'E', azimuth: 90 },
+    { label: 'S', azimuth: 180 },
+    { label: 'O', azimuth: 270 }
+  ];
+
+  for (const c of cardinals) {
+    const { x, y } = azimuthalProject(c.azimuth, 0);
+    const mark = document.createElement('span');
+    mark.textContent = c.label;
+    mark.style.position = 'absolute';
+    mark.style.left = `${x}%`;
+    mark.style.top = `${y}%`;
+    mark.style.fontSize = 'clamp(0.7rem, 1.5vw, 1rem)';
+    mark.style.color = 'var(--btn-color)';
+    mark.style.transform = 'translate(-50%, -50%)';
+    mark.style.zIndex = '4';
+    mark.style.pointerEvents = 'none';
+    mark.style.fontWeight = 'bold';
+    mark.style.opacity = '0.6';
+    container.appendChild(mark);
+  }
 }
 
 /**

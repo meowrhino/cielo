@@ -15,13 +15,7 @@ export function renderSunEast(sunData, currentTime) {
   const currentHour = currentTime.getHours() + currentTime.getMinutes() / 60;
   
   // Determinar posición actual del sol
-  let currentSunData = null;
-  for (const hourData of sunData.hourlyData) {
-    if (hourData.hour === Math.floor(currentHour) && hourData.isVisible) {
-      currentSunData = hourData;
-      break;
-    }
-  }
+  const currentSunData = getInterpolatedSunData(sunData.hourlyData, currentTime);
   
   // Crear canvas ASCII (pantalla completa)
   const width = 80;
@@ -35,7 +29,7 @@ export function renderSunEast(sunData, currentTime) {
   drawSunPath(canvas, width, height, sunrise, solarNoon, sunData);
   
   // Dibujar sol actual si está visible y en el rango Este
-  if (currentSunData && currentHour >= sunrise && currentHour <= solarNoon) {
+  if (currentSunData && currentSunData.isVisible && currentHour >= sunrise && currentHour <= solarNoon) {
     if (currentSunData.azimuth >= 0 && currentSunData.azimuth <= 180) {
       drawCurrentSun(canvas, width, height, currentSunData);
     }
@@ -62,13 +56,7 @@ export function renderSunWest(sunData, currentTime) {
   const currentHour = currentTime.getHours() + currentTime.getMinutes() / 60;
   
   // Determinar posición actual del sol
-  let currentSunData = null;
-  for (const hourData of sunData.hourlyData) {
-    if (hourData.hour === Math.floor(currentHour) && hourData.isVisible) {
-      currentSunData = hourData;
-      break;
-    }
-  }
+  const currentSunData = getInterpolatedSunData(sunData.hourlyData, currentTime);
   
   // Crear canvas ASCII (pantalla completa)
   const width = 80;
@@ -82,7 +70,7 @@ export function renderSunWest(sunData, currentTime) {
   drawSunPathWest(canvas, width, height, solarNoon, sunset, sunData);
   
   // Dibujar sol actual si está visible y en el rango Oeste
-  if (currentSunData && currentHour >= solarNoon && currentHour <= sunset) {
+  if (currentSunData && currentSunData.isVisible && currentHour >= solarNoon && currentHour <= sunset) {
     if (currentSunData.azimuth >= 180 && currentSunData.azimuth <= 360) {
       drawCurrentSunWest(canvas, width, height, currentSunData);
     }
@@ -225,6 +213,46 @@ function drawCurrentSunWest(canvas, width, height, sunData) {
  */
 function canvasToString(canvas) {
   return canvas.map(row => row.join('')).join('\n');
+}
+
+/**
+ * Interpola la posición actual del sol usando datos horarios
+ */
+function getInterpolatedSunData(hourlyData, currentTime) {
+  if (!hourlyData || hourlyData.length === 0) return null;
+
+  const hour = currentTime.getHours();
+  const nextHour = (hour + 1) % 24;
+  const current = hourlyData.find(entry => entry.hour === hour);
+  const next = hourlyData.find(entry => entry.hour === nextHour);
+
+  if (!current) return null;
+  if (!next) {
+    return {
+      azimuth: current.azimuth,
+      altitude: current.altitude,
+      isVisible: current.altitude > 0
+    };
+  }
+
+  const fraction = currentTime.getMinutes() / 60;
+  const azimuth = interpolateAngle(current.azimuth, next.azimuth, fraction);
+  const altitude = current.altitude + (next.altitude - current.altitude) * fraction;
+
+  return {
+    azimuth,
+    altitude,
+    isVisible: altitude > 0
+  };
+}
+
+/**
+ * Interpola un ángulo en grados manejando el cruce 0°/360°
+ */
+function interpolateAngle(start, end, t) {
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return start;
+  const delta = ((end - start + 540) % 360) - 180;
+  return (start + delta * t + 360) % 360;
 }
 
 /**

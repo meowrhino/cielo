@@ -152,15 +152,15 @@ function setupDebugControls() {
   const container = document.createElement("div");
   container.style.cssText = [
     "position: fixed",
-    "top: 12px",
-    "right: 12px",
+    "top: 2rem",
+    "right: 2rem",
     "z-index: 1000",
-    "background: rgba(10, 15, 40, 0.9)",
-    "color: #eaf0ff",
-    "border: 1px solid rgba(255, 255, 255, 0.15)",
+    "background: rgba(0, 0, 0, 0.85)",
+    "color: #f2f2f2",
+    "border: 1px solid #444",
     "border-radius: 8px",
     "padding: 10px 12px",
-    "font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+    "font-family: \"Courier Prime\", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
     "font-size: 12px",
     "max-width: 220px"
   ].join("; ");

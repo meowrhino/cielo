@@ -159,42 +159,53 @@ export function renderMoonPhase(moonData, container) {
 // === FUNCIONES AUXILIARES ===
 
 /**
+ * Proyección equidistante azimutal (misma que sky-renderer-v2)
+ */
+function azimuthalProject(azimuth, altitude) {
+  const azRad = azimuth * Math.PI / 180;
+  const r = (90 - altitude) / 90;
+  const scale = 48;
+  const x = 50 + r * Math.sin(azRad) * scale;
+  const y = 50 - r * Math.cos(azRad) * scale;
+  return { x, y };
+}
+
+/**
  * Dibuja la trayectoria de la luna durante la noche
  */
 function drawMoonPath(svg, moonData) {
   const points = [];
-  
+
   for (const hourData of moonData.hourlyData) {
     if (!hourData.isVisible || hourData.altitude < 0) continue;
-    
-    const x = (hourData.azimuth / 360) * 100;
-    const y = 100 - (hourData.altitude / 90) * 100;
-    
-    points.push({ x, y });
+
+    const pt = azimuthalProject(hourData.azimuth, hourData.altitude);
+    points.push(pt);
   }
-  
-  if (points.length < 2) {
-    console.log('No hay suficientes puntos para dibujar trayectoria lunar');
-    return;
-  }
-  
-  console.log('Dibujando trayectoria lunar con', points.length, 'puntos');
-  
-  // Crear path
+
+  if (points.length < 2) return;
+
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  
+
   let d = `M ${points[0].x} ${points[0].y}`;
   for (let i = 1; i < points.length; i++) {
-    d += ` L ${points[i].x} ${points[i].y}`;
+    // Evitar líneas enormes por wrap-around
+    const dx = points[i].x - points[i - 1].x;
+    const dy = points[i].y - points[i - 1].y;
+    if (Math.sqrt(dx * dx + dy * dy) > 40) {
+      d += ` M ${points[i].x} ${points[i].y}`;
+    } else {
+      d += ` L ${points[i].x} ${points[i].y}`;
+    }
   }
-  
+
   path.setAttribute('d', d);
   path.setAttribute('stroke', 'var(--text-color)');
   path.setAttribute('stroke-width', '0.3');
   path.setAttribute('stroke-dasharray', '1 1.5');
   path.setAttribute('fill', 'none');
   path.setAttribute('opacity', '0.3');
-  
+
   svg.appendChild(path);
 }
 
@@ -202,11 +213,8 @@ function drawMoonPath(svg, moonData) {
  * Dibuja la luna en su posición actual
  */
 function drawCurrentMoon(container, azimuth, altitude, phase) {
-  const x = (azimuth / 360) * 100;
-  const y = 100 - (altitude / 90) * 100;
-  
-  console.log('Dibujando luna en:', x, y, 'azimut:', azimuth, 'altitud:', altitude);
-  
+  const { x, y } = azimuthalProject(azimuth, altitude);
+
   const moon = document.createElement('span');
   moon.textContent = getMoonSymbol(phase);
   moon.style.position = 'absolute';
@@ -218,7 +226,7 @@ function drawCurrentMoon(container, azimuth, altitude, phase) {
   moon.style.zIndex = '3';
   moon.style.pointerEvents = 'none';
   moon.style.textShadow = '0 0 10px currentColor';
-  
+
   container.appendChild(moon);
 }
 

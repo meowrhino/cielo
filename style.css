@@ -1,22 +1,28 @@
-/**
- * CIELO - Visualización astronómica desde Barcelona
- * meowrhino.studio
- */
-
-/* ============================================
-   RESET Y CONFIGURACIÓN BASE
-   ============================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+:root {
+  --bg: #000;
+  --text: #f2f2f2;
+  --muted: #9a9a9a;
+  --theme-color: #000;
+  --edge: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+* {
+  box-sizing: border-box;
+}
 
 html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  box-sizing: border-box;
   font-family: 'Courier Prime', monospace;
-  scroll-behavior: smooth;
+  background: var(--bg);
+  color: var(--text);
+  color-scheme: dark;
 }
 
 button,
@@ -24,23 +30,21 @@ input,
 select,
 textarea {
   font-family: inherit;
+  color: inherit;
+}
+
+input {
+  accent-color: var(--muted);
 }
 
 a {
-  color: var(--btn-color);
+  color: var(--muted);
   text-decoration: none;
 }
 
-p,
-h1,
-h2 {
-  margin: 0;
-  padding: 0;
+a:hover {
+  color: var(--text);
 }
-
-/* ============================================
-   LAYOUT PRINCIPAL
-   ============================================ */
 
 #content {
   position: relative;
@@ -48,33 +52,17 @@ h2 {
   height: 100dvh;
 }
 
-/* ============================================
-   SISTEMA DE CELDAS (PANELES)
-   ============================================ */
-
 .celda {
-  /* Posicionamiento */
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  
-  /* Visualización */
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  inset: 0;
+  background: var(--bg);
+  color: var(--text);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.5s ease-in-out;
-  
-  /* Layout interno */
+  transition: opacity 0.35s ease;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .celda.activa {
@@ -82,83 +70,47 @@ h2 {
   pointer-events: auto;
 }
 
-/* ============================================
-   VARIABLES DE COLOR POR PANEL
-   ============================================ */
-
-.centro {
-  --bg-color: #000000;
-  --text-color: #ffffff;
-  --btn-color: #888888;
-  --theme-color: #000000;
+.contenido {
+  width: 100%;
+  height: 100%;
+  padding: var(--edge);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.75rem;
 }
-
-.norte {
-  --bg-color: #000814;
-  --text-color: #cad2c5;
-  --btn-color: #52796f;
-  --theme-color: #000814;
-}
-
-.sur {
-  --bg-color: #001219;
-  --text-color: #94d2bd;
-  --btn-color: #0a9396;
-  --theme-color: #001219;
-}
-
-.este {
-  --bg-color: #03045e;
-  --text-color: #caf0f8;
-  --btn-color: #0077b6;
-  --theme-color: #03045e;
-}
-
-.oeste {
-  --bg-color: #1a1423;
-  --text-color: #f4acb7;
-  --btn-color: #9d4edd;
-  --theme-color: #1a1423;
-}
-
-/* ============================================
-   BOTONES DE NAVEGACIÓN
-   ============================================ */
 
 .boton-nav {
-  /* Posicionamiento */
   position: absolute;
-  z-index: 1;
-  
-  /* Estilo */
-  font-size: clamp(1rem, 2dvw, 2rem);
-  padding: 0;
-  border: none;
+  z-index: 3;
+  border: 0;
   background: none;
+  padding: 0;
   cursor: pointer;
-  color: var(--btn-color, inherit);
-  transition: color 0.3s ease;
+  color: var(--muted);
+  font-size: clamp(0.9rem, 2dvw, 1.6rem);
 }
 
 .boton-nav:hover {
-  color: var(--text-color);
+  color: var(--text);
 }
 
-/* Posiciones específicas de cada botón */
 .btn_arriba {
-  top: 3dvh;
+  top: 2.5dvh;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .btn_abajo {
-  bottom: 3dvh;
+  bottom: 2.5dvh;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .btn_derecha {
-  right: 1dvw;
+  right: 2dvw;
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;
@@ -166,87 +118,61 @@ h2 {
 }
 
 .btn_izquierda {
-  left: 1dvw;
+  left: 2dvw;
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;
   text-orientation: mixed;
 }
 
-/* Responsive: botones más pequeños en desktop */
-@media (min-width: 768px) {
-  .boton-nav {
-    font-size: clamp(0.7rem, 1.1dvw, 1.3rem);
-  }
-}
-
-/* ============================================
-   CONTENEDOR DE CONTENIDO
-   ============================================ */
-
-.contenido {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* ============================================
-   ESTILOS ASCII
-   ============================================ */
-
 .ascii-container {
-  font-family: 'Courier Prime', monospace;
   white-space: pre;
-  line-height: 1.2;
-  font-size: clamp(0.5rem, 1.5vw, 1rem);
+  line-height: 1;
+  font-size: clamp(0.55rem, 1.2vw, 0.95rem);
+  max-width: 100%;
   text-align: center;
-  color: var(--text-color);
 }
 
 .ascii-large {
-  font-size: clamp(0.8rem, 2vw, 1.5rem);
+  font-size: clamp(0.7rem, 1.6vw, 1.25rem);
 }
 
 .ascii-diagram {
-  font-family: 'Courier Prime', monospace;
-  white-space: pre;
-  line-height: 1.2;
-  text-align: center;
-  color: var(--text-color);
   margin: 0;
+  display: inline-block;
+  text-align: left;
+  letter-spacing: 0;
+  font-variant-ligatures: none;
 }
 
 .ascii-meta {
-  font-size: clamp(0.8rem, 2vw, 1.2rem);
-  color: var(--btn-color);
-  text-align: center;
+  font-size: clamp(0.7rem, 1.6vw, 1rem);
+  color: var(--muted);
   white-space: pre-line;
 }
 
-/* ============================================
-   PANEL CENTRO - ESTILOS ESPECÍFICOS
-   ============================================ */
+.info-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: min(80%, 42rem);
+}
+
+.info-title {
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  margin: 0;
+}
 
 .centro .contenido {
   justify-content: flex-start;
   position: relative;
 }
 
-.centro-subtitle {
-  font-size: clamp(0.8rem, 2vw, 1.2rem);
-  color: var(--btn-color);
-}
-
 .centro-stack {
   position: absolute;
-  top: 70dvh;
   left: 50%;
+  bottom: var(--edge);
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
@@ -254,104 +180,12 @@ h2 {
   text-align: center;
 }
 
+.centro-subtitle,
 .centro-link {
-  font-size: clamp(0.8rem, 2vw, 1.2rem);
-  color: var(--btn-color);
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  color: var(--muted);
 }
 
 .centro-link:hover {
-  color: var(--text-color);
+  color: var(--text);
 }
-
-/* ============================================
-   INFO PANEL - COMPONENTE GENÉRICO
-   ============================================ */
-
-.info-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 80%;
-}
-
-.info-title {
-  font-size: clamp(1.2rem, 3vw, 2rem);
-  margin-bottom: 0.5rem;
-}
-
-.info-data {
-  font-size: clamp(0.8rem, 1.5vw, 1rem);
-  line-height: 1.6;
-}
-
-/* ============================================
-   DEBUG PANEL - ESTILOS DE DEBUGGING
-   ============================================ */
-
-/* DEBUG: Panel de debugging - Eliminar en versión final */
-.debug-panel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.9);
-  color: #00ff00;
-  padding: 1rem;
-  font-size: 0.8rem;
-  z-index: 9999;
-  border-top: 1px solid #00ff00;
-  max-height: 30vh;
-  overflow-y: auto;
-}
-
-/* DEBUG: Controles del panel */
-.debug-controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* DEBUG: Grupo de control individual */
-.debug-control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-/* DEBUG: Label de control */
-.debug-control-group label {
-  font-size: 0.7rem;
-  color: #00ff00;
-  text-transform: uppercase;
-}
-
-/* DEBUG: Inputs del panel */
-.debug-control-group input {
-  background: #000;
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  padding: 0.3rem;
-  font-size: 0.8rem;
-}
-
-/* DEBUG: Readout de información */
-.debug-readout {
-  font-family: 'Courier Prime', monospace;
-  font-size: 0.7rem;
-  line-height: 1.4;
-  white-space: pre-wrap;
-  color: #00ff00;
-  background: #001100;
-  padding: 0.5rem;
-  border: 1px solid #00ff00;
-  border-radius: 2px;
-}
-
-/* DEBUG: Valores numéricos destacados */
-.debug-value {
-  color: #00ffff;
-  font-weight: bold;
-}
-
-/* FIN DEBUG */
