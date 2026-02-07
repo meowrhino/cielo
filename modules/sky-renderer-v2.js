@@ -378,11 +378,10 @@ function drawConstellationLines(svg, lines, lat, lon, time, isNorthernHemisphere
         }
 
         path.setAttribute('d', d);
-        path.setAttribute('stroke', 'var(--btn-color)');
-        path.setAttribute('stroke-width', '0.15');
-        path.setAttribute('stroke-dasharray', '0.5 0.8');
+        path.setAttribute('stroke', 'var(--muted)');
+        path.setAttribute('stroke-width', '0.3');
         path.setAttribute('fill', 'none');
-        path.setAttribute('opacity', '0.4');
+        path.setAttribute('opacity', '0.6');
         path.setAttribute('vector-effect', 'non-scaling-stroke');
 
         svg.appendChild(path);
