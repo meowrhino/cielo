@@ -15,19 +15,12 @@ export function renderMoonPosition(moonData, currentTime, container) {
   const currentHour = currentTime.getHours();
   const hourData = moonData.hourlyData.find(h => h.hour === currentHour);
   
-  if (!hourData) {
-    console.log('No hay datos de luna para la hora:', currentHour);
-    return;
-  }
-  
-  console.log('Renderizando posición lunar:', hourData);
-  
   // Limpiar contenedor
   container.innerHTML = '';
   container.style.position = 'relative';
   container.style.width = '100%';
   container.style.height = '100%';
-  
+
   // Crear SVG para la trayectoria
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.style.position = 'absolute';
@@ -40,15 +33,15 @@ export function renderMoonPosition(moonData, currentTime, container) {
   svg.setAttribute('viewBox', '0 0 100 100');
   svg.setAttribute('preserveAspectRatio', 'none');
   container.appendChild(svg);
-  
+
   // Dibujar trayectoria de la luna durante la noche
   drawMoonPath(svg, moonData);
-  
-  // Dibujar luna actual si está visible
-  if (hourData.isVisible && hourData.altitude > 0) {
+
+  // Dibujar luna actual si hay datos y está visible
+  if (hourData && hourData.isVisible && hourData.altitude > 0) {
     drawCurrentMoon(container, hourData.azimuth, hourData.altitude, moonData.phase);
   }
-  
+
   // Añadir información
   const info = document.createElement('div');
   info.className = 'moon-info';
@@ -62,15 +55,21 @@ export function renderMoonPosition(moonData, currentTime, container) {
   info.style.zIndex = '3';
   info.style.pointerEvents = 'none';
   info.style.whiteSpace = 'pre-line';
-  
-  const visibilityText = hourData.isVisible && hourData.altitude > 0 ? 'visible' : 'bajo el horizonte';
-  
-  info.textContent = [
-    `azimut: ${hourData.azimuth.toFixed(1)}° · altitud: ${hourData.altitude.toFixed(1)}°`,
-    `${visibilityText}`,
-    `fase: ${(moonData.phase * 100).toFixed(0)}%`
-  ].join('\n');
-  
+
+  const phaseName = getMoonPhaseName(moonData.phase);
+
+  if (hourData && hourData.altitude > 0 && hourData.isVisible) {
+    info.textContent = [
+      `azimut: ${hourData.azimuth.toFixed(1)}° · altitud: ${hourData.altitude.toFixed(1)}°`,
+      phaseName
+    ].join('\n');
+  } else {
+    info.textContent = [
+      `luna bajo el horizonte`,
+      phaseName
+    ].join('\n');
+  }
+
   container.appendChild(info);
 }
 
@@ -159,14 +158,15 @@ export function renderMoonPhase(moonData, container) {
 // === FUNCIONES AUXILIARES ===
 
 /**
- * Proyección equidistante azimutal (misma que sky-renderer-v2)
+ * Proyección equidistante azimutal adaptativa (misma que sky-renderer-v2)
  */
 function azimuthalProject(azimuth, altitude) {
   const azRad = azimuth * Math.PI / 180;
   const r = (90 - altitude) / 90;
-  const scale = 48;
-  const x = 50 + r * Math.sin(azRad) * scale;
-  const y = 50 - r * Math.cos(azRad) * scale;
+  const scaleX = 50;
+  const scaleY = 50;
+  const x = 50 + r * Math.sin(azRad) * scaleX;
+  const y = 50 - r * Math.cos(azRad) * scaleY;
   return { x, y };
 }
 

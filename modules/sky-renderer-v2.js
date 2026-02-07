@@ -103,10 +103,10 @@ function getStarSize(mag) {
 }
 
 /**
- * Proyección equidistante azimutal (zenithal)
- * Convierte coordenadas horizontales (azimut/altitud) a coordenadas de pantalla (%)
- * El cenit queda en el centro, el horizonte en el borde del círculo inscrito.
- * Norte queda abajo (como mirando hacia arriba tumbado mirando al sur).
+ * Proyección equidistante azimutal adaptativa
+ * Se estira para llenar todo el rectángulo del contenedor.
+ * En pantalla ancha (desktop) se estira horizontalmente,
+ * en pantalla alta (móvil) se estira verticalmente.
  *
  * @param {number} azimuth - Azimut en grados (0=N, 90=E, 180=S, 270=O)
  * @param {number} altitude - Altitud en grados (0=horizonte, 90=cenit)
@@ -116,11 +116,11 @@ function azimuthalProject(azimuth, altitude) {
   const azRad = azimuth * Math.PI / 180;
   // Distancia normalizada desde el cenit: 0 en cenit, 1 en horizonte
   const r = (90 - altitude) / 90;
-  // Escala para que quepa en el viewport (usar ~48 para dejar margen)
-  const scale = 48;
-  // x: sin(az) va hacia el este (derecha), y: -cos(az) para que norte quede abajo
-  const x = 50 + r * Math.sin(azRad) * scale;
-  const y = 50 - r * Math.cos(azRad) * scale;
+  // Escala independiente por eje — llena todo el rectángulo del viewport
+  const scaleX = 50;
+  const scaleY = 50;
+  const x = 50 + r * Math.sin(azRad) * scaleX;
+  const y = 50 - r * Math.cos(azRad) * scaleY;
   return { x, y };
 }
 

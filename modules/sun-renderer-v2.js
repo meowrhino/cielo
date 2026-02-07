@@ -1,97 +1,92 @@
 /**
  * Módulo de renderizado del sol V2
  * Usa SVG para curvas fluidas y posicionamiento absoluto para el sol
+ * Centra la trayectoria en el rango real de azimut del sol
  */
+
+/**
+ * Calcula el rango de azimut real del sol para centrarlo
+ */
+function getSunAzimuthRange(sunData, azimuthStart, azimuthEnd) {
+  let min = Infinity;
+  let max = -Infinity;
+  let maxAlt = 0;
+
+  for (const h of sunData.hourlyData) {
+    if (!h.isVisible) continue;
+    if (h.azimuth < azimuthStart || h.azimuth > azimuthEnd) continue;
+    if (h.azimuth < min) min = h.azimuth;
+    if (h.azimuth > max) max = h.azimuth;
+    if (h.altitude > maxAlt) maxAlt = h.altitude;
+  }
+
+  if (min === Infinity) return { min: azimuthStart, max: azimuthEnd, maxAlt: 45 };
+  return { min, max, maxAlt };
+}
+
+/**
+ * Mapea azimut y altitud a coordenadas de pantalla centradas en el rango real
+ */
+function sunProject(azimuth, altitude, azRange) {
+  // Margen del 15% a cada lado del rango de azimut
+  const span = azRange.max - azRange.min;
+  const margin = Math.max(span * 0.15, 5);
+  const rangeMin = azRange.min - margin;
+  const rangeMax = azRange.max + margin;
+
+  const x = ((azimuth - rangeMin) / (rangeMax - rangeMin)) * 100;
+
+  // Escalar altitud: maxAlt ocupa ~70% del alto, dejar margen arriba y abajo
+  const altScale = Math.min(azRange.maxAlt * 1.3, 90);
+  const y = 90 - (altitude / altScale) * 75;
+
+  return { x, y };
+}
 
 /**
  * Renderiza la trayectoria del sol desde salida hasta mediodía (panel Este)
  */
 export function renderSunEast(sunData, currentTime, container) {
-  if (!sunData || !container) {
-    console.error('No se puede renderizar sol este: faltan datos o contenedor');
-    return;
-  }
-  
+  if (!sunData || !container) return;
+
   const sunrise = parseTime(sunData.sunrise);
   const solarNoon = parseTime(sunData.solarNoon);
   const currentHour = currentTime.getHours() + currentTime.getMinutes() / 60;
-  
+
   // Determinar posición actual del sol
-  let currentSunData = null;
-  for (const hourData of sunData.hourlyData) {
-    if (hourData.hour === Math.floor(currentHour) && hourData.isVisible) {
-      currentSunData = hourData;
-      break;
-    }
-  }
-  
-  console.log('Renderizando sol este, hora:', currentHour, 'datos:', currentSunData);
-  
+  const currentSunData = getInterpolatedSunData(sunData.hourlyData, currentTime);
+
+  // Calcular rango real de azimut para esta mitad
+  const azRange = getSunAzimuthRange(sunData, 0, 180);
+
   // Limpiar contenedor
   container.innerHTML = '';
   container.style.position = 'relative';
   container.style.width = '100%';
   container.style.height = '100%';
-  
+
   // Crear SVG para la trayectoria
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.style.position = 'absolute';
-  svg.style.top = '0';
-  svg.style.left = '0';
-  svg.style.width = '100%';
-  svg.style.height = '100%';
-  svg.style.pointerEvents = 'none';
-  svg.style.zIndex = '1';
-  svg.setAttribute('viewBox', '0 0 100 100');
-  svg.setAttribute('preserveAspectRatio', 'none');
-  container.appendChild(svg);
-  
-  // Dibujar marca del Este puro (90°, centro horizontal)
-  drawCompassMarker(container, 50, 'E');
-  
+  const svg = createSvg(container);
+
   // Dibujar trayectoria del sol
-  drawSunPath(svg, sunrise, solarNoon, sunData, 0, 180);
-  
-  // Dibujar marcadores de salida y mediodía
-  const sunriseData = sunData.hourlyData.find(h => Math.abs(h.hour - Math.floor(sunrise)) <= 1 && h.isVisible);
-  const noonData = sunData.hourlyData.find(h => Math.abs(h.hour - Math.floor(solarNoon)) <= 1 && h.isVisible);
-  
-  if (sunriseData) {
-    drawSunMarker(container, sunriseData.azimuth, sunriseData.altitude, '↑', 'salida', 0);
-  }
-  if (noonData) {
-    drawSunMarker(container, noonData.azimuth, noonData.altitude, '⊙', 'mediodía', 0);
-  }
-  
+  drawSunPath(svg, sunrise, solarNoon, sunData, 0, 180, azRange);
+
   // Dibujar sol actual si está visible y en el rango Este
-  if (currentSunData && currentHour >= sunrise && currentHour <= solarNoon) {
+  if (currentSunData && currentSunData.isVisible && currentHour >= sunrise && currentHour <= solarNoon) {
     if (currentSunData.azimuth >= 0 && currentSunData.azimuth <= 180) {
-      drawCurrentSun(container, currentSunData.azimuth, currentSunData.altitude, 0);
+      drawCurrentSun(container, currentSunData.azimuth, currentSunData.altitude, azRange);
     }
   }
-  
+
+  // Marca del horizonte
+  drawHorizonLine(svg, azRange);
+
   // Añadir información
-  const info = document.createElement('div');
-  info.className = 'sun-info';
-  info.style.position = 'absolute';
-  info.style.bottom = '2rem';
-  info.style.left = '50%';
-  info.style.transform = 'translateX(-50%)';
-  info.style.fontSize = 'clamp(0.7rem, 1.5vw, 0.9rem)';
-  info.style.color = 'var(--btn-color)';
-  info.style.textAlign = 'center';
-  info.style.zIndex = '3';
-  info.style.pointerEvents = 'none';
-  info.style.whiteSpace = 'pre-line';
-  
-  const azSunrise = sunriseData ? sunriseData.azimuth.toFixed(1) : 'n/a';
-  const azNoon = noonData ? noonData.azimuth.toFixed(1) : 'n/a';
-  
+  const info = createInfoDiv();
   info.textContent = [
-    `salida: ${sunData.sunrise} (${azSunrise}°)`,
-    `mediodía: ${sunData.solarNoon} (${azNoon}°)`
+    `salida: ${sunData.sunrise}`,
+    `mediodía: ${sunData.solarNoon}`
   ].join('\n');
-  
   container.appendChild(info);
 }
 
@@ -99,33 +94,52 @@ export function renderSunEast(sunData, currentTime, container) {
  * Renderiza la trayectoria del sol desde mediodía hasta puesta (panel Oeste)
  */
 export function renderSunWest(sunData, currentTime, container) {
-  if (!sunData || !container) {
-    console.error('No se puede renderizar sol oeste: faltan datos o contenedor');
-    return;
-  }
-  
+  if (!sunData || !container) return;
+
   const solarNoon = parseTime(sunData.solarNoon);
   const sunset = parseTime(sunData.sunset);
   const currentHour = currentTime.getHours() + currentTime.getMinutes() / 60;
-  
+
   // Determinar posición actual del sol
-  let currentSunData = null;
-  for (const hourData of sunData.hourlyData) {
-    if (hourData.hour === Math.floor(currentHour) && hourData.isVisible) {
-      currentSunData = hourData;
-      break;
-    }
-  }
-  
-  console.log('Renderizando sol oeste, hora:', currentHour, 'datos:', currentSunData);
-  
+  const currentSunData = getInterpolatedSunData(sunData.hourlyData, currentTime);
+
+  // Calcular rango real de azimut para esta mitad
+  const azRange = getSunAzimuthRange(sunData, 180, 360);
+
   // Limpiar contenedor
   container.innerHTML = '';
   container.style.position = 'relative';
   container.style.width = '100%';
   container.style.height = '100%';
-  
+
   // Crear SVG para la trayectoria
+  const svg = createSvg(container);
+
+  // Dibujar trayectoria del sol
+  drawSunPath(svg, solarNoon, sunset, sunData, 180, 360, azRange);
+
+  // Dibujar sol actual si está visible y en el rango Oeste
+  if (currentSunData && currentSunData.isVisible && currentHour >= solarNoon && currentHour <= sunset) {
+    if (currentSunData.azimuth >= 180 && currentSunData.azimuth <= 360) {
+      drawCurrentSun(container, currentSunData.azimuth, currentSunData.altitude, azRange);
+    }
+  }
+
+  // Marca del horizonte
+  drawHorizonLine(svg, azRange);
+
+  // Añadir información
+  const info = createInfoDiv();
+  info.textContent = [
+    `mediodía: ${sunData.solarNoon}`,
+    `puesta: ${sunData.sunset}`
+  ].join('\n');
+  container.appendChild(info);
+}
+
+// === FUNCIONES AUXILIARES ===
+
+function createSvg(container) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.style.position = 'absolute';
   svg.style.top = '0';
@@ -137,32 +151,10 @@ export function renderSunWest(sunData, currentTime, container) {
   svg.setAttribute('viewBox', '0 0 100 100');
   svg.setAttribute('preserveAspectRatio', 'none');
   container.appendChild(svg);
-  
-  // Dibujar marca del Oeste puro (270°, centro horizontal)
-  drawCompassMarker(container, 50, 'O');
-  
-  // Dibujar trayectoria del sol
-  drawSunPath(svg, solarNoon, sunset, sunData, 180, 360);
-  
-  // Dibujar marcadores de mediodía y puesta
-  const noonData = sunData.hourlyData.find(h => Math.abs(h.hour - Math.floor(solarNoon)) <= 1 && h.isVisible);
-  const sunsetData = sunData.hourlyData.find(h => Math.abs(h.hour - Math.floor(sunset)) <= 1 && h.isVisible);
-  
-  if (noonData) {
-    drawSunMarker(container, noonData.azimuth, noonData.altitude, '⊙', 'mediodía', 180);
-  }
-  if (sunsetData) {
-    drawSunMarker(container, sunsetData.azimuth, sunsetData.altitude, '↓', 'puesta', 180);
-  }
-  
-  // Dibujar sol actual si está visible y en el rango Oeste
-  if (currentSunData && currentHour >= solarNoon && currentHour <= sunset) {
-    if (currentSunData.azimuth >= 180 && currentSunData.azimuth <= 360) {
-      drawCurrentSun(container, currentSunData.azimuth, currentSunData.altitude, 180);
-    }
-  }
-  
-  // Añadir información
+  return svg;
+}
+
+function createInfoDiv() {
   const info = document.createElement('div');
   info.className = 'sun-info';
   info.style.position = 'absolute';
@@ -175,137 +167,71 @@ export function renderSunWest(sunData, currentTime, container) {
   info.style.zIndex = '3';
   info.style.pointerEvents = 'none';
   info.style.whiteSpace = 'pre-line';
-  
-  const azNoon = noonData ? noonData.azimuth.toFixed(1) : 'n/a';
-  const azSunset = sunsetData ? sunsetData.azimuth.toFixed(1) : 'n/a';
-  
-  info.textContent = [
-    `mediodía: ${sunData.solarNoon} (${azNoon}°)`,
-    `puesta: ${sunData.sunset} (${azSunset}°)`
-  ].join('\n');
-  
-  container.appendChild(info);
+  return info;
 }
 
-// === FUNCIONES AUXILIARES ===
-
 /**
- * Dibuja la marca de punto cardinal en el horizonte
+ * Dibuja una línea de horizonte sutil
  */
-function drawCompassMarker(container, x, label) {
-  const marker = document.createElement('span');
-  marker.textContent = label;
-  marker.style.position = 'absolute';
-  marker.style.left = `${x}%`;
-  marker.style.bottom = '5rem';
-  marker.style.fontSize = 'clamp(0.8rem, 2vw, 1.2rem)';
-  marker.style.color = 'var(--btn-color)';
-  marker.style.transform = 'translateX(-50%)';
-  marker.style.zIndex = '2';
-  marker.style.pointerEvents = 'none';
-  marker.style.fontWeight = 'bold';
-  
-  container.appendChild(marker);
+function drawHorizonLine(svg, azRange) {
+  const left = sunProject(azRange.min, 0, azRange);
+  const right = sunProject(azRange.max, 0, azRange);
+
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', '0');
+  line.setAttribute('y1', left.y.toString());
+  line.setAttribute('x2', '100');
+  line.setAttribute('y2', right.y.toString());
+  line.setAttribute('stroke', 'var(--text-color)');
+  line.setAttribute('stroke-width', '0.1');
+  line.setAttribute('opacity', '0.2');
+  svg.appendChild(line);
 }
 
 /**
  * Dibuja la trayectoria del sol como una curva SVG
  */
-function drawSunPath(svg, startTime, endTime, sunData, azimuthStart, azimuthEnd) {
+function drawSunPath(svg, startTime, endTime, sunData, azimuthStart, azimuthEnd, azRange) {
   const points = [];
   const steps = 50;
-  
+
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
     const hour = startTime + (endTime - startTime) * t;
     const hourData = sunData.hourlyData.find(h => Math.abs(h.hour - Math.floor(hour)) < 0.5);
-    
+
     if (!hourData || !hourData.isVisible) continue;
     if (hourData.azimuth < azimuthStart || hourData.azimuth > azimuthEnd) continue;
-    
-    // Normalizar azimut al rango 0-100
-    let normalizedAzimuth = hourData.azimuth;
-    if (azimuthStart === 180) {
-      normalizedAzimuth -= 180;
-    }
-    const x = (normalizedAzimuth / 180) * 100;
-    
-    // Normalizar altitud al rango 0-100 (invertido)
-    const y = 100 - (hourData.altitude / 90) * 100;
-    
-    points.push({ x, y });
+
+    const pt = sunProject(hourData.azimuth, hourData.altitude, azRange);
+    points.push(pt);
   }
-  
-  if (points.length < 2) {
-    console.log('No hay suficientes puntos para dibujar trayectoria');
-    return;
-  }
-  
-  console.log('Dibujando trayectoria con', points.length, 'puntos');
-  
-  // Crear path con curva suave
+
+  if (points.length < 2) return;
+
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  
-  // Construir el path
+
   let d = `M ${points[0].x} ${points[0].y}`;
-  
   for (let i = 1; i < points.length; i++) {
     d += ` L ${points[i].x} ${points[i].y}`;
   }
-  
+
   path.setAttribute('d', d);
   path.setAttribute('stroke', 'var(--text-color)');
   path.setAttribute('stroke-width', '0.3');
   path.setAttribute('stroke-dasharray', '1 1.5');
   path.setAttribute('fill', 'none');
   path.setAttribute('opacity', '0.5');
-  
-  svg.appendChild(path);
-}
 
-/**
- * Dibuja un marcador en la trayectoria del sol
- */
-function drawSunMarker(container, azimuth, altitude, symbol, label, azimuthOffset = 0) {
-  // Normalizar azimut
-  let normalizedAzimuth = azimuth;
-  if (azimuthOffset === 180) {
-    normalizedAzimuth -= 180;
-  }
-  
-  const x = (normalizedAzimuth / 180) * 100;
-  const y = 100 - (altitude / 90) * 100;
-  
-  const marker = document.createElement('span');
-  marker.textContent = symbol;
-  marker.style.position = 'absolute';
-  marker.style.left = `${x}%`;
-  marker.style.top = `${y}%`;
-  marker.style.fontSize = 'clamp(0.8rem, 2vw, 1.2rem)';
-  marker.style.color = 'var(--btn-color)';
-  marker.style.transform = 'translate(-50%, -50%)';
-  marker.style.zIndex = '2';
-  marker.style.pointerEvents = 'none';
-  marker.title = label;
-  
-  container.appendChild(marker);
+  svg.appendChild(path);
 }
 
 /**
  * Dibuja el sol en su posición actual
  */
-function drawCurrentSun(container, azimuth, altitude, azimuthOffset = 0) {
-  // Normalizar azimut
-  let normalizedAzimuth = azimuth;
-  if (azimuthOffset === 180) {
-    normalizedAzimuth -= 180;
-  }
-  
-  const x = (normalizedAzimuth / 180) * 100;
-  const y = 100 - (altitude / 90) * 100;
-  
-  console.log('Dibujando sol en:', x, y, 'azimut:', azimuth, 'altitud:', altitude);
-  
+function drawCurrentSun(container, azimuth, altitude, azRange) {
+  const { x, y } = sunProject(azimuth, altitude, azRange);
+
   const sun = document.createElement('span');
   sun.textContent = '☼';
   sun.style.position = 'absolute';
@@ -317,8 +243,48 @@ function drawCurrentSun(container, azimuth, altitude, azimuthOffset = 0) {
   sun.style.zIndex = '3';
   sun.style.pointerEvents = 'none';
   sun.style.textShadow = '0 0 10px currentColor';
-  
+
   container.appendChild(sun);
+}
+
+/**
+ * Interpola la posición actual del sol usando datos horarios
+ */
+function getInterpolatedSunData(hourlyData, currentTime) {
+  if (!hourlyData || hourlyData.length === 0) return null;
+
+  const hour = currentTime.getHours();
+  const nextHour = (hour + 1) % 24;
+  const current = hourlyData.find(entry => entry.hour === hour);
+  const next = hourlyData.find(entry => entry.hour === nextHour);
+
+  if (!current) return null;
+  if (!next) {
+    return {
+      azimuth: current.azimuth,
+      altitude: current.altitude,
+      isVisible: current.altitude > 0
+    };
+  }
+
+  const fraction = currentTime.getMinutes() / 60;
+  const azimuth = interpolateAngle(current.azimuth, next.azimuth, fraction);
+  const altitude = current.altitude + (next.altitude - current.altitude) * fraction;
+
+  return {
+    azimuth,
+    altitude,
+    isVisible: altitude > 0
+  };
+}
+
+/**
+ * Interpola un ángulo en grados manejando el cruce 0°/360°
+ */
+function interpolateAngle(start, end, t) {
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return start;
+  const delta = ((end - start + 540) % 360) - 180;
+  return (start + delta * t + 360) % 360;
 }
 
 /**

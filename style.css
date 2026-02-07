@@ -159,6 +159,14 @@ a:hover {
   max-width: min(80%, 42rem);
 }
 
+/* Paneles de cielo/sol/luna: sin padding, llenan toda la pantalla */
+.norte .contenido,
+.sur .contenido,
+.este .contenido,
+.oeste .contenido {
+  padding: 0;
+}
+
 .info-title {
   font-size: clamp(1.1rem, 3vw, 1.8rem);
   margin: 0;
