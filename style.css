@@ -208,3 +208,9 @@ a:hover {
 .centro-link:hover {
   color: var(--text);
 }
+
+/* Nombres de constelaciones */
+.constellation-name:hover {
+  opacity: 0.9 !important;
+  color: var(--text) !important;
+}

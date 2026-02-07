@@ -20,6 +20,7 @@ export function renderMoonPosition(moonData, currentTime, container) {
   container.style.position = 'relative';
   container.style.width = '100%';
   container.style.height = '100%';
+  container.style.overflow = 'hidden';
 
   // Crear SVG para la trayectoria
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -163,10 +164,9 @@ export function renderMoonPhase(moonData, container) {
 function azimuthalProject(azimuth, altitude) {
   const azRad = azimuth * Math.PI / 180;
   const r = (90 - altitude) / 90;
-  const scaleX = 50;
-  const scaleY = 50;
-  const x = 50 + r * Math.sin(azRad) * scaleX;
-  const y = 50 - r * Math.cos(azRad) * scaleY;
+  const scale = 72;
+  const x = 50 + r * Math.sin(azRad) * scale;
+  const y = 50 - r * Math.cos(azRad) * scale;
   return { x, y };
 }
 
@@ -192,7 +192,7 @@ function drawMoonPath(svg, moonData) {
     // Evitar líneas enormes por wrap-around
     const dx = points[i].x - points[i - 1].x;
     const dy = points[i].y - points[i - 1].y;
-    if (Math.sqrt(dx * dx + dy * dy) > 40) {
+    if (Math.sqrt(dx * dx + dy * dy) > 60) {
       d += ` M ${points[i].x} ${points[i].y}`;
     } else {
       d += ` L ${points[i].x} ${points[i].y}`;
