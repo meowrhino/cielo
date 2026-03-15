@@ -480,3 +480,89 @@ body.green-mode #detail-label {
   color: rgba(40, 160, 40, 0.04);
 }
 
+/* === Natal chart info panel === */
+
+.natal-info {
+  position: fixed;
+  bottom: 3.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  min-width: 180px;
+  max-width: 300px;
+  padding: 0.7rem 1rem;
+  background: rgba(7, 4, 10, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  font-family: 'Inknut Antiqua', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  text-transform: lowercase;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+}
+
+.natal-info-title {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1em;
+  margin-bottom: 0.2em;
+  letter-spacing: 0.5px;
+}
+
+.natal-info-row {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.natal-info-dignity {
+  color: rgba(255, 215, 120, 0.6);
+}
+
+.natal-info-sep {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.04);
+  margin: 0.4em 0;
+}
+
+.natal-info-aspect {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Night mode natal-info */
+body.night-mode .natal-info {
+  background: rgba(10, 0, 0, 0.92);
+  border-color: rgba(255, 40, 40, 0.08);
+  color: rgba(255, 60, 60, 0.5);
+}
+
+body.night-mode .natal-info-title {
+  color: rgba(255, 60, 60, 0.7);
+}
+
+body.night-mode .natal-info-dignity {
+  color: rgba(255, 140, 80, 0.6);
+}
+
+body.night-mode .natal-info-sep {
+  background: rgba(255, 40, 40, 0.06);
+}
+
+/* Green mode natal-info */
+body.green-mode .natal-info {
+  background: rgba(4, 10, 4, 0.92);
+  border-color: rgba(40, 160, 40, 0.08);
+  color: rgba(60, 200, 60, 0.5);
+}
+
+body.green-mode .natal-info-title {
+  color: rgba(60, 200, 60, 0.7);
+}
+
+body.green-mode .natal-info-dignity {
+  color: rgba(160, 200, 60, 0.6);
+}
+
+body.green-mode .natal-info-sep {
+  background: rgba(40, 160, 40, 0.06);
+}
+
