@@ -1,10 +1,12 @@
 /**
- * Interacción: touch/click en elementos del astrolabio
+ * Interacción: touch/click, drag/pan en modo zoom
  * Click en sol/luna/constelación → zoom inmersivo
- * Hover en desktop → cursor pointer
+ * Drag en modo zoom → pan por el cielo
  */
 
-export function setupInteraction(canvas, astrolabe, { onSelect }) {
+export function setupInteraction(canvas, astrolabe, { onSelect, onPan }) {
+  let dragState = null; // { startX, startY, moved }
+
   function findHit(clientX, clientY) {
     const rect = canvas.getBoundingClientRect();
     const targets = astrolabe.getHitTargets();
@@ -34,37 +36,102 @@ export function setupInteraction(canvas, astrolabe, { onSelect }) {
     return closest;
   }
 
-  // Click / tap
+  // Suppress native click — all click logic goes through mouseup/touchend
   canvas.addEventListener('click', (e) => {
-    if (astrolabe.isAnimating()) return; // Ignore during animation
-
-    const hit = findHit(e.clientX, e.clientY);
-    if (hit && onSelect) {
-      e.stopImmediatePropagation();
-      onSelect(hit);
-    }
-    // If no hit and we're zoomed, the canvas click handler in app.js handles exit
+    e.stopImmediatePropagation();
+    e.preventDefault();
   });
 
-  // Hover (desktop)
+  // === Mouse events ===
+
+  canvas.addEventListener('mousedown', (e) => {
+    dragState = { startX: e.clientX, startY: e.clientY, moved: false };
+  });
+
   canvas.addEventListener('mousemove', (e) => {
-    if (astrolabe.getZoomLevel() > 1.5) {
-      canvas.style.cursor = 'default';
-      return;
+    if (dragState) {
+      const dx = e.clientX - dragState.startX;
+      const dy = e.clientY - dragState.startY;
+
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        dragState.moved = true;
+      }
+
+      if (dragState.moved && astrolabe.getZoomLevel() > 1) {
+        astrolabe.panBy(-dx, -dy);
+        dragState.startX = e.clientX;
+        dragState.startY = e.clientY;
+        if (onPan) onPan();
+      }
+    } else {
+      // Hover cursor
+      if (astrolabe.getZoomLevel() > 1.5) {
+        const hit = findHit(e.clientX, e.clientY);
+        canvas.style.cursor = hit ? 'pointer' : 'grab';
+      } else {
+        const hit = findHit(e.clientX, e.clientY);
+        canvas.style.cursor = hit ? 'pointer' : 'default';
+      }
     }
-    const hit = findHit(e.clientX, e.clientY);
-    canvas.style.cursor = hit ? 'pointer' : 'default';
   });
 
-  // Touch
-  canvas.addEventListener('touchstart', (e) => {
-    if (astrolabe.isAnimating()) return;
+  canvas.addEventListener('mouseup', (e) => {
+    if (dragState && !dragState.moved) {
+      handleTap(e.clientX, e.clientY);
+    }
+    dragState = null;
+  });
 
-    const touch = e.touches[0];
-    const hit = findHit(touch.clientX, touch.clientY);
-    if (hit && onSelect) {
+  canvas.addEventListener('mouseleave', () => {
+    dragState = null;
+  });
+
+  // === Touch events ===
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      dragState = { startX: t.clientX, startY: t.clientY, moved: false };
+    }
+  }, { passive: true });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (!dragState || e.touches.length !== 1) return;
+
+    const t = e.touches[0];
+    const dx = t.clientX - dragState.startX;
+    const dy = t.clientY - dragState.startY;
+
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+      dragState.moved = true;
+    }
+
+    if (dragState.moved && astrolabe.getZoomLevel() > 1) {
       e.preventDefault();
-      onSelect(hit);
+      astrolabe.panBy(-dx, -dy);
+      dragState.startX = t.clientX;
+      dragState.startY = t.clientY;
+      if (onPan) onPan();
     }
   }, { passive: false });
+
+  canvas.addEventListener('touchend', (e) => {
+    if (dragState && !dragState.moved && e.changedTouches.length === 1) {
+      const t = e.changedTouches[0];
+      handleTap(t.clientX, t.clientY);
+    }
+    dragState = null;
+  });
+
+  // === Shared tap logic ===
+
+  function handleTap(clientX, clientY) {
+    if (astrolabe.isAnimating()) return;
+
+    const hit = findHit(clientX, clientY);
+
+    if (hit) {
+      if (onSelect) onSelect(hit);
+    }
+  }
 }

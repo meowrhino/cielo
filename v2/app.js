@@ -4,10 +4,8 @@
 import { parseTime, azimuthalProject, equatorialToHorizontal, geoJsonToRaDec, interpolateHourly } from './astronomy.js';
 import { createAstrolabe } from './astrolabe.js';
 import { setupInteraction } from './interaction.js';
-import { sunPoetry, moonPoetry, constellationPoetry } from './poetry.js';
 
 const BARCELONA = { name: 'barcelona', lat: 41.3851, lon: 2.1734, label: '41.4°N · 2.2°E' };
-const ANTIPODA = { name: 'antípoda', lat: -41.3851, lon: 182.1734, label: '41.4°S · 177.8°E' };
 
 // Estado
 let sunDataAll = null;
@@ -16,7 +14,7 @@ let starCatalog = null;
 let constellationLines = null;
 let astrolabe = null;
 
-let face = BARCELONA;
+let face = { ...BARCELONA };
 let mode = 'astrolabe'; // 'astrolabe' | 'detail'
 let detailTarget = null;
 let animFrameId = null;
@@ -33,6 +31,12 @@ function isDaytime(sunData, now) {
   if (!sunData) return true;
   const t = now.getHours() + now.getMinutes() / 60;
   return t >= parseTime(sunData.sunrise) && t < parseTime(sunData.sunset);
+}
+
+function formatCoords(lat, lon) {
+  const ns = lat >= 0 ? 'N' : 'S';
+  const ew = lon >= 0 ? 'E' : 'W';
+  return `${Math.abs(lat).toFixed(1)}°${ns} · ${Math.abs(lon).toFixed(1)}°${ew}`;
 }
 
 function updateInfoOverlays(now, sunData, moonData) {
@@ -142,72 +146,44 @@ function getZoomCenter(target, now) {
 }
 
 /**
- * Genera las líneas de poesía para el target
+ * Nombre legible del target
  */
-function getPoetryLines(target, now) {
-  const state = getState(now);
-
-  if (target.type === 'sun') {
-    return sunPoetry(state.sunData, now);
-  }
-  if (target.type === 'moon') {
-    return moonPoetry(state.moonData, now);
-  }
-  if (target.type === 'constellation') {
-    const az = parseFloat(target.data.azimuth || 0);
-    const alt = parseFloat(target.data.altitude || 0);
-    // Recalcular centroide
-    const constellation = constellationLines.find(c => c.properties.id === target.data.id);
-    if (constellation) {
-      let sumAz = 0, sumAlt = 0, count = 0;
-      for (const lineCoords of constellation.geometry.coordinates) {
-        for (const [geoLon, geoLat] of lineCoords) {
-          const { ra, dec } = geoJsonToRaDec(geoLon, geoLat);
-          const { azimuth, altitude } = equatorialToHorizontal(ra, dec, face.lat, face.lon, now);
-          if (altitude > 0) { sumAz += azimuth; sumAlt += altitude; count++; }
-        }
-      }
-      if (count > 0) {
-        return constellationPoetry(target.data.name, sumAz / count, sumAlt / count);
-      }
-    }
-    return constellationPoetry(target.data.name, az, alt);
-  }
-
-  return [];
+function getTargetName(target) {
+  if (target.type === 'sun') return 'sol';
+  if (target.type === 'moon') return 'luna';
+  if (target.type === 'constellation') return target.data.name.toLowerCase();
+  if (target.type === 'star') return target.data.name ? target.data.name.toLowerCase() : '';
+  return '';
 }
 
 /**
- * Entra en modo detail: zoom en la zona del cielo
+ * Entra o cambia de zoom
  */
 function enterDetail(target) {
+  const wasInDetail = mode === 'detail';
   mode = 'detail';
   detailTarget = target;
 
   const now = new Date();
   const { nx, ny } = getZoomCenter(target, now);
 
-  // Zoom al punto
-  astrolabe.zoomTo(nx, ny, 4, 500);
+  // Zoom al punto (más rápido si ya estamos en zoom)
+  astrolabe.zoomTo(nx, ny, 4, wasInDetail ? 350 : 500);
 
-  // Mostrar overlay con nombre y poesía
+  // Mostrar nombre watermark (solo nombre, sin texto poético)
   const detailView = document.getElementById('detail-view');
   const label = document.getElementById('detail-label');
-  const poetry = document.getElementById('detail-poetry');
 
-  const lines = getPoetryLines(target, now);
-  label.textContent = lines[0] || target.data.name || '';
-  poetry.innerHTML = lines.slice(1).map(l => `<div class="detail-line">${l}</div>`).join('');
-
+  label.textContent = getTargetName(target);
+  label.style.opacity = '';
   detailView.classList.remove('hidden');
   document.body.classList.add('detail-mode');
 
-  // Animar render durante el zoom
   startAnimLoop();
 }
 
 /**
- * Vuelve al astrolabio fullscreen
+ * Vuelve al astrolabio
  */
 function exitDetail() {
   mode = 'astrolabe';
@@ -222,7 +198,7 @@ function exitDetail() {
 }
 
 /**
- * Loop de animación durante zooms
+ * Loop de animación durante zooms y panning
  */
 function startAnimLoop() {
   if (animFrameId) return;
@@ -242,22 +218,51 @@ function startAnimLoop() {
 }
 
 /**
- * Flip del astrolabio: Barcelona ↔ antípoda
+ * Flip del astrolabio: cara actual ↔ antípoda
  */
 function flipAstrolabe() {
-  if (mode === 'detail') return; // No flipear durante zoom
+  if (mode === 'detail') return;
 
   const wrapper = document.getElementById('astrolabe-wrapper');
   wrapper.classList.add('flipping');
 
   setTimeout(() => {
-    face = face === BARCELONA ? ANTIPODA : BARCELONA;
+    face = {
+      name: face.name === 'antípoda' ? (face._originalName || 'barcelona') : 'antípoda',
+      lat: -face.lat,
+      lon: ((face.lon + 180) % 360),
+      label: formatCoords(-face.lat, (face.lon + 180) % 360),
+      _originalName: face.name === 'antípoda' ? face._originalName : face.name
+    };
     render();
   }, 250);
 
   setTimeout(() => {
     wrapper.classList.remove('flipping');
   }, 500);
+}
+
+/**
+ * Intenta obtener la ubicación del usuario
+ */
+function requestGeolocation() {
+  if (!navigator.geolocation) return;
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      face = {
+        name: 'tu cielo',
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+        label: formatCoords(pos.coords.latitude, pos.coords.longitude)
+      };
+      render();
+    },
+    () => {
+      // Si falla, mantener Barcelona
+    },
+    { timeout: 8000 }
+  );
 }
 
 async function init() {
@@ -273,23 +278,23 @@ async function init() {
 
   setupInteraction(canvas, astrolabe, {
     onSelect: (target) => {
-      if (mode === 'detail') {
-        // Ya en zoom — salir
-        exitDetail();
-        return;
-      }
+      // Click en cualquier objeto → zoom allí
       if (target.type === 'sun' || target.type === 'moon' || target.type === 'constellation') {
         enterDetail(target);
       }
+    },
+    onPan: () => {
+      // Ocultar watermark mientras se arrastra
+      const label = document.getElementById('detail-label');
+      if (label) label.style.opacity = '0';
+      render();
     }
   });
 
-  // Click en canvas sin hit → si estamos en zoom, salir
-  canvas.addEventListener('click', (e) => {
-    if (mode === 'detail') {
-      // El interaction.js ya maneja hits. Si llegamos aquí, no hubo hit.
-      exitDetail();
-    }
+  // Back button
+  document.getElementById('back-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    exitDetail();
   });
 
   // Flip button
@@ -297,6 +302,9 @@ async function init() {
     e.stopPropagation();
     flipAstrolabe();
   });
+
+  // Pedir geolocalización
+  requestGeolocation();
 
   // Render inicial
   render();

@@ -101,7 +101,7 @@ body.detail-mode #flip-btn {
 /* Watermark label — becasDigMeow style */
 #detail-label {
   position: fixed;
-  top: 50%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Inknut Antiqua', Georgia, serif;
@@ -114,30 +114,43 @@ body.detail-mode #flip-btn {
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
-  animation: fadeIn 0.6s ease both;
+  transition: opacity 0.3s ease;
 }
 
-/* Poetry lines */
-#detail-poetry {
+/* Back button */
+#back-btn {
   position: fixed;
-  bottom: 15%;
+  bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  text-align: center;
-  pointer-events: none;
-  animation: fadeInUp 0.5s ease 0.2s both;
-}
-
-.detail-line {
-  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
-  color: rgba(255, 255, 255, 0.35);
-  line-height: 2.2;
+  font-family: 'Inknut Antiqua', Georgia, serif;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.3);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 0.4rem 1.2rem;
+  cursor: pointer;
+  text-transform: lowercase;
   letter-spacing: 0.5px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  pointer-events: auto;
+  z-index: 4;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+#back-btn:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Zoom mode cursor */
+body.detail-mode canvas {
+  cursor: grab;
+}
+
+body.detail-mode canvas:active {
+  cursor: grabbing;
 }
 
 @keyframes fadeInUp {

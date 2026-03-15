@@ -66,6 +66,15 @@ export function createAstrolabe(canvas) {
   }
 
   /**
+   * Desplaza el centro del zoom por un delta en píxeles
+   */
+  function panBy(dxPx, dyPx) {
+    if (zoom.level <= 1) return;
+    zoom.cx += dxPx / (radius * zoom.level);
+    zoom.cy += dyPx / (radius * zoom.level);
+  }
+
+  /**
    * Actualiza el zoom si hay animación activa
    * Retorna true si la animación sigue activa
    */
@@ -481,6 +490,6 @@ export function createAstrolabe(canvas) {
   return {
     render, resize, getHitTargets, toPixel,
     getLogicalWidth, getLogicalHeight,
-    zoomTo, zoomReset, updateZoom, isAnimating, getZoomLevel
+    zoomTo, zoomReset, updateZoom, isAnimating, getZoomLevel, panBy
   };
 }
