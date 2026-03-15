@@ -4,6 +4,7 @@
 import { parseTime, azimuthalProject, equatorialToHorizontal, geoJsonToRaDec, interpolateHourly } from './astronomy.js';
 import { createAstrolabe } from './astrolabe.js';
 import { setupInteraction } from './interaction.js';
+import { computePlanetPositions } from './planets.js';
 
 const BARCELONA = { name: 'barcelona', lat: 41.3851, lon: 2.1734, label: '41.4°N · 2.2°E' };
 
@@ -18,6 +19,15 @@ let face = { ...BARCELONA };
 let mode = 'astrolabe'; // 'astrolabe' | 'detail'
 let detailTarget = null;
 let animFrameId = null;
+let nightMode = localStorage.getItem('cielo-night') === '1';
+
+// AR state
+let arMode = false;
+let arSmoothed = { alpha: 0, beta: 0 };
+let arFrameId = null;
+
+// Tooltip state
+let tooltipTimer = null;
 
 function getDateKey(date) {
   return date.toISOString().split('T')[0];
@@ -83,6 +93,7 @@ function getState(now) {
     moonData,
     starCatalog,
     constellationLines,
+    planets: computePlanetPositions(now),
     lat: face.lat,
     lon: face.lon,
     isDaytime: daytime
@@ -142,6 +153,16 @@ function getZoomCenter(target, now) {
     }
   }
 
+  if (target.type === 'planet') {
+    const { azimuth, altitude } = equatorialToHorizontal(
+      target.data.ra || 0, target.data.dec || 0, face.lat, face.lon, now
+    );
+    if (altitude > 0) {
+      const proj = azimuthalProject(azimuth, altitude);
+      return { nx: proj.x, ny: proj.y };
+    }
+  }
+
   return { nx: 0, ny: 0 };
 }
 
@@ -152,14 +173,53 @@ function getTargetName(target) {
   if (target.type === 'sun') return 'sol';
   if (target.type === 'moon') return 'luna';
   if (target.type === 'constellation') return target.data.name.toLowerCase();
+  if (target.type === 'planet') return target.data.label || target.data.name;
   if (target.type === 'star') return target.data.name ? target.data.name.toLowerCase() : '';
   return '';
+}
+
+/**
+ * Muestra tooltip cerca del objeto tocado
+ */
+function showTooltip(target, clientX, clientY) {
+  hideTooltip();
+
+  const tooltip = document.getElementById('tooltip');
+  if (!tooltip) return;
+
+  let text = '';
+  if (target.type === 'star') {
+    const name = target.data.name || '?';
+    text = `${name} · mag ${target.data.mag.toFixed(1)}`;
+  } else if (target.type === 'planet') {
+    text = `${target.data.label} · mag ${target.data.magnitude.toFixed(1)}`;
+  }
+
+  if (!text) return;
+
+  tooltip.textContent = text;
+  tooltip.classList.remove('hidden');
+
+  // Posicionar cerca del tap
+  const maxX = window.innerWidth - 180;
+  const maxY = window.innerHeight - 40;
+  tooltip.style.left = Math.min(clientX + 10, maxX) + 'px';
+  tooltip.style.top = Math.min(clientY - 40, maxY) + 'px';
+
+  tooltipTimer = setTimeout(hideTooltip, 3000);
+}
+
+function hideTooltip() {
+  if (tooltipTimer) { clearTimeout(tooltipTimer); tooltipTimer = null; }
+  const tooltip = document.getElementById('tooltip');
+  if (tooltip) tooltip.classList.add('hidden');
 }
 
 /**
  * Entra o cambia de zoom
  */
 function enterDetail(target) {
+  hideTooltip();
   const wasInDetail = mode === 'detail';
   mode = 'detail';
   detailTarget = target;
@@ -248,6 +308,9 @@ function flipAstrolabe() {
 function requestGeolocation() {
   if (!navigator.geolocation) return;
 
+  const nameEl = document.getElementById('location-name');
+  if (nameEl) nameEl.textContent = 'buscando...';
+
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       face = {
@@ -259,10 +322,106 @@ function requestGeolocation() {
       render();
     },
     () => {
-      // Si falla, mantener Barcelona
+      if (nameEl) nameEl.textContent = face.name;
     },
     { timeout: 8000 }
   );
+}
+
+/**
+ * Toggle modo noche (rojo)
+ */
+function toggleNightMode() {
+  nightMode = !nightMode;
+  document.body.classList.toggle('night-mode', nightMode);
+  localStorage.setItem('cielo-night', nightMode ? '1' : '0');
+  render();
+}
+
+/**
+ * Modo AR — usa sensores del dispositivo para apuntar al cielo
+ */
+function toggleAR() {
+  if (arMode) {
+    stopAR();
+    return;
+  }
+
+  // iOS requiere permiso explícito
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission()
+      .then(state => { if (state === 'granted') startAR(); })
+      .catch(() => {});
+  } else if ('DeviceOrientationEvent' in window) {
+    startAR();
+  }
+}
+
+function startAR() {
+  arMode = true;
+  document.body.classList.add('ar-mode');
+
+  const arLabel = document.getElementById('ar-label');
+  const timeEl = document.getElementById('time-display');
+  const dateEl = document.getElementById('date-display');
+  if (arLabel) arLabel.classList.remove('hidden');
+  if (timeEl) timeEl.classList.add('hidden');
+  if (dateEl) dateEl.classList.add('hidden');
+
+  // Zoom a 2x para vista parcial
+  astrolabe.zoomTo(0, 0, 2, 300);
+  startAnimLoop();
+
+  window.addEventListener('deviceorientation', onDeviceOrientation);
+  arFrameId = requestAnimationFrame(arLoop);
+}
+
+function stopAR() {
+  arMode = false;
+  document.body.classList.remove('ar-mode');
+
+  const arLabel = document.getElementById('ar-label');
+  const timeEl = document.getElementById('time-display');
+  const dateEl = document.getElementById('date-display');
+  if (arLabel) arLabel.classList.add('hidden');
+  if (timeEl) timeEl.classList.remove('hidden');
+  if (dateEl) dateEl.classList.remove('hidden');
+
+  window.removeEventListener('deviceorientation', onDeviceOrientation);
+  if (arFrameId) { cancelAnimationFrame(arFrameId); arFrameId = null; }
+
+  astrolabe.zoomReset(300);
+  startAnimLoop();
+}
+
+function onDeviceOrientation(e) {
+  // alpha: compass heading (0-360), beta: tilt front/back (-180..180), gamma: tilt left/right
+  let alpha = e.alpha || 0;
+  // webkitCompassHeading es más preciso en iOS
+  if (e.webkitCompassHeading != null) alpha = e.webkitCompassHeading;
+
+  const beta = e.beta || 0;
+
+  // Low-pass filter
+  arSmoothed.alpha = arSmoothed.alpha * 0.8 + alpha * 0.2;
+  arSmoothed.beta = arSmoothed.beta * 0.8 + beta * 0.2;
+}
+
+function arLoop() {
+  if (!arMode) return;
+
+  // Convertir orientación del dispositivo a coordenadas del cielo
+  // beta ~90 = horizontal (horizonte), beta ~0 = vertical (cénit)
+  const azimuth = arSmoothed.alpha;
+  const altitude = Math.max(0, Math.min(90, 90 - arSmoothed.beta));
+
+  // Proyectar a coordenadas normalizadas
+  const proj = azimuthalProject(azimuth, altitude);
+  astrolabe.setViewCenter(proj.x, proj.y);
+  render();
+
+  arFrameId = requestAnimationFrame(arLoop);
 }
 
 async function init() {
@@ -278,13 +437,20 @@ async function init() {
 
   setupInteraction(canvas, astrolabe, {
     onSelect: (target) => {
-      // Click en cualquier objeto → zoom allí
-      if (target.type === 'sun' || target.type === 'moon' || target.type === 'constellation') {
+      hideTooltip();
+      if (target.type === 'star') {
+        // Estrellas: mostrar tooltip, no zoom
+        showTooltip(target, target.px, target.py);
+      } else if (target.type === 'planet') {
+        // Planetas: tooltip + zoom
+        showTooltip(target, target.px, target.py);
+        enterDetail(target);
+      } else if (target.type === 'sun' || target.type === 'moon' || target.type === 'constellation') {
         enterDetail(target);
       }
     },
     onPan: () => {
-      // Ocultar watermark mientras se arrastra
+      hideTooltip();
       const label = document.getElementById('detail-label');
       if (label) label.style.opacity = '0';
       render();
@@ -302,6 +468,25 @@ async function init() {
     e.stopPropagation();
     flipAstrolabe();
   });
+
+  // Night mode button
+  document.getElementById('night-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleNightMode();
+  });
+
+  // Location button (click on top-right info)
+  document.getElementById('info-tr').addEventListener('click', () => {
+    requestGeolocation();
+  });
+
+  // AR toggle (click on top-left info)
+  document.getElementById('info-tl').addEventListener('click', () => {
+    toggleAR();
+  });
+
+  // Aplicar modo noche guardado
+  if (nightMode) document.body.classList.add('night-mode');
 
   // Pedir geolocalización
   requestGeolocation();

@@ -8,6 +8,67 @@ import { equatorialToHorizontal, azimuthalProject, geoJsonToRaDec, interpolateHo
 const TAU = Math.PI * 2;
 const DEG = Math.PI / 180;
 
+/** Nombres propios de estrellas brillantes (mag < 2.5) */
+const STAR_NAMES = [
+  { ra: 101.3, dec: -16.7, name: 'sirius' },
+  { ra: 96.0, dec: -52.7, name: 'canopus' },
+  { ra: 213.9, dec: 19.2, name: 'arcturus' },
+  { ra: 279.2, dec: 38.8, name: 'vega' },
+  { ra: 78.6, dec: 46.0, name: 'capella' },
+  { ra: 78.6, dec: -8.2, name: 'rigel' },
+  { ra: 114.8, dec: 5.2, name: 'procyon' },
+  { ra: 88.8, dec: 7.4, name: 'betelgeuse' },
+  { ra: 297.7, dec: 8.9, name: 'altair' },
+  { ra: 68.0, dec: 16.5, name: 'aldebaran' },
+  { ra: 201.3, dec: -11.2, name: 'spica' },
+  { ra: 247.4, dec: -26.4, name: 'antares' },
+  { ra: 116.3, dec: 28.0, name: 'pollux' },
+  { ra: 344.4, dec: -29.6, name: 'fomalhaut' },
+  { ra: 310.4, dec: 45.3, name: 'deneb' },
+  { ra: 152.1, dec: 12.0, name: 'regulus' },
+  { ra: 186.6, dec: -63.1, name: 'acrux' },
+  { ra: 219.9, dec: -60.8, name: 'mimosa' },
+  { ra: 210.9, dec: -60.4, name: 'gacrux' },
+  { ra: 263.4, dec: -37.1, name: 'shaula' },
+  { ra: 165.9, dec: 61.8, name: 'dubhe' },
+  { ra: 104.7, dec: -28.9, name: 'wezen' },
+  { ra: 37.9, dec: 89.3, name: 'polaris' },
+  { ra: 95.7, dec: -17.9, name: 'mirzam' },
+  { ra: 187.8, dec: -57.1, name: 'hadar' },
+  { ra: 24.4, dec: -57.2, name: 'achernar' },
+  { ra: 81.3, dec: 6.3, name: 'bellatrix' },
+  { ra: 81.6, dec: -1.9, name: 'alnilam' },
+  { ra: 104.0, dec: -26.4, name: 'adhara' },
+  { ra: 113.6, dec: 31.9, name: 'castor' },
+  { ra: 206.9, dec: 49.3, name: 'alioth' },
+  { ra: 193.5, dec: 55.0, name: 'mizar' },
+  { ra: 200.9, dec: 54.9, name: 'alkaid' },
+  { ra: 83.0, dec: -0.3, name: 'mintaka' },
+  { ra: 84.1, dec: -1.2, name: 'alnilam' },
+  { ra: 85.2, dec: -1.9, name: 'alnitak' },
+  { ra: 191.9, dec: -59.7, name: 'alfa centauri' },
+  { ra: 233.7, dec: 26.7, name: 'alphecca' },
+  { ra: 283.8, dec: 33.4, name: 'albireo' },
+  { ra: 305.6, dec: 40.3, name: 'sadr' },
+  { ra: 269.2, dec: 51.5, name: 'eltanin' },
+  { ra: 257.6, dec: -16.0, name: 'sabik' },
+  { ra: 253.1, dec: -38.0, name: 'kaus australis' },
+  { ra: 286.4, dec: -27.7, name: 'nunki' },
+  { ra: 252.2, dec: -69.0, name: 'atria' },
+  { ra: 49.9, dec: 41.1, name: 'mirfak' },
+  { ra: 51.1, dec: 49.9, name: 'algol' },
+  { ra: 41.0, dec: 23.5, name: 'alcyone' },
+];
+
+function findStarName(ra, dec) {
+  for (const s of STAR_NAMES) {
+    const dra = Math.abs(ra - s.ra);
+    const ddec = Math.abs(dec - s.dec);
+    if (dra < 1.5 && ddec < 1.5) return s.name;
+  }
+  return null;
+}
+
 export function createAstrolabe(canvas) {
   const ctx = canvas.getContext('2d');
   let W, H, cx, cy, radius;
@@ -69,9 +130,16 @@ export function createAstrolabe(canvas) {
    * Desplaza el centro del zoom por un delta en píxeles
    */
   function panBy(dxPx, dyPx) {
-    if (zoom.level <= 1) return;
-    zoom.cx += dxPx / (radius * zoom.level);
-    zoom.cy += dyPx / (radius * zoom.level);
+    zoom.cx += dxPx / (radius * Math.max(zoom.level, 1));
+    zoom.cy += dyPx / (radius * Math.max(zoom.level, 1));
+  }
+
+  /**
+   * Establece el centro de vista directamente (para modo AR)
+   */
+  function setViewCenter(newCx, newCy) {
+    zoom.cx = newCx;
+    zoom.cy = newCy;
   }
 
   /**
@@ -213,11 +281,12 @@ export function createAstrolabe(canvas) {
 
       // Hit target para estrellas brillantes
       if (star.mag < 2.5) {
+        const properName = findStarName(star.ra, star.dec);
         hitTargets.push({
           type: 'star',
           px, py,
           radius: Math.max(size * 3, 12),
-          data: { name: star.name, mag: star.mag, azimuth, altitude }
+          data: { name: properName || star.name, mag: star.mag, azimuth, altitude, ra: star.ra, dec: star.dec }
         });
       }
 
@@ -469,6 +538,63 @@ export function createAstrolabe(canvas) {
     ctx.fillRect(0, 0, W, H);
   }
 
+  /**
+   * Dibuja los planetas visibles
+   */
+  function drawPlanets(planets, lat, lon, time) {
+    if (!planets) return;
+
+    for (const planet of planets) {
+      const { azimuth, altitude } = equatorialToHorizontal(planet.ra, planet.dec, lat, lon, time);
+      if (altitude < 0) continue;
+
+      const { x, y } = azimuthalProject(azimuth, altitude);
+      const { px, py } = toPixel(x, y);
+
+      if (px < -20 || px > W + 20 || py < -20 || py > H + 20) continue;
+
+      const baseSize = Math.max(2, (6 - planet.magnitude) / 2);
+      const size = baseSize * Math.min(zoom.level, 3);
+
+      // Color del planeta
+      const col = planet.color;
+      const r = parseInt(col.slice(1, 3), 16);
+      const g = parseInt(col.slice(3, 5), 16);
+      const b = parseInt(col.slice(5, 7), 16);
+
+      // Glow coloreado
+      const glowR = size * 5;
+      const grd = ctx.createRadialGradient(px, py, 0, px, py, glowR);
+      grd.addColorStop(0, `rgba(${r},${g},${b},0.3)`);
+      grd.addColorStop(1, `rgba(${r},${g},${b},0)`);
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(px, py, glowR, 0, TAU);
+      ctx.fill();
+
+      // Disco del planeta
+      ctx.fillStyle = `rgba(${r},${g},${b},0.9)`;
+      ctx.beginPath();
+      ctx.arc(px, py, size, 0, TAU);
+      ctx.fill();
+
+      // Etiqueta
+      if (zoom.level > 1.5 || planet.magnitude < 0) {
+        ctx.font = '9px Inknut Antiqua, Georgia, serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = `rgba(${r},${g},${b},0.5)`;
+        ctx.fillText(planet.label, px, py + size + 12);
+      }
+
+      hitTargets.push({
+        type: 'planet',
+        px, py,
+        radius: Math.max(size * 3, 15),
+        data: { name: planet.name, label: planet.label, magnitude: planet.magnitude, azimuth, altitude }
+      });
+    }
+  }
+
   function render(time, state) {
     hitTargets = [];
 
@@ -476,6 +602,7 @@ export function createAstrolabe(canvas) {
     drawFrame();
     drawConstellations(state.constellationLines, state.lat, state.lon, time);
     drawStars(state.starCatalog, state.lat, state.lon, time);
+    drawPlanets(state.planets, state.lat, state.lon, time);
     drawSun(state.sunData, time);
     drawMoon(state.moonData, time);
   }
@@ -490,6 +617,7 @@ export function createAstrolabe(canvas) {
   return {
     render, resize, getHitTargets, toPixel,
     getLogicalWidth, getLogicalHeight,
-    zoomTo, zoomReset, updateZoom, isAnimating, getZoomLevel, panBy
+    zoomTo, zoomReset, updateZoom, isAnimating, getZoomLevel, panBy,
+    setViewCenter
   };
 }

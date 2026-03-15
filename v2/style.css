@@ -240,3 +240,119 @@ body.detail-mode .info-overlay {
 .tooltip.hidden {
   opacity: 0;
 }
+
+/* === Night mode button === */
+
+#night-btn {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 4.5rem;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 5;
+  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#night-btn:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.detail-mode #night-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* === Night mode (red filter) === */
+
+body.night-mode {
+  background: #0a0000;
+}
+
+body.night-mode .info-overlay {
+  color: rgba(255, 60, 60, 0.5);
+}
+
+body.night-mode #time-display {
+  color: rgba(255, 60, 60, 0.6);
+}
+
+body.night-mode #date-display,
+body.night-mode #location-coords {
+  color: rgba(255, 40, 40, 0.3);
+}
+
+body.night-mode #flip-btn,
+body.night-mode #night-btn,
+body.night-mode #back-btn {
+  border-color: rgba(255, 40, 40, 0.15);
+  color: rgba(255, 60, 60, 0.4);
+}
+
+body.night-mode #night-btn {
+  color: rgba(255, 80, 80, 0.7);
+  border-color: rgba(255, 60, 60, 0.3);
+}
+
+body.night-mode .tooltip {
+  background: rgba(10, 0, 0, 0.9);
+  border-color: rgba(255, 40, 40, 0.15);
+  color: rgba(255, 60, 60, 0.6);
+}
+
+body.night-mode #detail-label {
+  color: rgba(255, 40, 40, 0.04);
+}
+
+body.night-mode canvas {
+  filter: saturate(0) brightness(0.7) sepia(1) hue-rotate(-30deg);
+}
+
+/* === Location button (clickable) === */
+
+#info-tr {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+#info-tr:hover #location-name {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* === AR mode === */
+
+#info-tl {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+#info-tl:hover #time-display {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#ar-label {
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+#ar-label.hidden {
+  display: none;
+}
+
+body.ar-mode #info-tl {
+  color: rgba(100, 200, 255, 0.6);
+}
+
+body.ar-mode #ar-label {
+  color: rgba(100, 200, 255, 0.5);
+}

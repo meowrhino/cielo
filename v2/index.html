@@ -16,6 +16,7 @@
   <div id="astrolabe-wrapper">
     <canvas id="astrolabe"></canvas>
     <button id="flip-btn" title="girar al otro lado del mundo">↕</button>
+    <button id="night-btn" title="modo nocturno">☽</button>
   </div>
 
   <!-- Overlay de zoom (nombre watermark + botón volver) -->
@@ -24,10 +25,14 @@
     <button id="back-btn">volver</button>
   </div>
 
+  <!-- Tooltip para estrellas/planetas -->
+  <div id="tooltip" class="tooltip hidden"></div>
+
   <!-- Overlays de info -->
   <div id="info-tl" class="info-overlay">
     <div id="time-display"></div>
     <div id="date-display"></div>
+    <div id="ar-label" class="hidden">visión mapa</div>
   </div>
 
   <div id="info-tr" class="info-overlay">
