@@ -1,10 +1,10 @@
 /**
  * App principal — carga de datos, estado, loop de actualización
  */
-import { parseTime } from './astronomy.js';
+import { parseTime, azimuthalProject, equatorialToHorizontal, geoJsonToRaDec, interpolateHourly } from './astronomy.js';
 import { createAstrolabe } from './astrolabe.js';
 import { setupInteraction } from './interaction.js';
-import { renderSunView, renderMoonView, renderConstellationView } from './views.js';
+import { sunPoetry, moonPoetry, constellationPoetry } from './poetry.js';
 
 const BARCELONA = { name: 'barcelona', lat: 41.3851, lon: 2.1734, label: '41.4°N · 2.2°E' };
 const ANTIPODA = { name: 'antípoda', lat: -41.3851, lon: 182.1734, label: '41.4°S · 177.8°E' };
@@ -16,9 +16,10 @@ let starCatalog = null;
 let constellationLines = null;
 let astrolabe = null;
 
-let face = BARCELONA; // cara actual del astrolabio
+let face = BARCELONA;
 let mode = 'astrolabe'; // 'astrolabe' | 'detail'
-let detailTarget = null; // { type, data } del objeto seleccionado
+let detailTarget = null;
+let animFrameId = null;
 
 function getDateKey(date) {
   return date.toISOString().split('T')[0];
@@ -93,49 +94,116 @@ function render() {
   if (astrolabe) {
     astrolabe.render(now, state);
   }
-
-  // Si estamos en detail mode, re-renderizar la vista
-  if (mode === 'detail' && detailTarget) {
-    renderDetailView(now, state);
-  }
-}
-
-function renderDetailView(now, state) {
-  const container = document.getElementById('detail-content');
-  if (!container || !detailTarget) return;
-
-  switch (detailTarget.type) {
-    case 'sun':
-      renderSunView(container, state.sunData, now);
-      break;
-    case 'moon':
-      renderMoonView(container, state.moonData, now);
-      break;
-    case 'constellation':
-      renderConstellationView(container, detailTarget.data, starCatalog, constellationLines, face.lat, face.lon, now);
-      break;
-  }
 }
 
 /**
- * Entra en modo detail: astrolabio se encoge, vista aparece
+ * Calcula el centro de zoom (en coordenadas normalizadas) para un target
+ */
+function getZoomCenter(target, now) {
+  const state = getState(now);
+
+  if (target.type === 'constellation') {
+    const constellation = constellationLines.find(c => c.properties.id === target.data.id);
+    if (!constellation) return { nx: 0, ny: 0 };
+
+    let sumX = 0, sumY = 0, count = 0;
+    for (const lineCoords of constellation.geometry.coordinates) {
+      for (const [geoLon, geoLat] of lineCoords) {
+        const { ra, dec } = geoJsonToRaDec(geoLon, geoLat);
+        const { azimuth, altitude } = equatorialToHorizontal(ra, dec, face.lat, face.lon, now);
+        if (altitude > 0) {
+          const proj = azimuthalProject(azimuth, altitude);
+          sumX += proj.x;
+          sumY += proj.y;
+          count++;
+        }
+      }
+    }
+    return count > 0 ? { nx: sumX / count, ny: sumY / count } : { nx: 0, ny: 0 };
+  }
+
+  if (target.type === 'sun' && state.sunData) {
+    const pos = interpolateHourly(state.sunData.hourlyData, now);
+    if (pos && pos.isVisible) {
+      const proj = azimuthalProject(pos.azimuth, pos.altitude);
+      return { nx: proj.x, ny: proj.y };
+    }
+  }
+
+  if (target.type === 'moon' && state.moonData) {
+    const pos = interpolateHourly(state.moonData.hourlyData, now);
+    if (pos && pos.altitude > 0) {
+      const proj = azimuthalProject(pos.azimuth, pos.altitude);
+      return { nx: proj.x, ny: proj.y };
+    }
+  }
+
+  return { nx: 0, ny: 0 };
+}
+
+/**
+ * Genera las líneas de poesía para el target
+ */
+function getPoetryLines(target, now) {
+  const state = getState(now);
+
+  if (target.type === 'sun') {
+    return sunPoetry(state.sunData, now);
+  }
+  if (target.type === 'moon') {
+    return moonPoetry(state.moonData, now);
+  }
+  if (target.type === 'constellation') {
+    const az = parseFloat(target.data.azimuth || 0);
+    const alt = parseFloat(target.data.altitude || 0);
+    // Recalcular centroide
+    const constellation = constellationLines.find(c => c.properties.id === target.data.id);
+    if (constellation) {
+      let sumAz = 0, sumAlt = 0, count = 0;
+      for (const lineCoords of constellation.geometry.coordinates) {
+        for (const [geoLon, geoLat] of lineCoords) {
+          const { ra, dec } = geoJsonToRaDec(geoLon, geoLat);
+          const { azimuth, altitude } = equatorialToHorizontal(ra, dec, face.lat, face.lon, now);
+          if (altitude > 0) { sumAz += azimuth; sumAlt += altitude; count++; }
+        }
+      }
+      if (count > 0) {
+        return constellationPoetry(target.data.name, sumAz / count, sumAlt / count);
+      }
+    }
+    return constellationPoetry(target.data.name, az, alt);
+  }
+
+  return [];
+}
+
+/**
+ * Entra en modo detail: zoom en la zona del cielo
  */
 function enterDetail(target) {
   mode = 'detail';
   detailTarget = target;
 
-  const wrapper = document.getElementById('astrolabe-wrapper');
-  const detailView = document.getElementById('detail-view');
+  const now = new Date();
+  const { nx, ny } = getZoomCenter(target, now);
 
-  wrapper.classList.add('minimap');
+  // Zoom al punto
+  astrolabe.zoomTo(nx, ny, 4, 500);
+
+  // Mostrar overlay con nombre y poesía
+  const detailView = document.getElementById('detail-view');
+  const label = document.getElementById('detail-label');
+  const poetry = document.getElementById('detail-poetry');
+
+  const lines = getPoetryLines(target, now);
+  label.textContent = lines[0] || target.data.name || '';
+  poetry.innerHTML = lines.slice(1).map(l => `<div class="detail-line">${l}</div>`).join('');
+
   detailView.classList.remove('hidden');
   document.body.classList.add('detail-mode');
 
-  // Re-render astrolabio en tamaño minimap
-  setTimeout(() => {
-    astrolabe.resize();
-    render();
-  }, 50);
+  // Animar render durante el zoom
+  startAnimLoop();
 }
 
 /**
@@ -145,31 +213,47 @@ function exitDetail() {
   mode = 'astrolabe';
   detailTarget = null;
 
-  const wrapper = document.getElementById('astrolabe-wrapper');
   const detailView = document.getElementById('detail-view');
-
   detailView.classList.add('hidden');
   document.body.classList.remove('detail-mode');
-  wrapper.classList.remove('minimap');
 
-  // Wait for CSS transition to finish before resizing
-  setTimeout(() => {
-    astrolabe.resize();
+  astrolabe.zoomReset(400);
+  startAnimLoop();
+}
+
+/**
+ * Loop de animación durante zooms
+ */
+function startAnimLoop() {
+  if (animFrameId) return;
+
+  function animStep() {
+    const stillAnimating = astrolabe.updateZoom();
     render();
-  }, 550);
+
+    if (stillAnimating) {
+      animFrameId = requestAnimationFrame(animStep);
+    } else {
+      animFrameId = null;
+    }
+  }
+
+  animFrameId = requestAnimationFrame(animStep);
 }
 
 /**
  * Flip del astrolabio: Barcelona ↔ antípoda
  */
 function flipAstrolabe() {
+  if (mode === 'detail') return; // No flipear durante zoom
+
   const wrapper = document.getElementById('astrolabe-wrapper');
   wrapper.classList.add('flipping');
 
   setTimeout(() => {
     face = face === BARCELONA ? ANTIPODA : BARCELONA;
     render();
-  }, 250); // Mitad de la animación (cuando scaleY=0)
+  }, 250);
 
   setTimeout(() => {
     wrapper.classList.remove('flipping');
@@ -189,33 +273,23 @@ async function init() {
 
   setupInteraction(canvas, astrolabe, {
     onSelect: (target) => {
+      if (mode === 'detail') {
+        // Ya en zoom — salir
+        exitDetail();
+        return;
+      }
       if (target.type === 'sun' || target.type === 'moon' || target.type === 'constellation') {
         enterDetail(target);
       }
     }
   });
 
-  // Minimap click → volver a fullscreen
-  const wrapper = document.getElementById('astrolabe-wrapper');
-  wrapper.addEventListener('click', (e) => {
+  // Click en canvas sin hit → si estamos en zoom, salir
+  canvas.addEventListener('click', (e) => {
     if (mode === 'detail') {
-      e.stopPropagation();
+      // El interaction.js ya maneja hits. Si llegamos aquí, no hubo hit.
       exitDetail();
     }
-  });
-
-  // Detail view click en fondo vacío → volver
-  const detailView = document.getElementById('detail-view');
-  detailView.addEventListener('click', (e) => {
-    if (e.target === detailView) {
-      exitDetail();
-    }
-  });
-
-  // Detail content: stop propagation para que no cierre al tocar contenido
-  const detailContent = document.getElementById('detail-content');
-  detailContent.addEventListener('click', (e) => {
-    e.stopPropagation();
   });
 
   // Flip button

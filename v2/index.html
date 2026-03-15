@@ -8,15 +8,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Astrolabio (fullscreen o minimap) -->
+  <!-- Astrolabio (siempre fullscreen) -->
   <div id="astrolabe-wrapper">
     <canvas id="astrolabe"></canvas>
     <button id="flip-btn" title="girar al otro lado del mundo">↕</button>
   </div>
 
-  <!-- Vista inmersiva (oculta por defecto) -->
+  <!-- Overlay de zoom (nombre watermark + poesía) -->
   <div id="detail-view" class="hidden">
-    <div id="detail-content"></div>
+    <div id="detail-label"></div>
+    <div id="detail-poetry"></div>
   </div>
 
   <!-- Overlays de info -->

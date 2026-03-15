@@ -1,6 +1,6 @@
 /**
  * Interacción: touch/click en elementos del astrolabio
- * Click en sol/luna/constelación → abre vista inmersiva
+ * Click en sol/luna/constelación → zoom inmersivo
  * Hover en desktop → cursor pointer
  */
 
@@ -9,9 +9,6 @@ export function setupInteraction(canvas, astrolabe, { onSelect }) {
     const rect = canvas.getBoundingClientRect();
     const targets = astrolabe.getHitTargets();
 
-    // hitTargets están en coordenadas lógicas (px sin DPR)
-    // clientX/Y son coordenadas de viewport
-    // Necesitamos mapear viewport → lógicas del canvas
     const logicalW = astrolabe.getLogicalWidth();
     const logicalH = astrolabe.getLogicalHeight();
     const scaleX = logicalW / rect.width;
@@ -37,31 +34,31 @@ export function setupInteraction(canvas, astrolabe, { onSelect }) {
     return closest;
   }
 
-  // Click / tap → abre vista inmersiva
+  // Click / tap
   canvas.addEventListener('click', (e) => {
-    const wrapper = document.getElementById('astrolabe-wrapper');
-    if (wrapper && wrapper.classList.contains('minimap')) return;
+    if (astrolabe.isAnimating()) return; // Ignore during animation
 
     const hit = findHit(e.clientX, e.clientY);
     if (hit && onSelect) {
-      e.stopPropagation(); // Prevent bubbling to wrapper
+      e.stopImmediatePropagation();
       onSelect(hit);
     }
+    // If no hit and we're zoomed, the canvas click handler in app.js handles exit
   });
 
   // Hover (desktop)
   canvas.addEventListener('mousemove', (e) => {
-    const wrapper = document.getElementById('astrolabe-wrapper');
-    if (wrapper && wrapper.classList.contains('minimap')) return;
-
+    if (astrolabe.getZoomLevel() > 1.5) {
+      canvas.style.cursor = 'default';
+      return;
+    }
     const hit = findHit(e.clientX, e.clientY);
     canvas.style.cursor = hit ? 'pointer' : 'default';
   });
 
   // Touch
   canvas.addEventListener('touchstart', (e) => {
-    const wrapper = document.getElementById('astrolabe-wrapper');
-    if (wrapper && wrapper.classList.contains('minimap')) return;
+    if (astrolabe.isAnimating()) return;
 
     const touch = e.touches[0];
     const hit = findHit(touch.clientX, touch.clientY);

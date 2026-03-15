@@ -28,29 +28,7 @@ body {
   left: 0;
   width: 100dvw;
   height: 100dvh;
-  transition: all 0.5s ease;
   z-index: 1;
-}
-
-#astrolabe-wrapper.minimap {
-  width: 32vmin;
-  height: 32vmin;
-  top: 1.5rem;
-  left: 1.5rem;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 15;
-  transition: all 0.5s ease, border-color 0.2s ease;
-}
-
-#astrolabe-wrapper.minimap:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-#astrolabe-wrapper.minimap canvas {
-  border-radius: 50%;
 }
 
 #astrolabe-wrapper.flipping canvas {
@@ -85,7 +63,7 @@ canvas {
   font-size: 14px;
   cursor: pointer;
   z-index: 5;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.4s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,11 +74,13 @@ canvas {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.minimap #flip-btn {
-  display: none;
+/* Hide flip button during zoom */
+body.detail-mode #flip-btn {
+  opacity: 0;
+  pointer-events: none;
 }
 
-/* === Detail view === */
+/* === Detail view (zoom overlay) === */
 
 #detail-view {
   position: fixed;
@@ -108,40 +88,44 @@ canvas {
   left: 0;
   width: 100dvw;
   height: 100dvh;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
   opacity: 1;
   transition: opacity 0.4s ease;
 }
 
 #detail-view.hidden {
   opacity: 0;
-  pointer-events: none;
 }
 
-#detail-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  max-width: 500px;
-  width: 90%;
-  padding-top: 38vmin;
-}
-
-.detail-text {
-  text-align: center;
-  animation: fadeInUp 0.5s ease both;
-}
-
-.detail-title {
-  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
-  color: rgba(255, 255, 255, 0.75);
+/* Watermark label — becasDigMeow style */
+#detail-label {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Inknut Antiqua', Georgia, serif;
+  font-size: clamp(5rem, 18dvw, 16rem);
   font-weight: 300;
-  margin-bottom: 1.4rem;
-  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.04);
+  text-transform: lowercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  animation: fadeIn 0.6s ease both;
+}
+
+/* Poetry lines */
+#detail-poetry {
+  position: fixed;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  animation: fadeInUp 0.5s ease 0.2s both;
 }
 
 .detail-line {
@@ -151,21 +135,19 @@ canvas {
   letter-spacing: 0.5px;
 }
 
-.detail-canvas {
-  width: 100%;
-  max-width: 400px;
-  height: 200px;
-  animation: fadeInUp 0.5s ease 0.15s both;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateX(-50%) translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
@@ -176,16 +158,17 @@ canvas {
   z-index: 10;
   pointer-events: none;
   line-height: 1.8;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
+}
+
+/* Hide overlays during zoom */
+body.detail-mode .info-overlay {
+  opacity: 0;
 }
 
 #info-tl {
   top: 1.5rem;
   left: 1.5rem;
-}
-
-body.detail-mode #info-tl {
-  top: calc(32vmin + 3rem);
 }
 
 #info-tr {
@@ -220,12 +203,6 @@ body.detail-mode #info-tl {
 #location-coords {
   color: rgba(255, 255, 255, 0.25);
   font-size: 0.9em;
-}
-
-/* === Separator dots === */
-
-.detail-line + .detail-line {
-  /* Subtle breathing room between lines */
 }
 
 /* === Tooltip === */

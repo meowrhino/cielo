@@ -1,6 +1,7 @@
 /**
  * Renderizado del astrolabio en Canvas 2D
  * Disco circular: zenit en centro, horizonte en borde
+ * Soporta zoom suave en una región del cielo
  */
 import { equatorialToHorizontal, azimuthalProject, geoJsonToRaDec, interpolateHourly } from './astronomy.js';
 
@@ -10,7 +11,11 @@ const DEG = Math.PI / 180;
 export function createAstrolabe(canvas) {
   const ctx = canvas.getContext('2d');
   let W, H, cx, cy, radius;
-  let hitTargets = []; // Para interaction.js
+  let hitTargets = [];
+
+  // Zoom state
+  let zoom = { level: 1, cx: 0, cy: 0 }; // cx/cy in normalized coords (-1..1)
+  let zoomAnim = null; // { from, to, start, duration }
 
   function resize() {
     const dpr = window.devicePixelRatio || 1;
@@ -33,12 +38,60 @@ export function createAstrolabe(canvas) {
 
   /**
    * Convierte coordenadas normalizadas del astrolabio (-1..1) a píxeles
+   * Aplica zoom: centra en zoom.cx/cy y escala por zoom.level
    */
   function toPixel(nx, ny) {
+    const zx = (nx - zoom.cx) * zoom.level;
+    const zy = (ny - zoom.cy) * zoom.level;
     return {
-      px: cx + nx * radius,
-      py: cy + ny * radius
+      px: cx + zx * radius,
+      py: cy + zy * radius
     };
+  }
+
+  /**
+   * Inicia animación de zoom hacia un punto (en coordenadas normalizadas)
+   */
+  function zoomTo(targetCx, targetCy, targetLevel, duration = 450) {
+    zoomAnim = {
+      from: { level: zoom.level, cx: zoom.cx, cy: zoom.cy },
+      to: { level: targetLevel, cx: targetCx, cy: targetCy },
+      start: performance.now(),
+      duration
+    };
+  }
+
+  function zoomReset(duration = 400) {
+    zoomTo(0, 0, 1, duration);
+  }
+
+  /**
+   * Actualiza el zoom si hay animación activa
+   * Retorna true si la animación sigue activa
+   */
+  function updateZoom() {
+    if (!zoomAnim) return false;
+
+    const t = Math.min(1, (performance.now() - zoomAnim.start) / zoomAnim.duration);
+    // ease-out cubic
+    const e = 1 - Math.pow(1 - t, 3);
+
+    zoom.level = zoomAnim.from.level + (zoomAnim.to.level - zoomAnim.from.level) * e;
+    zoom.cx = zoomAnim.from.cx + (zoomAnim.to.cx - zoomAnim.from.cx) * e;
+    zoom.cy = zoomAnim.from.cy + (zoomAnim.to.cy - zoomAnim.from.cy) * e;
+
+    if (t >= 1) {
+      zoomAnim = null;
+    }
+    return t < 1;
+  }
+
+  function isAnimating() {
+    return zoomAnim !== null;
+  }
+
+  function getZoomLevel() {
+    return zoom.level;
   }
 
   /**
@@ -46,17 +99,21 @@ export function createAstrolabe(canvas) {
    */
   function drawFrame() {
     // Anillo del horizonte
+    const horizonCenter = toPixel(0, 0);
+    const horizonEdge = toPixel(1, 0);
+    const visibleRadius = Math.abs(horizonEdge.px - horizonCenter.px);
+
     ctx.beginPath();
-    ctx.arc(cx, cy, radius, 0, TAU);
+    ctx.arc(horizonCenter.px, horizonCenter.py, visibleRadius, 0, TAU);
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
     // Anillos de altitud (30° y 60°)
     for (const alt of [30, 60]) {
-      const r = ((90 - alt) / 90) * radius;
+      const r = ((90 - alt) / 90) * visibleRadius;
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, TAU);
+      ctx.arc(horizonCenter.px, horizonCenter.py, r, 0, TAU);
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
       ctx.lineWidth = 0.5;
       ctx.setLineDash([4, 8]);
@@ -65,8 +122,9 @@ export function createAstrolabe(canvas) {
     }
 
     // Zenit dot
+    const zenith = toPixel(0, 0);
     ctx.beginPath();
-    ctx.arc(cx, cy, 1.5, 0, TAU);
+    ctx.arc(zenith.px, zenith.py, 1.5, 0, TAU);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.fill();
 
@@ -83,10 +141,13 @@ export function createAstrolabe(canvas) {
     ctx.textBaseline = 'middle';
 
     for (const c of cardinals) {
-      const { x, y } = azimuthalProject(c.az, -5); // Ligeramente fuera del horizonte
+      const { x, y } = azimuthalProject(c.az, -5);
       const { px, py } = toPixel(x, y);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-      ctx.fillText(c.label, px, py);
+      // Only draw if on screen
+      if (px > -50 && px < W + 50 && py > -50 && py < H + 50) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.fillText(c.label, px, py);
+      }
     }
   }
 
@@ -108,16 +169,19 @@ export function createAstrolabe(canvas) {
       const { x, y } = azimuthalProject(azimuth, altitude);
       const { px, py } = toPixel(x, y);
 
-      // Tamaño y brillo según magnitud
-      const brightness = Math.max(0.08, (magLimit - star.mag) / magLimit);
-      const size = Math.max(0.3, (magLimit - star.mag) / magLimit * 2.5);
+      // Cull off-screen stars
+      if (px < -20 || px > W + 20 || py < -20 || py > H + 20) continue;
 
-      // Color sutil según magnitud (más brillantes ligeramente azuladas o doradas)
+      // Tamaño y brillo según magnitud — escalar con zoom
+      const brightness = Math.max(0.08, (magLimit - star.mag) / magLimit);
+      const baseSize = Math.max(0.3, (magLimit - star.mag) / magLimit * 2.5);
+      const size = baseSize * Math.min(zoom.level, 3); // Scale stars with zoom but cap
+
+      // Color sutil según magnitud
       let r = 255, g = 255, b = 255;
       if (star.mag < 1) {
-        // Estrellas brillantes: ligero tono
-        if (star.dec > 0) { r = 255; g = 245; b = 220; } // dorado
-        else { r = 220; g = 230; b = 255; } // azulado
+        if (star.dec > 0) { r = 255; g = 245; b = 220; }
+        else { r = 220; g = 230; b = 255; }
       }
 
       // Glow para estrellas brillantes
@@ -160,14 +224,15 @@ export function createAstrolabe(canvas) {
   function drawConstellations(lines, lat, lon, time) {
     if (!lines) return;
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
-    ctx.lineWidth = 0.5;
+    const lineOpacity = zoom.level > 1.5 ? 0.15 : 0.07;
+    ctx.strokeStyle = `rgba(255, 255, 255, ${lineOpacity})`;
+    ctx.lineWidth = zoom.level > 1.5 ? 1 : 0.5;
 
     for (const constellation of lines) {
       const { geometry, properties } = constellation;
       if (geometry.type !== 'MultiLineString') continue;
 
-      const allPoints = []; // Para centroide
+      const allPoints = [];
 
       for (const lineCoords of geometry.coordinates) {
         const points = [];
@@ -191,9 +256,13 @@ export function createAstrolabe(canvas) {
         for (let i = 1; i < points.length; i++) {
           const dx = points[i].px - points[i - 1].px;
           const dy = points[i].py - points[i - 1].py;
-          if (Math.sqrt(dx * dx + dy * dy) > radius * 1.2) { hasGap = true; break; }
+          if (Math.sqrt(dx * dx + dy * dy) > radius * zoom.level * 1.2) { hasGap = true; break; }
         }
         if (hasGap) continue;
+
+        // Check if any point is on screen
+        const onScreen = points.some(p => p.px > -100 && p.px < W + 100 && p.py > -100 && p.py < H + 100);
+        if (!onScreen) continue;
 
         // Dibujar línea
         ctx.beginPath();
@@ -211,18 +280,22 @@ export function createAstrolabe(canvas) {
         const centX = allPoints.reduce((s, p) => s + p.px, 0) / allPoints.length;
         const centY = allPoints.reduce((s, p) => s + p.py, 0) / allPoints.length;
 
-        ctx.font = '8px Inknut Antiqua, Georgia, serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
-        ctx.fillText(properties.name, centX, centY);
+        if (centX > -50 && centX < W + 50 && centY > -50 && centY < H + 50) {
+          const fontSize = zoom.level > 1.5 ? 10 : 8;
+          ctx.font = `${fontSize}px Inknut Antiqua, Georgia, serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const nameOpacity = zoom.level > 1.5 ? 0.2 : 0.12;
+          ctx.fillStyle = `rgba(255, 255, 255, ${nameOpacity})`;
+          ctx.fillText(properties.name, centX, centY);
 
-        hitTargets.push({
-          type: 'constellation',
-          px: centX, py: centY,
-          radius: 30,
-          data: { name: properties.name, id: properties.id }
-        });
+          hitTargets.push({
+            type: 'constellation',
+            px: centX, py: centY,
+            radius: 30,
+            data: { name: properties.name, id: properties.id }
+          });
+        }
       }
     }
   }
@@ -238,7 +311,11 @@ export function createAstrolabe(canvas) {
 
     const { x, y } = azimuthalProject(pos.azimuth, pos.altitude);
     const { px, py } = toPixel(x, y);
-    const sunRadius = 8;
+
+    // Cull off-screen
+    if (px < -100 || px > W + 100 || py < -100 || py > H + 100) return;
+
+    const sunRadius = 8 * Math.min(zoom.level, 2.5);
 
     // Glow exterior
     const glow = ctx.createRadialGradient(px, py, sunRadius * 0.5, px, py, sunRadius * 8);
@@ -298,7 +375,11 @@ export function createAstrolabe(canvas) {
 
     const { x, y } = azimuthalProject(pos.azimuth, pos.altitude);
     const { px, py } = toPixel(x, y);
-    const moonRadius = 6;
+
+    // Cull off-screen
+    if (px < -100 || px > W + 100 || py < -100 || py > H + 100) return;
+
+    const moonRadius = 6 * Math.min(zoom.level, 2.5);
 
     // Glow
     const glow = ctx.createRadialGradient(px, py, moonRadius, px, py, moonRadius * 5);
@@ -315,8 +396,7 @@ export function createAstrolabe(canvas) {
     ctx.arc(px, py, moonRadius, 0, TAU);
     ctx.fill();
 
-    // Fase: sombra sobre el disco
-    // phase: 0=nueva, 0.25=cuarto creciente, 0.5=llena, 0.75=cuarto menguante
+    // Fase
     const phase = moonData.phase;
     if (phase < 0.98 && phase > 0.02) {
       ctx.save();
@@ -324,40 +404,27 @@ export function createAstrolabe(canvas) {
       ctx.arc(px, py, moonRadius, 0, TAU);
       ctx.clip();
 
-      // Terminador: elipse que simula la sombra
-      const illuminationAngle = phase * TAU;
-      const shadowX = Math.cos(illuminationAngle) * moonRadius;
-
       ctx.fillStyle = '#000';
       ctx.beginPath();
-      // Dibujar sombra como semicírculo + elipse
       if (phase < 0.5) {
-        // Creciente: sombra ocupa la derecha
         ctx.arc(px, py, moonRadius, -Math.PI / 2, Math.PI / 2);
         ctx.ellipse(px, py, Math.abs(moonRadius * (1 - 2 * phase)), moonRadius, 0, Math.PI / 2, -Math.PI / 2);
       } else {
-        // Menguante: sombra ocupa la izquierda
         ctx.arc(px, py, moonRadius, Math.PI / 2, -Math.PI / 2);
         ctx.ellipse(px, py, Math.abs(moonRadius * (2 * phase - 1)), moonRadius, 0, -Math.PI / 2, Math.PI / 2);
       }
       ctx.fill();
       ctx.restore();
-    } else if (phase <= 0.02 || phase >= 0.98) {
-      // Luna nueva: cubrir todo
-      if (phase <= 0.02 || phase >= 0.98) {
-        ctx.fillStyle = phase <= 0.02 ? 'rgba(0,0,0,0.9)' : 'transparent';
-        if (phase <= 0.02) {
-          ctx.beginPath();
-          ctx.arc(px, py, moonRadius, 0, TAU);
-          ctx.fill();
-          // Borde tenue para que se vea
-          ctx.strokeStyle = 'rgba(200, 210, 230, 0.15)';
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.arc(px, py, moonRadius, 0, TAU);
-          ctx.stroke();
-        }
-      }
+    } else if (phase <= 0.02) {
+      ctx.fillStyle = 'rgba(0,0,0,0.9)';
+      ctx.beginPath();
+      ctx.arc(px, py, moonRadius, 0, TAU);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(200, 210, 230, 0.15)';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.arc(px, py, moonRadius, 0, TAU);
+      ctx.stroke();
     }
 
     hitTargets.push({
@@ -380,13 +447,11 @@ export function createAstrolabe(canvas) {
    */
   function drawBackground(isDaytime) {
     if (isDaytime) {
-      // De día: gradiente azul muy sutil (no puro negro)
       const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 1.5);
       grd.addColorStop(0, '#0a1628');
       grd.addColorStop(1, '#040810');
       ctx.fillStyle = grd;
     } else {
-      // De noche: negro profundo
       const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 1.5);
       grd.addColorStop(0, '#050510');
       grd.addColorStop(1, '#000005');
@@ -401,10 +466,9 @@ export function createAstrolabe(canvas) {
     drawBackground(state.isDaytime);
     drawFrame();
     drawConstellations(state.constellationLines, state.lat, state.lon, time);
-    const starCount = drawStars(state.starCatalog, state.lat, state.lon, time);
+    drawStars(state.starCatalog, state.lat, state.lon, time);
     drawSun(state.sunData, time);
     drawMoon(state.moonData, time);
-
   }
 
   function getHitTargets() {
@@ -414,5 +478,9 @@ export function createAstrolabe(canvas) {
   function getLogicalWidth() { return W; }
   function getLogicalHeight() { return H; }
 
-  return { render, resize, getHitTargets, toPixel, getLogicalWidth, getLogicalHeight };
+  return {
+    render, resize, getHitTargets, toPixel,
+    getLogicalWidth, getLogicalHeight,
+    zoomTo, zoomReset, updateZoom, isAnimating, getZoomLevel
+  };
 }
