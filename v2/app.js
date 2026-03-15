@@ -3,6 +3,7 @@
  */
 import { parseTime, azimuthalProject, equatorialToHorizontal, geoJsonToRaDec, computeSunPosition, computeMoonPosition } from './astronomy.js';
 import { createAstrolabe } from './astrolabe.js';
+import { createNatalChart } from './natal-chart.js';
 import { setupInteraction } from './interaction.js';
 import { computePlanetPositions } from './planets.js';
 
@@ -18,9 +19,10 @@ let moonDataAll = null;
 let starCatalog = null;
 let constellationLines = null;
 let astrolabe = null;
+let natalChart = null;
 
 let face = { ...BARCELONA };
-let mode = 'astrolabe'; // 'astrolabe' | 'detail'
+let mode = 'astrolabe'; // 'astrolabe' | 'detail' | 'natal'
 let detailTarget = null;
 let animFrameId = null;
 let menuOpen = false;
@@ -114,7 +116,11 @@ function render() {
   const now = new Date();
   const state = getState(now);
   updateInfoOverlays(now, state.sunData, state.moonData);
-  if (astrolabe) astrolabe.render(now, state);
+  if (mode === 'natal') {
+    if (natalChart) natalChart.render(now, state);
+  } else {
+    if (astrolabe) astrolabe.render(now, state);
+  }
 }
 
 // === Zoom ===
@@ -361,9 +367,35 @@ function requestGeolocation() {
 
 function centerView() {
   closeAllPanels();
+  if (mode === 'natal') { toggleNatal(); return; }
   if (mode === 'detail') exitDetail();
   astrolabe.zoomReset(400);
   startAnimLoop();
+}
+
+// === Natal chart toggle ===
+
+function toggleNatal() {
+  closeAllPanels();
+  const astroCanvas = document.getElementById('astrolabe');
+  const natalCanvas = document.getElementById('natal-canvas');
+  const cartaBtn = document.getElementById('carta-btn');
+
+  if (mode === 'natal') {
+    mode = 'astrolabe';
+    astroCanvas.style.display = '';
+    natalCanvas.style.display = 'none';
+    cartaBtn.classList.remove('active');
+    document.body.classList.remove('natal-mode');
+  } else {
+    if (mode === 'detail') exitDetail();
+    mode = 'natal';
+    astroCanvas.style.display = 'none';
+    natalCanvas.style.display = '';
+    cartaBtn.classList.add('active');
+    document.body.classList.add('natal-mode');
+  }
+  render();
 }
 
 // === Init ===
@@ -378,6 +410,9 @@ async function init() {
 
   const canvas = document.getElementById('astrolabe');
   astrolabe = createAstrolabe(canvas);
+
+  const natalCanvas = document.getElementById('natal-canvas');
+  natalChart = createNatalChart(natalCanvas);
 
   setupInteraction(canvas, astrolabe, {
     onSelect: (target) => {
@@ -434,6 +469,11 @@ async function init() {
     flipAstrolabe();
   });
 
+  document.getElementById('carta-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleNatal();
+  });
+
   document.getElementById('center-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     centerView();
@@ -475,6 +515,7 @@ async function init() {
 
   window.addEventListener('resize', () => {
     astrolabe.resize();
+    natalChart.resize();
     render();
   });
 }

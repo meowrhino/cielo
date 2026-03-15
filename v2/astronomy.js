@@ -183,3 +183,70 @@ export function computeMoonPosition(time) {
 
   return eclipticToEquatorial(moonLon, moonLat);
 }
+
+/**
+ * Calcula el ascendente (longitud eclíptica del punto que sube por el horizonte este)
+ * Devuelve grados 0-360
+ */
+export function computeAscendant(time, lat, lon) {
+  const eps = OBLIQUITY * DEG;
+  const phi = lat * DEG;
+  const thetaL = localSiderealTime(time, lon) * DEG;
+
+  const asc = Math.atan2(
+    Math.cos(thetaL),
+    -(Math.sin(thetaL) * Math.cos(eps) + Math.tan(phi) * Math.sin(eps))
+  );
+  return ((asc * RAD) + 360) % 360;
+}
+
+/**
+ * Convierte RA/Dec (grados) a longitud eclíptica (grados)
+ */
+export function equatorialToEclipticLon(ra, dec) {
+  const eps = OBLIQUITY * DEG;
+  const raR = ra * DEG;
+  const decR = dec * DEG;
+  const lon = Math.atan2(
+    Math.sin(raR) * Math.cos(eps) + Math.tan(decR) * Math.sin(eps),
+    Math.cos(raR)
+  );
+  return ((lon * RAD) + 360) % 360;
+}
+
+/**
+ * Longitud eclíptica del sol (grados) — para carta natal
+ */
+export function computeSunEclipticLon(time) {
+  const days = (time.getTime() - J2000) / 86400000;
+  const T = days / 36525;
+  const L0 = (280.46646 + 36000.76983 * T) % 360;
+  const M = (357.52911 + 35999.05029 * T) % 360;
+  const Mrad = M * DEG;
+  const C = (1.9146 - 0.004817 * T) * Math.sin(Mrad)
+          + 0.019993 * Math.sin(2 * Mrad)
+          + 0.000290 * Math.sin(3 * Mrad);
+  return ((L0 + C) % 360 + 360) % 360;
+}
+
+/**
+ * Longitud eclíptica de la luna (grados) — para carta natal
+ */
+export function computeMoonEclipticLon(time) {
+  const days = (time.getTime() - J2000) / 86400000;
+  const T = days / 36525;
+  const Lp = (218.3165 + 481267.8813 * T) % 360;
+  const D  = (297.8502 + 445267.1115 * T) % 360;
+  const M  = (357.5291 + 35999.0503 * T) % 360;
+  const Mp = (134.9634 + 477198.8676 * T) % 360;
+  const F  = (93.2720 + 483202.0175 * T) % 360;
+  const Dr = D * DEG, Mr = M * DEG, Mpr = Mp * DEG, Fr = F * DEG;
+  const lonCorr =
+      6.289 * Math.sin(Mpr)
+    + 1.274 * Math.sin(2 * Dr - Mpr)
+    + 0.658 * Math.sin(2 * Dr)
+    + 0.214 * Math.sin(2 * Mpr)
+    - 0.186 * Math.sin(Mr)
+    - 0.114 * Math.sin(2 * Fr);
+  return ((Lp + lonCorr) % 360 + 360) % 360;
+}
