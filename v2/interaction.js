@@ -106,7 +106,7 @@ export function setupInteraction(canvas, astrolabe, { onSelect, onPan }) {
       dragState.moved = true;
     }
 
-    if (dragState.moved && astrolabe.getZoomLevel() > 1) {
+    if (dragState.moved) {
       e.preventDefault();
       astrolabe.panBy(-dx, -dy);
       dragState.startX = t.clientX;

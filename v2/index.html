@@ -29,32 +29,40 @@
   <!-- Pestaña del menú (siempre visible) -->
   <button id="menu-tab" class="text-btn">cielo</button>
 
-  <!-- Menú drawer -->
-  <div id="drawer" class="drawer hidden">
-    <div class="drawer-content">
-      <div class="drawer-row">
-        <div>
-          <div id="time-display"></div>
-          <div id="date-display"></div>
-        </div>
-        <div class="drawer-right">
-          <div id="location-name">barcelona</div>
-          <div id="location-coords">41.4°N · 2.2°E</div>
-        </div>
-      </div>
+  <!-- Barra de menú compacta -->
+  <div id="menu-bar" class="menu-bar hidden">
+    <button id="info-btn" class="text-btn">info</button>
+    <button id="ubi-btn" class="text-btn">ubi</button>
+    <button id="tema-btn" class="text-btn">tema</button>
+    <button id="vuelta-btn" class="text-btn">vuelta</button>
+    <button id="ar-btn" class="text-btn">mapa</button>
+  </div>
 
-      <div class="drawer-row drawer-info">
-        <span id="sun-info"></span>
-        <span id="moon-info"></span>
+  <!-- Panel de info -->
+  <div id="info-panel" class="info-panel hidden">
+    <div class="info-row">
+      <div>
+        <div id="time-display"></div>
+        <div id="date-display"></div>
       </div>
-
-      <div class="drawer-row drawer-actions">
-        <button id="location-btn" class="text-btn">ubicación</button>
-        <button id="mode-btn" class="text-btn">normal</button>
-        <button id="flip-btn" class="text-btn">antípoda</button>
-        <button id="ar-btn" class="text-btn">visión mapa</button>
+      <div class="info-right">
+        <div id="location-name">barcelona</div>
+        <div id="location-coords">41.4°N · 2.2°E</div>
       </div>
     </div>
+    <div class="info-row info-astro">
+      <span id="sun-info"></span>
+      <span id="moon-info"></span>
+    </div>
+  </div>
+
+  <!-- Modal de temas -->
+  <div id="tema-modal" class="tema-modal hidden">
+    <button class="text-btn tema-option" data-tema="0">normal</button>
+    <button class="text-btn tema-option" data-tema="1">noche</button>
+    <button class="text-btn tema-option" data-tema="2">cálido</button>
+    <button class="text-btn tema-option" data-tema="3">frío</button>
+    <button class="text-btn tema-option" data-tema="4">verde</button>
   </div>
 
   <script type="module" src="app.js"></script>

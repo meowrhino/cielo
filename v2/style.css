@@ -54,18 +54,17 @@ body {
   width: 100dvw;
   height: 100dvh;
   z-index: 1;
-  perspective: 1200px;
 }
 
 #astrolabe-wrapper.flipping canvas {
-  animation: flip 0.7s ease-in-out;
-  transform-style: preserve-3d;
+  animation: fade-flip 0.6s ease-in-out;
 }
 
-@keyframes flip {
-  0%   { transform: rotateX(0deg); }
-  50%  { transform: rotateX(90deg); }
-  100% { transform: rotateX(0deg); }
+@keyframes fade-flip {
+  0%   { opacity: 1; }
+  40%  { opacity: 0; }
+  60%  { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 canvas {
@@ -86,69 +85,84 @@ canvas {
   color: rgba(255, 255, 255, 0.25);
   letter-spacing: 2px;
   padding: 0.5em 1.5em;
-  transition: color 0.2s ease, opacity 0.4s ease;
+  transition: color 0.2s ease, opacity 0.3s ease;
 }
 
 #menu-tab:hover {
   color: rgba(255, 255, 255, 0.5);
 }
 
-body.detail-mode #menu-tab {
+body.detail-mode #menu-tab,
+body.menu-open #menu-tab {
   opacity: 0;
   pointer-events: none;
 }
 
-/* === Drawer menu === */
+/* === Menu bar (compact bottom bar) === */
 
-.drawer {
+.menu-bar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100dvw;
+  bottom: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 20;
-  background: linear-gradient(to top, rgba(7, 4, 10, 0.95), rgba(7, 4, 10, 0.85) 70%, transparent);
-  padding: 2.5rem 1.5rem 1.5rem;
-  transform: translateY(0);
-  transition: transform 0.35s ease, opacity 0.35s ease;
+  display: flex;
+  gap: 1.2em;
+  align-items: center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.drawer.hidden {
-  transform: translateY(100%);
+.menu-bar.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(10px);
+}
+
+body.detail-mode .menu-bar {
   opacity: 0;
   pointer-events: none;
 }
 
-.drawer-content {
-  max-width: 500px;
-  margin: 0 auto;
+/* === Info panel (above menu bar) === */
+
+.info-panel {
+  position: fixed;
+  bottom: 2.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 19;
+  max-width: 420px;
+  width: 90vw;
+  padding: 0.8rem 1.2rem;
+  background: rgba(7, 4, 10, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.drawer-row {
+.info-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.info-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 0.4rem 0;
+  padding: 0.2rem 0;
 }
 
-.drawer-right {
+.info-right {
   text-align: right;
 }
 
-.drawer-info {
+.info-astro {
   color: rgba(255, 255, 255, 0.3);
-  gap: 2rem;
-  padding: 0.6rem 0;
+  gap: 1.5rem;
+  padding-top: 0.4rem;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  margin: 0.3rem 0;
-}
-
-.drawer-actions {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 0.6rem;
-  flex-wrap: wrap;
-  gap: 0.3rem;
+  margin-top: 0.2rem;
 }
 
 #time-display {
@@ -168,6 +182,33 @@ body.detail-mode #menu-tab {
 #location-coords {
   color: rgba(255, 255, 255, 0.25);
   font-size: 0.9em;
+}
+
+/* === Tema modal === */
+
+.tema-modal {
+  position: fixed;
+  bottom: 2.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 21;
+  display: flex;
+  gap: 1em;
+  padding: 0.6rem 1rem;
+  background: rgba(7, 4, 10, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.tema-modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.tema-option.active {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* === Detail view (zoom overlay) === */
@@ -253,8 +294,10 @@ body.night-mode {
   background: #0a0000;
 }
 
-body.night-mode .drawer {
-  background: linear-gradient(to top, rgba(10, 0, 0, 0.95), rgba(10, 0, 0, 0.85) 70%, transparent);
+body.night-mode .info-panel,
+body.night-mode .tema-modal {
+  background: rgba(10, 0, 0, 0.92);
+  border-color: rgba(255, 40, 40, 0.06);
 }
 
 body.night-mode .text-btn {
@@ -275,7 +318,7 @@ body.night-mode #location-coords {
   color: rgba(255, 40, 40, 0.3);
 }
 
-body.night-mode .drawer-info {
+body.night-mode .info-astro {
   color: rgba(255, 40, 40, 0.3);
   border-color: rgba(255, 40, 40, 0.06);
 }
@@ -316,8 +359,10 @@ body.green-mode canvas {
   filter: hue-rotate(90deg) brightness(0.85) saturate(0.9);
 }
 
-body.green-mode .drawer {
-  background: linear-gradient(to top, rgba(4, 10, 4, 0.95), rgba(4, 10, 4, 0.85) 70%, transparent);
+body.green-mode .info-panel,
+body.green-mode .tema-modal {
+  background: rgba(4, 10, 4, 0.92);
+  border-color: rgba(40, 160, 40, 0.06);
 }
 
 body.green-mode .text-btn {
@@ -338,7 +383,7 @@ body.green-mode #location-coords {
   color: rgba(40, 160, 40, 0.3);
 }
 
-body.green-mode .drawer-info {
+body.green-mode .info-astro {
   color: rgba(40, 160, 40, 0.3);
   border-color: rgba(40, 160, 40, 0.06);
 }
@@ -361,4 +406,10 @@ body.green-mode #detail-label {
 
 body.ar-mode #menu-tab {
   color: rgba(100, 200, 255, 0.4);
+}
+
+body.ar-mode .menu-bar,
+body.ar-mode #menu-tab {
+  opacity: 0;
+  pointer-events: none;
 }

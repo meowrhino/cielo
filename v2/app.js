@@ -23,7 +23,7 @@ let face = { ...BARCELONA };
 let mode = 'astrolabe'; // 'astrolabe' | 'detail'
 let detailTarget = null;
 let animFrameId = null;
-let drawerOpen = false;
+let menuOpen = false;
 
 // Visual mode
 let currentModeIndex = parseInt(localStorage.getItem('cielo-mode') || '0', 10);
@@ -183,7 +183,7 @@ function getTargetName(target) {
 
 function enterDetail(target) {
   hideTooltip();
-  closeDrawer();
+  closeAllPanels();
   const wasInDetail = mode === 'detail';
   mode = 'detail';
   detailTarget = target;
@@ -261,45 +261,53 @@ function hideTooltip() {
   if (tooltip) tooltip.classList.add('hidden');
 }
 
-// === Drawer menu ===
+// === Menu system ===
 
-function toggleDrawer() {
-  drawerOpen ? closeDrawer() : openDrawer();
+function toggleMenu() {
+  menuOpen ? closeAllPanels() : openMenu();
 }
 
-function openDrawer() {
-  drawerOpen = true;
-  document.getElementById('drawer').classList.remove('hidden');
-  document.getElementById('menu-tab').textContent = '×';
+function openMenu() {
+  menuOpen = true;
+  document.body.classList.add('menu-open');
+  document.getElementById('menu-bar').classList.remove('hidden');
 }
 
-function closeDrawer() {
-  drawerOpen = false;
-  document.getElementById('drawer').classList.add('hidden');
-  document.getElementById('menu-tab').textContent = 'cielo';
+function closeAllPanels() {
+  menuOpen = false;
+  document.body.classList.remove('menu-open');
+  document.getElementById('menu-bar').classList.add('hidden');
+  document.getElementById('info-panel').classList.add('hidden');
+  document.getElementById('tema-modal').classList.add('hidden');
+}
+
+function togglePanel(panelId) {
+  const panel = document.getElementById(panelId);
+  const otherPanels = ['info-panel', 'tema-modal'].filter(id => id !== panelId);
+  otherPanels.forEach(id => document.getElementById(id).classList.add('hidden'));
+  panel.classList.toggle('hidden');
 }
 
 // === Visual modes ===
 
 function applyMode() {
-  // Remove all mode classes
   for (const cls of Object.values(MODE_CLASSES)) {
     if (cls) document.body.classList.remove(cls);
   }
-  // Apply current
   const cls = MODE_CLASSES[MODES[currentModeIndex]];
   if (cls) document.body.classList.add(cls);
 
-  // Update button text
-  const btn = document.getElementById('mode-btn');
-  if (btn) btn.textContent = MODES[currentModeIndex];
+  // Update active state in tema modal
+  document.querySelectorAll('.tema-option').forEach((btn, i) => {
+    btn.classList.toggle('active', i === currentModeIndex);
+  });
 
   localStorage.setItem('cielo-mode', String(currentModeIndex));
   render();
 }
 
-function cycleMode() {
-  currentModeIndex = (currentModeIndex + 1) % MODES.length;
+function setMode(index) {
+  currentModeIndex = index;
   applyMode();
 }
 
@@ -307,7 +315,7 @@ function cycleMode() {
 
 function flipAstrolabe() {
   if (mode === 'detail') return;
-  closeDrawer();
+  closeAllPanels();
 
   const wrapper = document.getElementById('astrolabe-wrapper');
   wrapper.classList.add('flipping');
@@ -321,9 +329,9 @@ function flipAstrolabe() {
       _originalName: face.name === 'antípoda' ? face._originalName : face.name
     };
     render();
-  }, 350);
+  }, 270);
 
-  setTimeout(() => wrapper.classList.remove('flipping'), 700);
+  setTimeout(() => wrapper.classList.remove('flipping'), 600);
 }
 
 // === Geolocation ===
@@ -366,7 +374,7 @@ function toggleAR() {
 
 function startAR() {
   arMode = true;
-  closeDrawer();
+  closeAllPanels();
   document.body.classList.add('ar-mode');
 
   astrolabe.zoomTo(0, 0, 2, 300);
@@ -374,9 +382,6 @@ function startAR() {
 
   window.addEventListener('deviceorientation', onDeviceOrientation);
   arFrameId = requestAnimationFrame(arLoop);
-
-  const btn = document.getElementById('ar-btn');
-  if (btn) btn.classList.add('active');
 }
 
 function stopAR() {
@@ -388,9 +393,6 @@ function stopAR() {
 
   astrolabe.zoomReset(300);
   startAnimLoop();
-
-  const btn = document.getElementById('ar-btn');
-  if (btn) btn.classList.remove('active');
 }
 
 function onDeviceOrientation(e) {
@@ -431,7 +433,7 @@ async function init() {
   setupInteraction(canvas, astrolabe, {
     onSelect: (target) => {
       hideTooltip();
-      closeDrawer();
+      closeAllPanels();
       if (target.type === 'star') {
         showTooltip(target);
       } else if (target.type === 'planet') {
@@ -443,7 +445,7 @@ async function init() {
     },
     onPan: () => {
       hideTooltip();
-      closeDrawer();
+      closeAllPanels();
       const label = document.getElementById('detail-label');
       if (label) label.style.opacity = '0';
       render();
@@ -456,26 +458,31 @@ async function init() {
     exitDetail();
   });
 
-  // Menu tab
+  // Menu tab — toggle menu
   document.getElementById('menu-tab').addEventListener('click', (e) => {
     e.stopPropagation();
-    toggleDrawer();
+    toggleMenu();
   });
 
-  // Drawer buttons
-  document.getElementById('flip-btn').addEventListener('click', (e) => {
+  // Menu bar buttons
+  document.getElementById('info-btn').addEventListener('click', (e) => {
     e.stopPropagation();
-    flipAstrolabe();
+    togglePanel('info-panel');
   });
 
-  document.getElementById('mode-btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    cycleMode();
-  });
-
-  document.getElementById('location-btn').addEventListener('click', (e) => {
+  document.getElementById('ubi-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     requestGeolocation();
+  });
+
+  document.getElementById('tema-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    togglePanel('tema-modal');
+  });
+
+  document.getElementById('vuelta-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    flipAstrolabe();
   });
 
   document.getElementById('ar-btn').addEventListener('click', (e) => {
@@ -483,9 +490,17 @@ async function init() {
     toggleAR();
   });
 
-  // Close drawer when tapping canvas
-  canvas.addEventListener('mousedown', () => { if (drawerOpen) closeDrawer(); });
-  canvas.addEventListener('touchstart', () => { if (drawerOpen) closeDrawer(); }, { passive: true });
+  // Tema modal buttons
+  document.querySelectorAll('.tema-option').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setMode(parseInt(btn.dataset.tema, 10));
+    });
+  });
+
+  // Close panels when tapping canvas
+  canvas.addEventListener('mousedown', () => { if (menuOpen) closeAllPanels(); });
+  canvas.addEventListener('touchstart', () => { if (menuOpen) closeAllPanels(); }, { passive: true });
 
   // Apply saved mode
   applyMode();
