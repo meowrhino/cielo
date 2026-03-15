@@ -8,24 +8,32 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="astrolabe"></canvas>
+  <!-- Astrolabio (fullscreen o minimap) -->
+  <div id="astrolabe-wrapper">
+    <canvas id="astrolabe"></canvas>
+    <button id="flip-btn" title="girar al otro lado del mundo">↕</button>
+  </div>
 
+  <!-- Vista inmersiva (oculta por defecto) -->
+  <div id="detail-view" class="hidden">
+    <div id="detail-content"></div>
+  </div>
+
+  <!-- Overlays de info -->
   <div id="info-tl" class="info-overlay">
     <div id="time-display"></div>
     <div id="date-display"></div>
   </div>
 
   <div id="info-tr" class="info-overlay">
-    <div>Barcelona</div>
-    <div>41.4°N · 2.2°E</div>
+    <div id="location-name">barcelona</div>
+    <div id="location-coords">41.4°N · 2.2°E</div>
   </div>
 
   <div id="info-bottom" class="info-overlay">
     <span id="sun-info"></span>
     <span id="moon-info"></span>
   </div>
-
-  <div id="tooltip" class="tooltip hidden"></div>
 
   <script type="module" src="app.js"></script>
 </body>

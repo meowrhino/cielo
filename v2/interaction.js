@@ -1,19 +1,31 @@
 /**
  * Interacción: touch/click en elementos del astrolabio
- * Detecta hits en sol, luna, estrellas, constelaciones y muestra tooltips
+ * Click en sol/luna/constelación → abre vista inmersiva
+ * Hover en desktop → cursor pointer
  */
 
-export function setupInteraction(canvas, astrolabe) {
-  const tooltip = document.getElementById('tooltip');
-
+export function setupInteraction(canvas, astrolabe, { onSelect }) {
   function findHit(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
     const targets = astrolabe.getHitTargets();
+
+    // hitTargets están en coordenadas lógicas (px sin DPR)
+    // clientX/Y son coordenadas de viewport
+    // Necesitamos mapear viewport → lógicas del canvas
+    const logicalW = astrolabe.getLogicalWidth();
+    const logicalH = astrolabe.getLogicalHeight();
+    const scaleX = logicalW / rect.width;
+    const scaleY = logicalH / rect.height;
+
+    const localX = (clientX - rect.left) * scaleX;
+    const localY = (clientY - rect.top) * scaleY;
+
     let closest = null;
     let closestDist = Infinity;
 
     for (const t of targets) {
-      const dx = clientX - t.px;
-      const dy = clientY - t.py;
+      const dx = localX - t.px;
+      const dy = localY - t.py;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < t.radius && dist < closestDist) {
@@ -25,90 +37,37 @@ export function setupInteraction(canvas, astrolabe) {
     return closest;
   }
 
-  function showTooltip(target, clientX, clientY) {
-    if (!tooltip) return;
-
-    let html = '';
-
-    switch (target.type) {
-      case 'sun':
-        html = `<strong>Sol</strong><br>
-                alt ${target.data.altitude}° · az ${target.data.azimuth}°<br>
-                ↑ ${target.data.sunrise} · ↓ ${target.data.sunset}`;
-        break;
-
-      case 'moon':
-        html = `<strong>Luna</strong> · ${target.data.phase}<br>
-                ${target.data.illumination}% iluminada<br>
-                alt ${target.data.altitude}° · az ${target.data.azimuth}°<br>
-                ↑ ${target.data.moonrise} · ↓ ${target.data.moonset}`;
-        break;
-
-      case 'star': {
-        const name = target.data.name && !target.data.name.includes('undefined')
-          ? target.data.name
-          : 'estrella';
-        html = `<strong>${name}</strong><br>
-                mag ${target.data.mag.toFixed(1)}<br>
-                alt ${target.data.altitude.toFixed(1)}° · az ${target.data.azimuth.toFixed(1)}°`;
-        break;
-      }
-
-      case 'constellation':
-        html = `<strong>${target.data.name}</strong>`;
-        break;
-    }
-
-    tooltip.innerHTML = html;
-    tooltip.classList.remove('hidden');
-
-    // Posicionar tooltip
-    const margin = 15;
-    let x = clientX + margin;
-    let y = clientY + margin;
-
-    // No salir de pantalla
-    const rect = tooltip.getBoundingClientRect();
-    if (x + rect.width > window.innerWidth - margin) {
-      x = clientX - rect.width - margin;
-    }
-    if (y + rect.height > window.innerHeight - margin) {
-      y = clientY - rect.height - margin;
-    }
-
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
-  }
-
-  function hideTooltip() {
-    if (tooltip) tooltip.classList.add('hidden');
-  }
-
-  // Click / tap
+  // Click / tap → abre vista inmersiva
   canvas.addEventListener('click', (e) => {
+    const wrapper = document.getElementById('astrolabe-wrapper');
+    if (wrapper && wrapper.classList.contains('minimap')) return;
+
     const hit = findHit(e.clientX, e.clientY);
-    if (hit) {
-      showTooltip(hit, e.clientX, e.clientY);
-    } else {
-      hideTooltip();
+    if (hit && onSelect) {
+      e.stopPropagation(); // Prevent bubbling to wrapper
+      onSelect(hit);
     }
   });
 
   // Hover (desktop)
   canvas.addEventListener('mousemove', (e) => {
+    const wrapper = document.getElementById('astrolabe-wrapper');
+    if (wrapper && wrapper.classList.contains('minimap')) return;
+
     const hit = findHit(e.clientX, e.clientY);
     canvas.style.cursor = hit ? 'pointer' : 'default';
   });
 
-  // Touch: cerrar tooltip al tocar fuera
+  // Touch
   canvas.addEventListener('touchstart', (e) => {
+    const wrapper = document.getElementById('astrolabe-wrapper');
+    if (wrapper && wrapper.classList.contains('minimap')) return;
+
     const touch = e.touches[0];
     const hit = findHit(touch.clientX, touch.clientY);
-    if (hit) {
+    if (hit && onSelect) {
       e.preventDefault();
-      showTooltip(hit, touch.clientX, touch.clientY);
-    } else {
-      hideTooltip();
+      onSelect(hit);
     }
   }, { passive: false });
 }

@@ -14,8 +14,10 @@ export function createAstrolabe(canvas) {
 
   function resize() {
     const dpr = window.devicePixelRatio || 1;
-    W = window.innerWidth;
-    H = window.innerHeight;
+    const parent = canvas.parentElement;
+    const rect = parent ? parent.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+    W = rect.width;
+    H = rect.height;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width = W + 'px';
@@ -402,11 +404,15 @@ export function createAstrolabe(canvas) {
     const starCount = drawStars(state.starCatalog, state.lat, state.lon, time);
     drawSun(state.sunData, time);
     drawMoon(state.moonData, time);
+
   }
 
   function getHitTargets() {
     return hitTargets;
   }
 
-  return { render, resize, getHitTargets, toPixel };
+  function getLogicalWidth() { return W; }
+  function getLogicalHeight() { return H; }
+
+  return { render, resize, getHitTargets, toPixel, getLogicalWidth, getLogicalHeight };
 }

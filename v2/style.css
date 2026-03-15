@@ -18,25 +18,171 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-canvas {
-  display: block;
+/* === Astrolabe wrapper === */
+
+#astrolabe-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  transition: all 0.5s ease;
+  z-index: 1;
 }
+
+#astrolabe-wrapper.minimap {
+  width: 35vmin;
+  height: 35vmin;
+  top: 1.5rem;
+  left: 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 15;
+}
+
+#astrolabe-wrapper.minimap canvas {
+  border-radius: 50%;
+}
+
+#astrolabe-wrapper.flipping canvas {
+  animation: flip 0.5s ease-in-out;
+}
+
+@keyframes flip {
+  0%   { transform: scaleY(1); }
+  50%  { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* === Flip button === */
+
+#flip-btn {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#flip-btn:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.minimap #flip-btn {
+  display: none;
+}
+
+/* === Detail view === */
+
+#detail-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+#detail-view.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#detail-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 500px;
+  width: 90%;
+  padding-top: 40vmin; /* Clear the minimap */
+}
+
+.detail-text {
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.detail-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.detail-line {
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 2;
+  letter-spacing: 0.3px;
+}
+
+.detail-canvas {
+  width: 100%;
+  max-width: 400px;
+  height: 200px;
+  animation: fadeInUp 0.5s ease 0.15s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Info overlays === */
 
 .info-overlay {
   position: fixed;
   z-index: 10;
   pointer-events: none;
   line-height: 1.6;
+  transition: opacity 0.3s ease;
+}
+
+.minimap-active .info-overlay {
+  /* Keep overlays visible in detail mode */
 }
 
 #info-tl {
   top: 1.5rem;
   left: 1.5rem;
+}
+
+/* When minimap is showing, move time info below it */
+body.detail-mode #info-tl {
+  top: calc(35vmin + 3rem);
 }
 
 #info-tr {
@@ -63,6 +209,12 @@ canvas {
 #date-display {
   color: rgba(255, 255, 255, 0.35);
 }
+
+#location-name {
+  text-transform: lowercase;
+}
+
+/* === Tooltip (kept for hover on desktop) === */
 
 .tooltip {
   position: fixed;
