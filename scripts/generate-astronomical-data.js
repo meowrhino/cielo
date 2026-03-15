@@ -315,9 +315,13 @@ async function main() {
   console.log('Generando datos lunares para Barcelona...');
   const moonDataBarcelona = generateMoonData(BARCELONA, startDate, daysToGenerate);
   
-  // Generar catálogo de estrellas
-  console.log('Generando catálogo de estrellas...');
-  const starCatalog = await generateStarCatalog();
+  // Generar catálogo de estrellas (saltar con SKIP_STARS=1)
+  const skipStars = process.env.SKIP_STARS === '1';
+  let starCatalog = [];
+  if (!skipStars) {
+    console.log('Generando catálogo de estrellas...');
+    starCatalog = await generateStarCatalog();
+  }
   
   // Crear directorios si no existen
   const dataDir = path.join(__dirname, '..', 'data');
@@ -343,10 +347,12 @@ async function main() {
     JSON.stringify(moonDataBarcelona, null, 2)
   );
   
-  fs.writeFileSync(
-    path.join(starsDir, 'catalog.json'),
-    JSON.stringify(starCatalog, null, 2)
-  );
+  if (!skipStars) {
+    fs.writeFileSync(
+      path.join(starsDir, 'catalog.json'),
+      JSON.stringify(starCatalog, null, 2)
+    );
+  }
   
   // Guardar metadata
   const metadata = {

@@ -1,0 +1,49 @@
+name: Update Astronomical Data
+
+# Genera datos de sol y luna en los equinoccios y solsticios.
+# Cada ejecución genera 150 días (~5 meses), así siempre hay
+# ~60 días de margen antes de la siguiente fecha astronómica.
+#
+# Fechas:
+#   20 mar — equinoccio de primavera
+#   21 jun — solsticio de verano
+#   22 sep — equinoccio de otoño
+#   21 dic — solsticio de invierno
+
+on:
+  schedule:
+    - cron: '0 6 20 3 *'   # 20 marzo
+    - cron: '0 6 21 6 *'   # 21 junio
+    - cron: '0 6 22 9 *'   # 22 septiembre
+    - cron: '0 6 21 12 *'  # 21 diciembre
+  workflow_dispatch: # ejecución manual
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate astronomical data (150 days)
+        run: DAYS=150 SKIP_STARS=1 npm run generate-data
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Commit and push if changed
+        run: |
+          git add data/sun/ data/moon/ data/metadata.json
+          git diff --quiet && git diff --staged --quiet || \
+            (git commit -m "Update astronomical data ($(date +%Y-%m-%d))" && git push)
