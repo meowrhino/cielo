@@ -3,7 +3,7 @@
  * Disco circular: zenit en centro, horizonte en borde
  * Soporta zoom suave en una región del cielo
  */
-import { equatorialToHorizontal, azimuthalProject, geoJsonToRaDec, interpolateHourly } from './astronomy.js';
+import { equatorialToHorizontal, azimuthalProject, geoJsonToRaDec, computeSunPosition } from './astronomy.js';
 
 const TAU = Math.PI * 2;
 const DEG = Math.PI / 180;
@@ -389,15 +389,15 @@ export function createAstrolabe(canvas) {
   }
 
   /**
-   * Dibuja el sol
+   * Dibuja el sol — posición dinámica vía RA/Dec
    */
-  function drawSun(sunData, time) {
-    if (!sunData || !sunData.hourlyData) return;
+  function drawSun(sunData, sunPosition, lat, lon, time) {
+    if (!sunPosition) return;
 
-    const pos = interpolateHourly(sunData.hourlyData, time);
-    if (!pos || !pos.isVisible) return;
+    const { azimuth, altitude } = equatorialToHorizontal(sunPosition.ra, sunPosition.dec, lat, lon, time);
+    if (altitude < -5) return;
 
-    const { x, y } = azimuthalProject(pos.azimuth, pos.altitude);
+    const { x, y } = azimuthalProject(azimuth, Math.max(altitude, 0));
     const { px, py } = toPixel(x, y);
 
     // Cull off-screen
@@ -425,14 +425,18 @@ export function createAstrolabe(canvas) {
     ctx.arc(px, py, sunRadius, 0, TAU);
     ctx.fill();
 
-    // Trayectoria del sol (arco del día)
+    // Trayectoria del sol (arco del día) — computada dinámicamente
     ctx.beginPath();
     ctx.strokeStyle = 'rgba(255, 200, 60, 0.08)';
     ctx.lineWidth = 1;
     let first = true;
-    for (const h of sunData.hourlyData) {
-      if (!h.isVisible) continue;
-      const proj = azimuthalProject(h.azimuth, h.altitude);
+    const today = new Date(time);
+    for (let h = 0; h < 24; h++) {
+      today.setHours(h, 0, 0, 0);
+      const hPos = computeSunPosition(today);
+      const hHoriz = equatorialToHorizontal(hPos.ra, hPos.dec, lat, lon, today);
+      if (hHoriz.altitude < 0) continue;
+      const proj = azimuthalProject(hHoriz.azimuth, hHoriz.altitude);
       const pt = toPixel(proj.x, proj.y);
       if (first) { ctx.moveTo(pt.px, pt.py); first = false; }
       else ctx.lineTo(pt.px, pt.py);
@@ -444,24 +448,24 @@ export function createAstrolabe(canvas) {
       px, py,
       radius: sunRadius * 3,
       data: {
-        altitude: pos.altitude.toFixed(1),
-        azimuth: pos.azimuth.toFixed(1),
-        sunrise: sunData.sunrise,
-        sunset: sunData.sunset
+        altitude: altitude.toFixed(1),
+        azimuth: azimuth.toFixed(1),
+        sunrise: sunData ? sunData.sunrise : '',
+        sunset: sunData ? sunData.sunset : ''
       }
     });
   }
 
   /**
-   * Dibuja la luna con su fase
+   * Dibuja la luna con su fase — posición dinámica vía RA/Dec
    */
-  function drawMoon(moonData, time) {
-    if (!moonData || !moonData.hourlyData) return;
+  function drawMoon(moonData, moonPosition, lat, lon, time) {
+    if (!moonPosition) return;
 
-    const pos = interpolateHourly(moonData.hourlyData, time);
-    if (!pos || pos.altitude < 0) return;
+    const { azimuth, altitude } = equatorialToHorizontal(moonPosition.ra, moonPosition.dec, lat, lon, time);
+    if (altitude < 0) return;
 
-    const { x, y } = azimuthalProject(pos.azimuth, pos.altitude);
+    const { x, y } = azimuthalProject(azimuth, altitude);
     const { px, py } = toPixel(x, y);
 
     // Cull off-screen
@@ -484,8 +488,8 @@ export function createAstrolabe(canvas) {
     ctx.arc(px, py, moonRadius, 0, TAU);
     ctx.fill();
 
-    // Fase
-    const phase = moonData.phase;
+    // Fase (usar datos del archivo si disponibles)
+    const phase = moonData ? moonData.phase : 0.5;
     if (phase < 0.98 && phase > 0.02) {
       ctx.save();
       ctx.beginPath();
@@ -520,12 +524,12 @@ export function createAstrolabe(canvas) {
       px, py,
       radius: moonRadius * 3,
       data: {
-        phase: moonData.phaseName,
-        illumination: moonData.illumination,
-        altitude: pos.altitude.toFixed(1),
-        azimuth: pos.azimuth.toFixed(1),
-        moonrise: moonData.moonrise,
-        moonset: moonData.moonset
+        phase: moonData ? moonData.phaseName : '',
+        illumination: moonData ? moonData.illumination : '',
+        altitude: altitude.toFixed(1),
+        azimuth: azimuth.toFixed(1),
+        moonrise: moonData ? moonData.moonrise : '',
+        moonset: moonData ? moonData.moonset : ''
       }
     });
   }
@@ -613,8 +617,8 @@ export function createAstrolabe(canvas) {
     drawConstellations(state.constellationLines, state.lat, state.lon, time);
     drawStars(state.starCatalog, state.lat, state.lon, time);
     drawPlanets(state.planets, state.lat, state.lon, time);
-    drawSun(state.sunData, time);
-    drawMoon(state.moonData, time);
+    drawSun(state.sunData, state.sunPosition, state.lat, state.lon, time);
+    drawMoon(state.moonData, state.moonPosition, state.lat, state.lon, time);
   }
 
   function getHitTargets() {

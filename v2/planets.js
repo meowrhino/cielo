@@ -4,6 +4,8 @@
  * Precisión: ~1° (suficiente para visualización)
  */
 
+import { eclipticToEquatorial } from './astronomy.js';
+
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 const J2000 = Date.UTC(2000, 0, 1, 12, 0, 0);
@@ -53,8 +55,6 @@ const ELEMENTS = {
   }
 };
 
-const OBLIQUITY = 23.4393; // oblicuidad de la eclíptica (aprox)
-
 /**
  * Resuelve la ecuación de Kepler: M = E - e*sin(E)
  */
@@ -98,28 +98,6 @@ function heliocentricPosition(el, T) {
   const z = (sinW * sinI) * xOrb + (cosW * sinI) * yOrb;
 
   return { x, y, z };
-}
-
-/**
- * Convierte eclíptica a ecuatorial (RA, Dec)
- */
-function eclipticToEquatorial(lon, lat) {
-  const eps = OBLIQUITY * DEG;
-  const cosEps = Math.cos(eps);
-  const sinEps = Math.sin(eps);
-
-  const sinLon = Math.sin(lon);
-  const cosLon = Math.cos(lon);
-  const sinLat = Math.sin(lat);
-  const cosLat = Math.cos(lat);
-
-  const ra = Math.atan2(sinLon * cosEps - Math.tan(lat) * sinEps, cosLon);
-  const dec = Math.asin(sinLat * cosEps + cosLat * sinEps * sinLon);
-
-  return {
-    ra: ((ra * RAD) + 360) % 360,
-    dec: dec * RAD
-  };
 }
 
 /**

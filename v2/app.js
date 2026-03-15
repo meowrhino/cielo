@@ -1,7 +1,7 @@
 /**
  * App principal — carga de datos, estado, loop de actualización
  */
-import { parseTime, azimuthalProject, equatorialToHorizontal, geoJsonToRaDec, interpolateHourly } from './astronomy.js';
+import { parseTime, azimuthalProject, equatorialToHorizontal, geoJsonToRaDec, computeSunPosition, computeMoonPosition } from './astronomy.js';
 import { createAstrolabe } from './astrolabe.js';
 import { setupInteraction } from './interaction.js';
 import { computePlanetPositions } from './planets.js';
@@ -9,8 +9,8 @@ import { computePlanetPositions } from './planets.js';
 const BARCELONA = { name: 'barcelona', lat: 41.3851, lon: 2.1734, label: '41.4°N · 2.2°E' };
 
 // Visual modes (cycle with mode button)
-const MODES = ['normal', 'noche', 'cálido', 'frío'];
-const MODE_CLASSES = { normal: '', noche: 'night-mode', 'cálido': 'warm-mode', 'frío': 'blue-mode' };
+const MODES = ['normal', 'noche', 'cálido', 'frío', 'verde'];
+const MODE_CLASSES = { normal: '', noche: 'night-mode', 'cálido': 'warm-mode', 'frío': 'blue-mode', verde: 'green-mode' };
 
 // Estado
 let sunDataAll = null;
@@ -99,6 +99,8 @@ function getState(now) {
   return {
     sunData,
     moonData,
+    sunPosition: computeSunPosition(now),
+    moonPosition: computeMoonPosition(now),
     starCatalog,
     constellationLines,
     planets: computePlanetPositions(now),
@@ -140,18 +142,20 @@ function getZoomCenter(target, now) {
     return count > 0 ? { nx: sumX / count, ny: sumY / count } : { nx: 0, ny: 0 };
   }
 
-  if (target.type === 'sun' && state.sunData) {
-    const pos = interpolateHourly(state.sunData.hourlyData, now);
-    if (pos && pos.isVisible) {
-      const proj = azimuthalProject(pos.azimuth, pos.altitude);
+  if (target.type === 'sun') {
+    const sunPos = computeSunPosition(now);
+    const { azimuth, altitude } = equatorialToHorizontal(sunPos.ra, sunPos.dec, face.lat, face.lon, now);
+    if (altitude > -5) {
+      const proj = azimuthalProject(azimuth, Math.max(altitude, 0));
       return { nx: proj.x, ny: proj.y };
     }
   }
 
-  if (target.type === 'moon' && state.moonData) {
-    const pos = interpolateHourly(state.moonData.hourlyData, now);
-    if (pos && pos.altitude > 0) {
-      const proj = azimuthalProject(pos.azimuth, pos.altitude);
+  if (target.type === 'moon') {
+    const moonPos = computeMoonPosition(now);
+    const { azimuth, altitude } = equatorialToHorizontal(moonPos.ra, moonPos.dec, face.lat, face.lon, now);
+    if (altitude > 0) {
+      const proj = azimuthalProject(azimuth, altitude);
       return { nx: proj.x, ny: proj.y };
     }
   }
@@ -317,9 +321,9 @@ function flipAstrolabe() {
       _originalName: face.name === 'antípoda' ? face._originalName : face.name
     };
     render();
-  }, 250);
+  }, 350);
 
-  setTimeout(() => wrapper.classList.remove('flipping'), 500);
+  setTimeout(() => wrapper.classList.remove('flipping'), 700);
 }
 
 // === Geolocation ===

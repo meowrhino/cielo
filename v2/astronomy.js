@@ -1,11 +1,14 @@
 /**
  * Cálculos astronómicos puros
- * LST, conversión ecuatorial→horizontal, proyección azimutal
+ * LST, conversión ecuatorial→horizontal, proyección azimutal,
+ * posiciones sol/luna
  */
 
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 const J2000 = new Date('2000-01-01T12:00:00Z').getTime();
+
+export const OBLIQUITY = 23.4393; // oblicuidad de la eclíptica
 
 /**
  * Calcula el Local Sidereal Time en grados
@@ -93,4 +96,90 @@ export function interpolateHourly(hourlyData, time) {
 export function parseTime(str) {
   const [h, m] = str.split(':').map(Number);
   return h + m / 60;
+}
+
+/**
+ * Convierte eclíptica a ecuatorial (RA, Dec)
+ * lon/lat en radianes
+ */
+export function eclipticToEquatorial(lon, lat) {
+  const eps = OBLIQUITY * DEG;
+  const cosEps = Math.cos(eps);
+  const sinEps = Math.sin(eps);
+
+  const sinLon = Math.sin(lon);
+  const cosLon = Math.cos(lon);
+  const sinLat = Math.sin(lat);
+  const cosLat = Math.cos(lat);
+
+  const ra = Math.atan2(sinLon * cosEps - Math.tan(lat) * sinEps, cosLon);
+  const dec = Math.asin(sinLat * cosEps + cosLat * sinEps * sinLon);
+
+  return {
+    ra: ((ra * RAD) + 360) % 360,
+    dec: dec * RAD
+  };
+}
+
+/**
+ * Posición del sol (RA/Dec) — algoritmo simplificado (~1° precisión)
+ * Fuente: Meeus, Astronomical Algorithms
+ */
+export function computeSunPosition(time) {
+  const days = (time.getTime() - J2000) / 86400000;
+  const T = days / 36525;
+
+  // Longitud media y anomalía media del sol
+  const L0 = (280.46646 + 36000.76983 * T) % 360;
+  const M = (357.52911 + 35999.05029 * T) % 360;
+  const Mrad = M * DEG;
+
+  // Ecuación del centro
+  const C = (1.9146 - 0.004817 * T) * Math.sin(Mrad)
+          + 0.019993 * Math.sin(2 * Mrad)
+          + 0.000290 * Math.sin(3 * Mrad);
+
+  // Longitud eclíptica del sol (latitud eclíptica ≈ 0)
+  const sunLon = (L0 + C) * DEG;
+
+  return eclipticToEquatorial(sunLon, 0);
+}
+
+/**
+ * Posición de la luna (RA/Dec) — algoritmo simplificado (~1-2° precisión)
+ * Usa los términos principales de la teoría de Brown/Meeus
+ */
+export function computeMoonPosition(time) {
+  const days = (time.getTime() - J2000) / 86400000;
+  const T = days / 36525;
+
+  // Argumentos fundamentales (grados)
+  const Lp = (218.3165 + 481267.8813 * T) % 360; // longitud media luna
+  const D  = (297.8502 + 445267.1115 * T) % 360;  // elongación media
+  const M  = (357.5291 + 35999.0503 * T) % 360;   // anomalía media sol
+  const Mp = (134.9634 + 477198.8676 * T) % 360;   // anomalía media luna
+  const F  = (93.2720 + 483202.0175 * T) % 360;    // argumento de latitud
+
+  const Dr = D * DEG, Mr = M * DEG, Mpr = Mp * DEG, Fr = F * DEG;
+
+  // Términos principales de longitud (grados)
+  const lonCorr =
+      6.289 * Math.sin(Mpr)
+    + 1.274 * Math.sin(2 * Dr - Mpr)
+    + 0.658 * Math.sin(2 * Dr)
+    + 0.214 * Math.sin(2 * Mpr)
+    - 0.186 * Math.sin(Mr)
+    - 0.114 * Math.sin(2 * Fr);
+
+  // Términos principales de latitud (grados)
+  const latCorr =
+      5.128 * Math.sin(Fr)
+    + 0.281 * Math.sin(Mpr + Fr)
+    + 0.278 * Math.sin(Mpr - Fr)
+    + 0.173 * Math.sin(2 * Dr - Fr);
+
+  const moonLon = (Lp + lonCorr) * DEG;
+  const moonLat = latCorr * DEG;
+
+  return eclipticToEquatorial(moonLon, moonLat);
 }
