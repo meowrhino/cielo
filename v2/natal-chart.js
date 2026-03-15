@@ -67,7 +67,7 @@ export function createNatalChart(canvas, callbacks = {}) {
   let lastAscendant = 0;
 
   // Zoom state for planet detail
-  let zoom = { level: 1, cx: 0, cy: 0, targetLevel: 1, targetCx: 0, targetCy: 0, animating: false, startTime: 0, duration: 400, startLevel: 1, startCx: 0, startCy: 0 };
+  let zoom = { level: 1, cx: 0, cy: 0, targetLevel: 1, targetCx: 0, targetCy: 0, animating: false, startTime: 0, duration: 400, startLevel: 1, startCx: 0, startCy: 0, panX: 0, panY: 0 };
   let zoomedBody = null;
 
   function resize() {
@@ -399,6 +399,8 @@ export function createNatalChart(canvas, callbacks = {}) {
   }
 
   // === Zoom animation ===
+  // zoom.cx/cy = the point in canvas-space that gets centered on screen
+  // zoom.panX/panY = accumulated drag offset in screen-space
 
   function zoomToBody(body) {
     zoomedBody = body;
@@ -411,6 +413,8 @@ export function createNatalChart(canvas, callbacks = {}) {
     zoom.startTime = performance.now();
     zoom.duration = 450;
     zoom.animating = true;
+    zoom.panX = 0;
+    zoom.panY = 0;
   }
 
   function zoomReset() {
@@ -419,11 +423,13 @@ export function createNatalChart(canvas, callbacks = {}) {
     zoom.startCx = zoom.cx;
     zoom.startCy = zoom.cy;
     zoom.targetLevel = 1;
-    zoom.targetCx = W / 2;
-    zoom.targetCy = H / 2;
+    zoom.targetCx = cx; // canvas center
+    zoom.targetCy = cy;
     zoom.startTime = performance.now();
     zoom.duration = 350;
     zoom.animating = true;
+    zoom.panX = 0;
+    zoom.panY = 0;
     hideDetail();
   }
 
@@ -448,7 +454,16 @@ export function createNatalChart(canvas, callbacks = {}) {
 
   function isZoomed() { return zoom.level > 1.5; }
 
-  // === Click handler ===
+  // Convert screen coords to canvas (pre-transform) coords
+  function screenToCanvas(sx, sy) {
+    if (zoom.level <= 1.01) return { x: sx, y: sy };
+    // Inverse of: translate(W/2 + panX, H/2 + panY) scale(level) translate(-focusX, -focusY)
+    const x = (sx - W / 2 - (zoom.panX || 0)) / zoom.level + zoom.cx;
+    const y = (sy - H / 2 - (zoom.panY || 0)) / zoom.level + zoom.cy;
+    return { x, y };
+  }
+
+  // === Click & drag handler ===
 
   let dragState = null;
 
@@ -460,7 +475,16 @@ export function createNatalChart(canvas, callbacks = {}) {
     if (!dragState) return;
     const dx = e.clientX - dragState.startX;
     const dy = e.clientY - dragState.startY;
+
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragState.moved = true;
+
+    if (dragState.moved && isZoomed()) {
+      zoom.panX = (zoom.panX || 0) + dx;
+      zoom.panY = (zoom.panY || 0) + dy;
+      dragState.startX = e.clientX;
+      dragState.startY = e.clientY;
+      if (callbacks.onNeedRender) callbacks.onNeedRender();
+    }
   });
 
   canvas.addEventListener('mouseup', (e) => {
@@ -478,8 +502,20 @@ export function createNatalChart(canvas, callbacks = {}) {
   canvas.addEventListener('touchmove', (e) => {
     if (!dragState || e.touches.length !== 1) return;
     const t = e.touches[0];
-    if (Math.abs(t.clientX - dragState.startX) > 3 || Math.abs(t.clientY - dragState.startY) > 3) dragState.moved = true;
-  }, { passive: true });
+    const dx = t.clientX - dragState.startX;
+    const dy = t.clientY - dragState.startY;
+
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragState.moved = true;
+
+    if (dragState.moved && isZoomed()) {
+      e.preventDefault();
+      zoom.panX = (zoom.panX || 0) + dx;
+      zoom.panY = (zoom.panY || 0) + dy;
+      dragState.startX = t.clientX;
+      dragState.startY = t.clientY;
+      if (callbacks.onNeedRender) callbacks.onNeedRender();
+    }
+  }, { passive: false });
 
   canvas.addEventListener('touchend', (e) => {
     if (dragState && !dragState.moved && e.changedTouches.length === 1) {
@@ -491,21 +527,18 @@ export function createNatalChart(canvas, callbacks = {}) {
 
   function handleClick(clientX, clientY, e) {
     const rect = canvas.getBoundingClientRect();
-    const mx = clientX - rect.left;
-    const my = clientY - rect.top;
+    const sx = clientX - rect.left;
+    const sy = clientY - rect.top;
 
-    // If zoomed in, clicking anywhere zooms out
-    if (isZoomed()) {
-      zoomReset();
-      if (callbacks.onNeedRender) callbacks.onNeedRender();
-      return;
-    }
+    // Transform screen coords to canvas coords for hit detection
+    const { x: mx, y: my } = screenToCanvas(sx, sy);
 
-    // Check planet hits
+    // Check planet hits (works both zoomed and unzoomed)
     for (const body of hitBodies) {
       const dx = mx - body.px;
       const dy = my - body.py;
-      if (Math.sqrt(dx * dx + dy * dy) < Math.max(body.size * 3, 22)) {
+      const hitR = isZoomed() ? Math.max(body.size * 2, 12) : Math.max(body.size * 3, 22);
+      if (Math.sqrt(dx * dx + dy * dy) < hitR) {
         e.stopPropagation();
         zoomToBody(body);
         showDetail(body);
@@ -514,7 +547,14 @@ export function createNatalChart(canvas, callbacks = {}) {
       }
     }
 
-    // Check constellation hits
+    // If zoomed and didn't hit a planet, zoom out
+    if (isZoomed()) {
+      zoomReset();
+      if (callbacks.onNeedRender) callbacks.onNeedRender();
+      return;
+    }
+
+    // Check constellation hits (only when not zoomed)
     for (const con of hitConstellations) {
       const dx = mx - con.cx;
       const dy = my - con.cy;
@@ -537,10 +577,10 @@ export function createNatalChart(canvas, callbacks = {}) {
     hitConstellations = [];
     drawBackground();
 
-    // Apply zoom transform
+    // Apply zoom transform — centers focus point on screen + pan offset
     ctx.save();
     if (zoom.level > 1.01) {
-      ctx.translate(zoom.cx, zoom.cy);
+      ctx.translate(W / 2 + (zoom.panX || 0), H / 2 + (zoom.panY || 0));
       ctx.scale(zoom.level, zoom.level);
       ctx.translate(-zoom.cx, -zoom.cy);
     }

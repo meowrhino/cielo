@@ -518,7 +518,7 @@ body.green-mode #detail-label {
 
 .natal-detail-info {
   position: fixed;
-  top: 38%;
+  top: 28%;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
