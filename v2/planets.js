@@ -128,20 +128,14 @@ export function computePlanetPositions(time) {
     const lon = Math.atan2(dy, dx);
     const lat = Math.atan2(dz, Math.sqrt(dx * dx + dy * dy));
 
-    // Distancia (para magnitud aproximada)
-    const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
     const { ra, dec } = eclipticToEquatorial(lon, lat);
-
-    // Magnitud muy aproximada (base + corrección por distancia)
-    const magnitude = el.mag + 5 * Math.log10(dist);
 
     planets.push({
       name,
       label: el.label,
       ra,
       dec,
-      magnitude,
+      magnitude: el.mag,
       color: el.color
     });
   }
