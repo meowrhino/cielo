@@ -29,6 +29,9 @@ let menuOpen = false;
 let currentModeIndex = parseInt(localStorage.getItem('cielo-mode') || '0', 10);
 if (currentModeIndex >= MODES.length) currentModeIndex = 0;
 
+// Magnitude limit (light pollution)
+let magLimit = parseFloat(localStorage.getItem('cielo-mag') || '6');
+
 // AR state
 let arMode = false;
 let arSmoothed = { alpha: 0, beta: 0 };
@@ -106,7 +109,8 @@ function getState(now) {
     planets: computePlanetPositions(now),
     lat: face.lat,
     lon: face.lon,
-    isDaytime: daytime
+    isDaytime: daytime,
+    magLimit
   };
 }
 
@@ -488,6 +492,18 @@ async function init() {
   document.getElementById('ar-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     toggleAR();
+  });
+
+  // Magnitude slider
+  const magSlider = document.getElementById('mag-slider');
+  const magLabel = document.getElementById('mag-label');
+  magSlider.value = magLimit;
+  magLabel.textContent = `mag ${magLimit}`;
+  magSlider.addEventListener('input', (e) => {
+    magLimit = parseFloat(e.target.value);
+    magLabel.textContent = `mag ${magLimit}`;
+    localStorage.setItem('cielo-mag', String(magLimit));
+    render();
   });
 
   // Tema modal buttons

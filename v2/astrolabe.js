@@ -231,10 +231,10 @@ export function createAstrolabe(canvas) {
   /**
    * Dibuja las estrellas visibles
    */
-  function drawStars(catalog, lat, lon, time) {
+  function drawStars(catalog, lat, lon, time, magLimit) {
     if (!catalog) return;
 
-    const magLimit = 6;
+    magLimit = magLimit || 6;
     let count = 0;
 
     for (const star of catalog) {
@@ -299,7 +299,7 @@ export function createAstrolabe(canvas) {
   /**
    * Dibuja las líneas de constelaciones
    */
-  function drawConstellations(lines, lat, lon, time) {
+  function drawConstellations(lines, lat, lon, time, magLimit) {
     if (!lines) return;
 
     const BELOW_HORIZON_LIMIT = -15; // mostrar hasta -15° bajo el horizonte
@@ -344,8 +344,9 @@ export function createAstrolabe(canvas) {
 
         // Opacidad según altitud mínima de la línea
         const belowFactor = minAlt < 0 ? Math.max(0.15, 1 + minAlt / 15) : 1;
+        const magFactor = magLimit != null ? Math.max(0, Math.min(1, (magLimit - 2) / 4)) : 1;
         const baseOpacity = zoom.level > 1.5 ? 0.15 : 0.07;
-        const lineOpacity = baseOpacity * belowFactor;
+        const lineOpacity = baseOpacity * belowFactor * magFactor;
 
         ctx.strokeStyle = `rgba(255, 255, 255, ${lineOpacity})`;
         ctx.lineWidth = zoom.level > 1.5 ? 1 : 0.5;
@@ -373,7 +374,8 @@ export function createAstrolabe(canvas) {
           ctx.font = `${fontSize}px Inknut Antiqua, Georgia, serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          const nameOpacity = (zoom.level > 1.5 ? 0.2 : 0.12) * nameFade;
+          const nameMagFade = magLimit != null ? Math.max(0, Math.min(1, (magLimit - 2) / 4)) : 1;
+          const nameOpacity = (zoom.level > 1.5 ? 0.2 : 0.12) * nameFade * nameMagFade;
           ctx.fillStyle = `rgba(255, 255, 255, ${nameOpacity})`;
           ctx.fillText(properties.name, centX, centY);
 
@@ -614,8 +616,8 @@ export function createAstrolabe(canvas) {
 
     drawBackground(state.isDaytime);
     drawFrame();
-    drawConstellations(state.constellationLines, state.lat, state.lon, time);
-    drawStars(state.starCatalog, state.lat, state.lon, time);
+    drawConstellations(state.constellationLines, state.lat, state.lon, time, state.magLimit);
+    drawStars(state.starCatalog, state.lat, state.lon, time, state.magLimit);
     drawPlanets(state.planets, state.lat, state.lon, time);
     drawSun(state.sunData, state.sunPosition, state.lat, state.lon, time);
     drawMoon(state.moonData, state.moonPosition, state.lat, state.lon, time);

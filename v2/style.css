@@ -184,6 +184,52 @@ body.detail-mode .menu-bar {
   font-size: 0.9em;
 }
 
+/* === Magnitude slider === */
+
+.mag-control {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  margin-top: 0.2rem;
+}
+
+#mag-label {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.85em;
+  min-width: 3.5em;
+}
+
+#mag-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+  outline: none;
+}
+
+#mag-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  border: none;
+}
+
+#mag-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  border: none;
+}
+
 /* === Tema modal === */
 
 .tema-modal {
@@ -327,6 +373,22 @@ body.night-mode #location-name {
   color: rgba(255, 60, 60, 0.5);
 }
 
+body.night-mode #mag-label {
+  color: rgba(255, 40, 40, 0.3);
+}
+
+body.night-mode #mag-slider {
+  background: rgba(255, 40, 40, 0.1);
+}
+
+body.night-mode #mag-slider::-webkit-slider-thumb {
+  background: rgba(255, 60, 60, 0.4);
+}
+
+body.night-mode .mag-control {
+  border-color: rgba(255, 40, 40, 0.06);
+}
+
 body.night-mode .tooltip {
   background: rgba(10, 0, 0, 0.92);
   border-color: rgba(255, 40, 40, 0.1);
@@ -390,6 +452,22 @@ body.green-mode .info-astro {
 
 body.green-mode #location-name {
   color: rgba(60, 200, 60, 0.5);
+}
+
+body.green-mode #mag-label {
+  color: rgba(40, 160, 40, 0.3);
+}
+
+body.green-mode #mag-slider {
+  background: rgba(40, 160, 40, 0.1);
+}
+
+body.green-mode #mag-slider::-webkit-slider-thumb {
+  background: rgba(60, 200, 60, 0.4);
+}
+
+body.green-mode .mag-control {
+  border-color: rgba(40, 160, 40, 0.06);
 }
 
 body.green-mode .tooltip {
