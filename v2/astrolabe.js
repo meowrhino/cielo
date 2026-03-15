@@ -78,7 +78,7 @@ export function createAstrolabe(canvas) {
       { label: 'O', az: 270 }
     ];
 
-    ctx.font = '11px Inter, system-ui, sans-serif';
+    ctx.font = '10px Inknut Antiqua, Georgia, serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
@@ -211,7 +211,7 @@ export function createAstrolabe(canvas) {
         const centX = allPoints.reduce((s, p) => s + p.px, 0) / allPoints.length;
         const centY = allPoints.reduce((s, p) => s + p.py, 0) / allPoints.length;
 
-        ctx.font = '9px Inter, system-ui, sans-serif';
+        ctx.font = '8px Inknut Antiqua, Georgia, serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';

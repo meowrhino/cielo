@@ -204,12 +204,18 @@ async function init() {
     }
   });
 
-  // Detail view click en vacío → volver
+  // Detail view click en fondo vacío → volver
   const detailView = document.getElementById('detail-view');
   detailView.addEventListener('click', (e) => {
-    if (e.target === detailView || e.target === document.getElementById('detail-content')) {
+    if (e.target === detailView) {
       exitDetail();
     }
+  });
+
+  // Detail content: stop propagation para que no cierre al tocar contenido
+  const detailContent = document.getElementById('detail-content');
+  detailContent.addEventListener('click', (e) => {
+    e.stopPropagation();
   });
 
   // Flip button

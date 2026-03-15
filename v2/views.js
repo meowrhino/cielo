@@ -81,7 +81,7 @@ function drawSunArc(canvas, sunData, time) {
 
   // Marcas horarias
   ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-  ctx.font = '10px Inter, system-ui, sans-serif';
+  ctx.font = '10px Inknut Antiqua, Georgia, serif';
   ctx.textAlign = 'center';
   for (const p of visiblePoints) {
     ctx.beginPath();
@@ -116,7 +116,7 @@ function drawSunArc(canvas, sunData, time) {
 
   // Labels
   ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-  ctx.font = '10px Inter, system-ui, sans-serif';
+  ctx.font = '10px Inknut Antiqua, Georgia, serif';
   ctx.textAlign = 'left';
   ctx.fillText(sunData.sunrise, margin, horizonY + 16);
   ctx.textAlign = 'right';
