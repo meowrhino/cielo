@@ -480,89 +480,141 @@ body.green-mode #detail-label {
   color: rgba(40, 160, 40, 0.04);
 }
 
-/* === Natal chart info panel === */
+/* === Natal chart detail view === */
 
-.natal-info {
+.natal-detail {
   position: fixed;
-  bottom: 3.5rem;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  z-index: 25;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.natal-detail.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#natal-detail-label {
+  position: fixed;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Inknut Antiqua', Georgia, serif;
+  font-size: clamp(5rem, 18dvw, 16rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.04);
+  text-transform: lowercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.natal-detail-info {
+  position: fixed;
+  top: 38%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 30;
-  min-width: 180px;
-  max-width: 300px;
-  padding: 0.7rem 1rem;
-  background: rgba(7, 4, 10, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
+  text-align: center;
   font-family: 'Inknut Antiqua', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(0.65rem, 1vw, 0.8rem);
   text-transform: lowercase;
-  color: rgba(255, 255, 255, 0.55);
-  line-height: 1.6;
+  pointer-events: none;
 }
 
-.natal-info-title {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1.1em;
-  margin-bottom: 0.2em;
-  letter-spacing: 0.5px;
+.natal-detail-info .ndi-position {
+  font-size: clamp(1.1rem, 2.5dvw, 1.6rem);
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+  margin-bottom: 0.3em;
 }
 
-.natal-info-row {
-  color: rgba(255, 255, 255, 0.4);
+.natal-detail-info .ndi-dignity {
+  font-size: clamp(0.8rem, 1.8dvw, 1.1rem);
+  color: rgba(255, 215, 120, 0.5);
+  margin-bottom: 0.5em;
 }
 
-.natal-info-dignity {
-  color: rgba(255, 215, 120, 0.6);
+.natal-detail-info .ndi-retro {
+  font-size: clamp(0.75rem, 1.5dvw, 0.95rem);
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 0.5em;
 }
 
-.natal-info-sep {
+.natal-detail-info .ndi-sep {
+  width: 40px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.04);
-  margin: 0.4em 0;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 0.6em auto;
 }
 
-.natal-info-aspect {
-  font-size: 0.9em;
-  color: rgba(255, 255, 255, 0.35);
+.natal-detail-info .ndi-aspect {
+  font-size: clamp(0.7rem, 1.3dvw, 0.85rem);
+  color: rgba(255, 255, 255, 0.25);
+  line-height: 1.8;
 }
 
-/* Night mode natal-info */
-body.night-mode .natal-info {
-  background: rgba(10, 0, 0, 0.92);
-  border-color: rgba(255, 40, 40, 0.08);
-  color: rgba(255, 60, 60, 0.5);
+#natal-back-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  z-index: 26;
+  font-size: clamp(0.7rem, 1.1dvw, 0.85rem);
 }
 
-body.night-mode .natal-info-title {
-  color: rgba(255, 60, 60, 0.7);
+body.natal-detail-mode .menu-bar,
+body.natal-detail-mode #menu-tab {
+  opacity: 0;
+  pointer-events: none;
 }
 
-body.night-mode .natal-info-dignity {
-  color: rgba(255, 140, 80, 0.6);
+/* Night mode */
+body.night-mode #natal-detail-label {
+  color: rgba(255, 40, 40, 0.04);
 }
 
-body.night-mode .natal-info-sep {
-  background: rgba(255, 40, 40, 0.06);
+body.night-mode .ndi-position {
+  color: rgba(255, 60, 60, 0.5) !important;
 }
 
-/* Green mode natal-info */
-body.green-mode .natal-info {
-  background: rgba(4, 10, 4, 0.92);
-  border-color: rgba(40, 160, 40, 0.08);
-  color: rgba(60, 200, 60, 0.5);
+body.night-mode .ndi-dignity {
+  color: rgba(255, 140, 80, 0.5) !important;
 }
 
-body.green-mode .natal-info-title {
-  color: rgba(60, 200, 60, 0.7);
+body.night-mode .ndi-sep {
+  background: rgba(255, 40, 40, 0.06) !important;
 }
 
-body.green-mode .natal-info-dignity {
-  color: rgba(160, 200, 60, 0.6);
+body.night-mode .ndi-aspect {
+  color: rgba(255, 40, 40, 0.25) !important;
 }
 
-body.green-mode .natal-info-sep {
-  background: rgba(40, 160, 40, 0.06);
+/* Green mode */
+body.green-mode #natal-detail-label {
+  color: rgba(40, 160, 40, 0.04);
+}
+
+body.green-mode .ndi-position {
+  color: rgba(60, 200, 60, 0.5) !important;
+}
+
+body.green-mode .ndi-dignity {
+  color: rgba(160, 200, 60, 0.5) !important;
+}
+
+body.green-mode .ndi-sep {
+  background: rgba(40, 160, 40, 0.06) !important;
+}
+
+body.green-mode .ndi-aspect {
+  color: rgba(40, 160, 40, 0.25) !important;
 }
 

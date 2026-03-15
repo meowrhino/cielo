@@ -405,7 +405,8 @@ function toggleNatal() {
     natalCanvas.style.display = 'none';
     cartaBtn.classList.remove('active');
     document.body.classList.remove('natal-mode');
-    if (natalChart.isZoomed()) natalChart.zoomReset();
+    natalChart.zoomReset();
+    document.body.classList.remove('natal-detail-mode');
   } else {
     if (mode === 'detail') exitDetail();
     mode = 'natal';
@@ -467,10 +468,17 @@ async function init() {
     }
   });
 
-  // Back button
+  // Back button (astrolabe detail)
   document.getElementById('back-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     exitDetail();
+  });
+
+  // Back button (natal chart detail)
+  document.getElementById('natal-back-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    natalChart.zoomReset();
+    startNatalAnimLoop();
   });
 
   // Menu tab — toggle menu

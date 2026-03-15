@@ -367,36 +367,35 @@ export function createNatalChart(canvas, callbacks = {}) {
     return diff < 0;
   }
 
-  // === Info panel ===
+  // === Detail overlay (like astrolabe detail view) ===
 
-  function showInfoPanel(body) {
-    let existing = document.getElementById('natal-info');
-    if (existing) existing.remove();
+  function showDetail(body) {
+    const label = document.getElementById('natal-detail-label');
+    const info = document.getElementById('natal-detail-info');
+    const detail = document.getElementById('natal-detail');
 
-    const panel = document.createElement('div');
-    panel.id = 'natal-info';
-    panel.className = 'natal-info';
+    label.textContent = body.label;
 
-    let html = `<div class="natal-info-title">${body.label}${body.retro ? ' ℞' : ''}</div>`;
-    html += `<div class="natal-info-row">${body.deg}° ${body.signName}</div>`;
-    if (body.dignity) html += `<div class="natal-info-row natal-info-dignity">${body.dignity}</div>`;
-    if (body.retro) html += `<div class="natal-info-row">retrógrado</div>`;
+    let html = `<div class="ndi-position">${body.deg}° ${body.signName}${body.retro ? ' ℞' : ''}</div>`;
+    if (body.dignity) html += `<div class="ndi-dignity">${body.dignity}</div>`;
+    if (body.retro) html += `<div class="ndi-retro">retrógrado</div>`;
 
     if (body.aspects && body.aspects.length > 0) {
-      html += `<div class="natal-info-sep"></div>`;
+      html += `<div class="ndi-sep"></div>`;
       for (const a of body.aspects) {
-        html += `<div class="natal-info-row natal-info-aspect">${a}</div>`;
+        html += `<div class="ndi-aspect">${a}</div>`;
       }
     }
 
-    panel.innerHTML = html;
-    document.body.appendChild(panel);
+    info.innerHTML = html;
+    detail.classList.remove('hidden');
+    document.body.classList.add('natal-detail-mode');
+  }
 
-    // Close on click anywhere
-    setTimeout(() => {
-      const close = () => { panel.remove(); document.removeEventListener('click', close); };
-      document.addEventListener('click', close);
-    }, 50);
+  function hideDetail() {
+    const detail = document.getElementById('natal-detail');
+    if (detail) detail.classList.add('hidden');
+    document.body.classList.remove('natal-detail-mode');
   }
 
   // === Zoom animation ===
@@ -425,9 +424,7 @@ export function createNatalChart(canvas, callbacks = {}) {
     zoom.startTime = performance.now();
     zoom.duration = 350;
     zoom.animating = true;
-    // Remove info panel
-    const existing = document.getElementById('natal-info');
-    if (existing) existing.remove();
+    hideDetail();
   }
 
   function updateZoom() {
@@ -511,7 +508,7 @@ export function createNatalChart(canvas, callbacks = {}) {
       if (Math.sqrt(dx * dx + dy * dy) < Math.max(body.size * 3, 22)) {
         e.stopPropagation();
         zoomToBody(body);
-        showInfoPanel(body);
+        showDetail(body);
         if (callbacks.onNeedRender) callbacks.onNeedRender();
         return;
       }
