@@ -171,6 +171,10 @@ export function createAstrolabe(canvas) {
     return zoom.level;
   }
 
+  function setZoomLevel(level) {
+    zoom.level = level;
+  }
+
   /**
    * Dibuja los anillos de referencia y marcas cardinales
    */
@@ -633,7 +637,7 @@ export function createAstrolabe(canvas) {
   return {
     render, resize, getHitTargets, toPixel,
     getLogicalWidth, getLogicalHeight,
-    zoomTo, zoomReset, updateZoom, isAnimating, getZoomLevel, panBy,
+    zoomTo, zoomReset, updateZoom, isAnimating, getZoomLevel, setZoomLevel, panBy,
     setViewCenter
   };
 }

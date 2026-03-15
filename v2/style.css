@@ -480,14 +480,3 @@ body.green-mode #detail-label {
   color: rgba(40, 160, 40, 0.04);
 }
 
-/* === AR mode === */
-
-body.ar-mode #menu-tab {
-  color: rgba(100, 200, 255, 0.4);
-}
-
-body.ar-mode .menu-bar,
-body.ar-mode #menu-tab {
-  opacity: 0;
-  pointer-events: none;
-}

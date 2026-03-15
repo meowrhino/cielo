@@ -32,10 +32,6 @@ if (currentModeIndex >= MODES.length) currentModeIndex = 0;
 // Magnitude limit (light pollution)
 let magLimit = parseFloat(localStorage.getItem('cielo-mag') || '6');
 
-// AR state
-let arMode = false;
-let arSmoothed = { alpha: 0, beta: 0 };
-let arFrameId = null;
 
 // Tooltip
 let tooltipTimer = null;
@@ -361,64 +357,13 @@ function requestGeolocation() {
   );
 }
 
-// === AR mode ===
+// === Center / reset view ===
 
-function toggleAR() {
-  if (arMode) { stopAR(); return; }
-
-  if (typeof DeviceOrientationEvent !== 'undefined' &&
-      typeof DeviceOrientationEvent.requestPermission === 'function') {
-    DeviceOrientationEvent.requestPermission()
-      .then(state => { if (state === 'granted') startAR(); })
-      .catch(() => {});
-  } else if ('DeviceOrientationEvent' in window) {
-    startAR();
-  }
-}
-
-function startAR() {
-  arMode = true;
+function centerView() {
   closeAllPanels();
-  document.body.classList.add('ar-mode');
-
-  astrolabe.zoomTo(0, 0, 2, 300);
+  if (mode === 'detail') exitDetail();
+  astrolabe.zoomReset(400);
   startAnimLoop();
-
-  window.addEventListener('deviceorientation', onDeviceOrientation);
-  arFrameId = requestAnimationFrame(arLoop);
-}
-
-function stopAR() {
-  arMode = false;
-  document.body.classList.remove('ar-mode');
-
-  window.removeEventListener('deviceorientation', onDeviceOrientation);
-  if (arFrameId) { cancelAnimationFrame(arFrameId); arFrameId = null; }
-
-  astrolabe.zoomReset(300);
-  startAnimLoop();
-}
-
-function onDeviceOrientation(e) {
-  let alpha = e.alpha || 0;
-  if (e.webkitCompassHeading != null) alpha = e.webkitCompassHeading;
-  const beta = e.beta || 0;
-
-  arSmoothed.alpha = arSmoothed.alpha * 0.8 + alpha * 0.2;
-  arSmoothed.beta = arSmoothed.beta * 0.8 + beta * 0.2;
-}
-
-function arLoop() {
-  if (!arMode) return;
-
-  const azimuth = arSmoothed.alpha;
-  const altitude = Math.max(0, Math.min(90, 90 - arSmoothed.beta));
-
-  const proj = azimuthalProject(azimuth, altitude);
-  astrolabe.setViewCenter(proj.x, proj.y);
-  render();
-
-  arFrameId = requestAnimationFrame(arLoop);
 }
 
 // === Init ===
@@ -489,9 +434,9 @@ async function init() {
     flipAstrolabe();
   });
 
-  document.getElementById('ar-btn').addEventListener('click', (e) => {
+  document.getElementById('center-btn').addEventListener('click', (e) => {
     e.stopPropagation();
-    toggleAR();
+    centerView();
   });
 
   // Magnitude slider

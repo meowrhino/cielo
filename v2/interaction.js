@@ -123,6 +123,46 @@ export function setupInteraction(canvas, astrolabe, { onSelect, onPan }) {
     dragState = null;
   });
 
+  // === Scroll wheel zoom ===
+
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.15 : 0.15;
+    const newZoom = Math.max(1, Math.min(6, astrolabe.getZoomLevel() * (1 + delta)));
+    astrolabe.setZoomLevel(newZoom);
+    if (onPan) onPan();
+  }, { passive: false });
+
+  // === Pinch-to-zoom ===
+
+  let pinchState = null;
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      dragState = null;
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      pinchState = { dist: Math.sqrt(dx * dx + dy * dy), zoom: astrolabe.getZoomLevel() };
+    }
+  }, { passive: true });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (pinchState && e.touches.length === 2) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const scale = dist / pinchState.dist;
+      const newZoom = Math.max(1, Math.min(6, pinchState.zoom * scale));
+      astrolabe.setZoomLevel(newZoom);
+      if (onPan) onPan();
+    }
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', () => {
+    if (pinchState) pinchState = null;
+  });
+
   // === Shared tap logic ===
 
   function handleTap(clientX, clientY) {
