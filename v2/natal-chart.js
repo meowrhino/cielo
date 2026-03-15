@@ -58,12 +58,17 @@ const ASPECTS = [
   { name: 'oposición',  angle: 180, orb: 8,  color: [255,80,80],   dash: [6, 3] }
 ];
 
-export function createNatalChart(canvas) {
+export function createNatalChart(canvas, callbacks = {}) {
   const ctx = canvas.getContext('2d');
   let W, H, cx, cy, outerR, innerR, planetR;
   let constellationShapes = null;
   let hitBodies = []; // for click detection
+  let hitConstellations = []; // for constellation click
   let lastAscendant = 0;
+
+  // Zoom state for planet detail
+  let zoom = { level: 1, cx: 0, cy: 0, targetLevel: 1, targetCx: 0, targetCy: 0, animating: false, startTime: 0, duration: 400, startLevel: 1, startCx: 0, startCy: 0 };
+  let zoomedBody = null;
 
   function resize() {
     const dpr = window.devicePixelRatio || 1;
@@ -156,7 +161,7 @@ export function createNatalChart(canvas) {
   function drawConstellations(asc) {
     if (!constellationShapes) return;
     const bandR = (outerR + innerR) / 2;
-    const symbolSize = (outerR - innerR) * 0.42; // bigger!
+    const symbolSize = (outerR - innerR) * 0.55;
 
     for (let i = 0; i < 12; i++) {
       const sign = SIGNS[i];
@@ -166,9 +171,9 @@ export function createNatalChart(canvas) {
       const midA = eclipticToAngle(i * 30 + 15, asc);
       const c = toXY(midA, bandR);
 
-      // Draw constellation lines (NO rotation — just translate)
-      ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-      ctx.lineWidth = 0.8;
+      // Draw constellation lines
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 0.9;
       ctx.lineCap = 'round';
 
       for (const line of shape) {
@@ -185,8 +190,8 @@ export function createNatalChart(canvas) {
       for (const line of shape) {
         for (const [px, py] of line) {
           ctx.beginPath();
-          ctx.arc(c.x + px * symbolSize, c.y - py * symbolSize, 1.2, 0, TAU);
-          ctx.fillStyle = 'rgba(255,255,255,0.3)';
+          ctx.arc(c.x + px * symbolSize, c.y - py * symbolSize, 1.4, 0, TAU);
+          ctx.fillStyle = 'rgba(255,255,255,0.35)';
           ctx.fill();
         }
       }
@@ -198,6 +203,9 @@ export function createNatalChart(canvas) {
       ctx.textBaseline = 'middle';
       ctx.fillStyle = 'rgba(255,255,255,0.15)';
       ctx.fillText(sign.name, namePos.x, namePos.y);
+
+      // Hit target for constellation click
+      hitConstellations.push({ constId: sign.constId, name: sign.name, cx: c.x, cy: c.y, radius: symbolSize * 1.2 });
     }
   }
 
@@ -391,28 +399,135 @@ export function createNatalChart(canvas) {
     }, 50);
   }
 
-  // === Click handler ===
+  // === Zoom animation ===
 
-  function setupClick() {
-    canvas.addEventListener('click', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      const mx = (e.clientX - rect.left);
-      const my = (e.clientY - rect.top);
-
-      for (const body of hitBodies) {
-        const dx = mx - body.px;
-        const dy = my - body.py;
-        if (Math.sqrt(dx * dx + dy * dy) < Math.max(body.size * 3, 20)) {
-          e.stopPropagation();
-          showInfoPanel(body);
-          return;
-        }
-      }
-    });
+  function zoomToBody(body) {
+    zoomedBody = body;
+    zoom.startLevel = zoom.level;
+    zoom.startCx = zoom.cx;
+    zoom.startCy = zoom.cy;
+    zoom.targetLevel = 3.5;
+    zoom.targetCx = body.px;
+    zoom.targetCy = body.py;
+    zoom.startTime = performance.now();
+    zoom.duration = 450;
+    zoom.animating = true;
   }
 
-  setupClick();
+  function zoomReset() {
+    zoomedBody = null;
+    zoom.startLevel = zoom.level;
+    zoom.startCx = zoom.cx;
+    zoom.startCy = zoom.cy;
+    zoom.targetLevel = 1;
+    zoom.targetCx = W / 2;
+    zoom.targetCy = H / 2;
+    zoom.startTime = performance.now();
+    zoom.duration = 350;
+    zoom.animating = true;
+    // Remove info panel
+    const existing = document.getElementById('natal-info');
+    if (existing) existing.remove();
+  }
+
+  function updateZoom() {
+    if (!zoom.animating) return false;
+    const elapsed = performance.now() - zoom.startTime;
+    const t = Math.min(1, elapsed / zoom.duration);
+    const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+    zoom.level = zoom.startLevel + (zoom.targetLevel - zoom.startLevel) * ease;
+    zoom.cx = zoom.startCx + (zoom.targetCx - zoom.startCx) * ease;
+    zoom.cy = zoom.startCy + (zoom.targetCy - zoom.startCy) * ease;
+
+    if (t >= 1) {
+      zoom.animating = false;
+      zoom.level = zoom.targetLevel;
+      zoom.cx = zoom.targetCx;
+      zoom.cy = zoom.targetCy;
+    }
+    return zoom.animating;
+  }
+
+  function isZoomed() { return zoom.level > 1.5; }
+
+  // === Click handler ===
+
+  let dragState = null;
+
+  canvas.addEventListener('mousedown', (e) => {
+    dragState = { startX: e.clientX, startY: e.clientY, moved: false };
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (!dragState) return;
+    const dx = e.clientX - dragState.startX;
+    const dy = e.clientY - dragState.startY;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragState.moved = true;
+  });
+
+  canvas.addEventListener('mouseup', (e) => {
+    if (dragState && !dragState.moved) handleClick(e.clientX, e.clientY, e);
+    dragState = null;
+  });
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      dragState = { startX: t.clientX, startY: t.clientY, moved: false };
+    }
+  }, { passive: true });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (!dragState || e.touches.length !== 1) return;
+    const t = e.touches[0];
+    if (Math.abs(t.clientX - dragState.startX) > 3 || Math.abs(t.clientY - dragState.startY) > 3) dragState.moved = true;
+  }, { passive: true });
+
+  canvas.addEventListener('touchend', (e) => {
+    if (dragState && !dragState.moved && e.changedTouches.length === 1) {
+      const t = e.changedTouches[0];
+      handleClick(t.clientX, t.clientY, e);
+    }
+    dragState = null;
+  });
+
+  function handleClick(clientX, clientY, e) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = clientX - rect.left;
+    const my = clientY - rect.top;
+
+    // If zoomed in, clicking anywhere zooms out
+    if (isZoomed()) {
+      zoomReset();
+      if (callbacks.onNeedRender) callbacks.onNeedRender();
+      return;
+    }
+
+    // Check planet hits
+    for (const body of hitBodies) {
+      const dx = mx - body.px;
+      const dy = my - body.py;
+      if (Math.sqrt(dx * dx + dy * dy) < Math.max(body.size * 3, 22)) {
+        e.stopPropagation();
+        zoomToBody(body);
+        showInfoPanel(body);
+        if (callbacks.onNeedRender) callbacks.onNeedRender();
+        return;
+      }
+    }
+
+    // Check constellation hits
+    for (const con of hitConstellations) {
+      const dx = mx - con.cx;
+      const dy = my - con.cy;
+      if (Math.sqrt(dx * dx + dy * dy) < con.radius) {
+        e.stopPropagation();
+        if (callbacks.onConstellationClick) callbacks.onConstellationClick(con.constId, con.name);
+        return;
+      }
+    }
+  }
 
   // === Main render ===
 
@@ -422,7 +537,16 @@ export function createNatalChart(canvas) {
     }
 
     hitBodies = [];
+    hitConstellations = [];
     drawBackground();
+
+    // Apply zoom transform
+    ctx.save();
+    if (zoom.level > 1.01) {
+      ctx.translate(zoom.cx, zoom.cy);
+      ctx.scale(zoom.level, zoom.level);
+      ctx.translate(-zoom.cx, -zoom.cy);
+    }
 
     const asc = computeAscendant(time, state.lat, state.lon);
     lastAscendant = asc;
@@ -481,7 +605,9 @@ export function createNatalChart(canvas) {
     }
 
     drawAspects(bodies);
+
+    ctx.restore();
   }
 
-  return { render, resize, getHitBodies: () => hitBodies };
+  return { render, resize, updateZoom, isZoomed, zoomReset, getHitBodies: () => hitBodies };
 }

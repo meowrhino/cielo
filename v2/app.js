@@ -235,6 +235,24 @@ function startAnimLoop() {
   animFrameId = requestAnimationFrame(animStep);
 }
 
+// === Natal chart anim loop ===
+
+let natalAnimId = null;
+
+function startNatalAnimLoop() {
+  if (natalAnimId) return;
+  function step() {
+    const stillAnimating = natalChart.updateZoom();
+    render();
+    if (stillAnimating) {
+      natalAnimId = requestAnimationFrame(step);
+    } else {
+      natalAnimId = null;
+    }
+  }
+  natalAnimId = requestAnimationFrame(step);
+}
+
 // === Tooltip ===
 
 function showTooltip(target) {
@@ -387,6 +405,7 @@ function toggleNatal() {
     natalCanvas.style.display = 'none';
     cartaBtn.classList.remove('active');
     document.body.classList.remove('natal-mode');
+    if (natalChart.isZoomed()) natalChart.zoomReset();
   } else {
     if (mode === 'detail') exitDetail();
     mode = 'natal';
@@ -412,7 +431,19 @@ async function init() {
   astrolabe = createAstrolabe(canvas);
 
   const natalCanvas = document.getElementById('natal-canvas');
-  natalChart = createNatalChart(natalCanvas);
+  natalChart = createNatalChart(natalCanvas, {
+    onConstellationClick: (constId, constName) => {
+      // Switch to astrolabe and zoom into this constellation
+      toggleNatal();
+      setTimeout(() => {
+        const target = { type: 'constellation', data: { id: constId, name: constName } };
+        enterDetail(target);
+      }, 100);
+    },
+    onNeedRender: () => {
+      startNatalAnimLoop();
+    }
+  });
 
   setupInteraction(canvas, astrolabe, {
     onSelect: (target) => {
