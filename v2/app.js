@@ -8,6 +8,10 @@ import { computePlanetPositions } from './planets.js';
 
 const BARCELONA = { name: 'barcelona', lat: 41.3851, lon: 2.1734, label: '41.4°N · 2.2°E' };
 
+// Visual modes (cycle with mode button)
+const MODES = ['normal', 'noche', 'cálido', 'frío'];
+const MODE_CLASSES = { normal: '', noche: 'night-mode', 'cálido': 'warm-mode', 'frío': 'blue-mode' };
+
 // Estado
 let sunDataAll = null;
 let moonDataAll = null;
@@ -19,14 +23,18 @@ let face = { ...BARCELONA };
 let mode = 'astrolabe'; // 'astrolabe' | 'detail'
 let detailTarget = null;
 let animFrameId = null;
-let nightMode = localStorage.getItem('cielo-night') === '1';
+let drawerOpen = false;
+
+// Visual mode
+let currentModeIndex = parseInt(localStorage.getItem('cielo-mode') || '0', 10);
+if (currentModeIndex >= MODES.length) currentModeIndex = 0;
 
 // AR state
 let arMode = false;
 let arSmoothed = { alpha: 0, beta: 0 };
 let arFrameId = null;
 
-// Tooltip state
+// Tooltip
 let tooltipTimer = null;
 
 function getDateKey(date) {
@@ -103,17 +111,12 @@ function getState(now) {
 function render() {
   const now = new Date();
   const state = getState(now);
-
   updateInfoOverlays(now, state.sunData, state.moonData);
-
-  if (astrolabe) {
-    astrolabe.render(now, state);
-  }
+  if (astrolabe) astrolabe.render(now, state);
 }
 
-/**
- * Calcula el centro de zoom (en coordenadas normalizadas) para un target
- */
+// === Zoom ===
+
 function getZoomCenter(target, now) {
   const state = getState(now);
 
@@ -154,11 +157,10 @@ function getZoomCenter(target, now) {
   }
 
   if (target.type === 'planet') {
-    const { azimuth, altitude } = equatorialToHorizontal(
-      target.data.ra || 0, target.data.dec || 0, face.lat, face.lon, now
-    );
-    if (altitude > 0) {
-      const proj = azimuthalProject(azimuth, altitude);
+    const az = parseFloat(target.data.azimuth);
+    const alt = parseFloat(target.data.altitude);
+    if (alt > 0) {
+      const proj = azimuthalProject(az, alt);
       return { nx: proj.x, ny: proj.y };
     }
   }
@@ -166,9 +168,6 @@ function getZoomCenter(target, now) {
   return { nx: 0, ny: 0 };
 }
 
-/**
- * Nombre legible del target
- */
 function getTargetName(target) {
   if (target.type === 'sun') return 'sol';
   if (target.type === 'moon') return 'luna';
@@ -178,33 +177,76 @@ function getTargetName(target) {
   return '';
 }
 
-/**
- * Muestra tooltip cerca del objeto tocado
- */
-function showTooltip(target, clientX, clientY) {
+function enterDetail(target) {
   hideTooltip();
+  closeDrawer();
+  const wasInDetail = mode === 'detail';
+  mode = 'detail';
+  detailTarget = target;
 
+  const now = new Date();
+  const { nx, ny } = getZoomCenter(target, now);
+
+  astrolabe.zoomTo(nx, ny, 4, wasInDetail ? 350 : 500);
+
+  const detailView = document.getElementById('detail-view');
+  const label = document.getElementById('detail-label');
+  label.textContent = getTargetName(target);
+  label.style.opacity = '';
+  detailView.classList.remove('hidden');
+  document.body.classList.add('detail-mode');
+
+  startAnimLoop();
+}
+
+function exitDetail() {
+  mode = 'astrolabe';
+  detailTarget = null;
+
+  document.getElementById('detail-view').classList.add('hidden');
+  document.body.classList.remove('detail-mode');
+
+  astrolabe.zoomReset(400);
+  startAnimLoop();
+}
+
+function startAnimLoop() {
+  if (animFrameId) return;
+
+  function animStep() {
+    const stillAnimating = astrolabe.updateZoom();
+    render();
+    if (stillAnimating) {
+      animFrameId = requestAnimationFrame(animStep);
+    } else {
+      animFrameId = null;
+    }
+  }
+  animFrameId = requestAnimationFrame(animStep);
+}
+
+// === Tooltip ===
+
+function showTooltip(target) {
+  hideTooltip();
   const tooltip = document.getElementById('tooltip');
   if (!tooltip) return;
 
   let text = '';
   if (target.type === 'star') {
-    const name = target.data.name || '?';
-    text = `${name} · mag ${target.data.mag.toFixed(1)}`;
+    text = `${target.data.name || '?'} · mag ${target.data.mag.toFixed(1)}`;
   } else if (target.type === 'planet') {
     text = `${target.data.label} · mag ${target.data.magnitude.toFixed(1)}`;
   }
-
   if (!text) return;
 
   tooltip.textContent = text;
   tooltip.classList.remove('hidden');
 
-  // Posicionar cerca del tap
   const maxX = window.innerWidth - 180;
   const maxY = window.innerHeight - 40;
-  tooltip.style.left = Math.min(clientX + 10, maxX) + 'px';
-  tooltip.style.top = Math.min(clientY - 40, maxY) + 'px';
+  tooltip.style.left = Math.min(target.px + 10, maxX) + 'px';
+  tooltip.style.top = Math.min(target.py - 40, maxY) + 'px';
 
   tooltipTimer = setTimeout(hideTooltip, 3000);
 }
@@ -215,73 +257,53 @@ function hideTooltip() {
   if (tooltip) tooltip.classList.add('hidden');
 }
 
-/**
- * Entra o cambia de zoom
- */
-function enterDetail(target) {
-  hideTooltip();
-  const wasInDetail = mode === 'detail';
-  mode = 'detail';
-  detailTarget = target;
+// === Drawer menu ===
 
-  const now = new Date();
-  const { nx, ny } = getZoomCenter(target, now);
-
-  // Zoom al punto (más rápido si ya estamos en zoom)
-  astrolabe.zoomTo(nx, ny, 4, wasInDetail ? 350 : 500);
-
-  // Mostrar nombre watermark (solo nombre, sin texto poético)
-  const detailView = document.getElementById('detail-view');
-  const label = document.getElementById('detail-label');
-
-  label.textContent = getTargetName(target);
-  label.style.opacity = '';
-  detailView.classList.remove('hidden');
-  document.body.classList.add('detail-mode');
-
-  startAnimLoop();
+function toggleDrawer() {
+  drawerOpen ? closeDrawer() : openDrawer();
 }
 
-/**
- * Vuelve al astrolabio
- */
-function exitDetail() {
-  mode = 'astrolabe';
-  detailTarget = null;
-
-  const detailView = document.getElementById('detail-view');
-  detailView.classList.add('hidden');
-  document.body.classList.remove('detail-mode');
-
-  astrolabe.zoomReset(400);
-  startAnimLoop();
+function openDrawer() {
+  drawerOpen = true;
+  document.getElementById('drawer').classList.remove('hidden');
+  document.getElementById('menu-tab').textContent = '×';
 }
 
-/**
- * Loop de animación durante zooms y panning
- */
-function startAnimLoop() {
-  if (animFrameId) return;
+function closeDrawer() {
+  drawerOpen = false;
+  document.getElementById('drawer').classList.add('hidden');
+  document.getElementById('menu-tab').textContent = 'cielo';
+}
 
-  function animStep() {
-    const stillAnimating = astrolabe.updateZoom();
-    render();
+// === Visual modes ===
 
-    if (stillAnimating) {
-      animFrameId = requestAnimationFrame(animStep);
-    } else {
-      animFrameId = null;
-    }
+function applyMode() {
+  // Remove all mode classes
+  for (const cls of Object.values(MODE_CLASSES)) {
+    if (cls) document.body.classList.remove(cls);
   }
+  // Apply current
+  const cls = MODE_CLASSES[MODES[currentModeIndex]];
+  if (cls) document.body.classList.add(cls);
 
-  animFrameId = requestAnimationFrame(animStep);
+  // Update button text
+  const btn = document.getElementById('mode-btn');
+  if (btn) btn.textContent = MODES[currentModeIndex];
+
+  localStorage.setItem('cielo-mode', String(currentModeIndex));
+  render();
 }
 
-/**
- * Flip del astrolabio: cara actual ↔ antípoda
- */
+function cycleMode() {
+  currentModeIndex = (currentModeIndex + 1) % MODES.length;
+  applyMode();
+}
+
+// === Flip ===
+
 function flipAstrolabe() {
   if (mode === 'detail') return;
+  closeDrawer();
 
   const wrapper = document.getElementById('astrolabe-wrapper');
   wrapper.classList.add('flipping');
@@ -297,14 +319,11 @@ function flipAstrolabe() {
     render();
   }, 250);
 
-  setTimeout(() => {
-    wrapper.classList.remove('flipping');
-  }, 500);
+  setTimeout(() => wrapper.classList.remove('flipping'), 500);
 }
 
-/**
- * Intenta obtener la ubicación del usuario
- */
+// === Geolocation ===
+
 function requestGeolocation() {
   if (!navigator.geolocation) return;
 
@@ -321,33 +340,16 @@ function requestGeolocation() {
       };
       render();
     },
-    () => {
-      if (nameEl) nameEl.textContent = face.name;
-    },
+    () => { if (nameEl) nameEl.textContent = face.name; },
     { timeout: 8000 }
   );
 }
 
-/**
- * Toggle modo noche (rojo)
- */
-function toggleNightMode() {
-  nightMode = !nightMode;
-  document.body.classList.toggle('night-mode', nightMode);
-  localStorage.setItem('cielo-night', nightMode ? '1' : '0');
-  render();
-}
+// === AR mode ===
 
-/**
- * Modo AR — usa sensores del dispositivo para apuntar al cielo
- */
 function toggleAR() {
-  if (arMode) {
-    stopAR();
-    return;
-  }
+  if (arMode) { stopAR(); return; }
 
-  // iOS requiere permiso explícito
   if (typeof DeviceOrientationEvent !== 'undefined' &&
       typeof DeviceOrientationEvent.requestPermission === 'function') {
     DeviceOrientationEvent.requestPermission()
@@ -360,50 +362,38 @@ function toggleAR() {
 
 function startAR() {
   arMode = true;
+  closeDrawer();
   document.body.classList.add('ar-mode');
 
-  const arLabel = document.getElementById('ar-label');
-  const timeEl = document.getElementById('time-display');
-  const dateEl = document.getElementById('date-display');
-  if (arLabel) arLabel.classList.remove('hidden');
-  if (timeEl) timeEl.classList.add('hidden');
-  if (dateEl) dateEl.classList.add('hidden');
-
-  // Zoom a 2x para vista parcial
   astrolabe.zoomTo(0, 0, 2, 300);
   startAnimLoop();
 
   window.addEventListener('deviceorientation', onDeviceOrientation);
   arFrameId = requestAnimationFrame(arLoop);
+
+  const btn = document.getElementById('ar-btn');
+  if (btn) btn.classList.add('active');
 }
 
 function stopAR() {
   arMode = false;
   document.body.classList.remove('ar-mode');
 
-  const arLabel = document.getElementById('ar-label');
-  const timeEl = document.getElementById('time-display');
-  const dateEl = document.getElementById('date-display');
-  if (arLabel) arLabel.classList.add('hidden');
-  if (timeEl) timeEl.classList.remove('hidden');
-  if (dateEl) dateEl.classList.remove('hidden');
-
   window.removeEventListener('deviceorientation', onDeviceOrientation);
   if (arFrameId) { cancelAnimationFrame(arFrameId); arFrameId = null; }
 
   astrolabe.zoomReset(300);
   startAnimLoop();
+
+  const btn = document.getElementById('ar-btn');
+  if (btn) btn.classList.remove('active');
 }
 
 function onDeviceOrientation(e) {
-  // alpha: compass heading (0-360), beta: tilt front/back (-180..180), gamma: tilt left/right
   let alpha = e.alpha || 0;
-  // webkitCompassHeading es más preciso en iOS
   if (e.webkitCompassHeading != null) alpha = e.webkitCompassHeading;
-
   const beta = e.beta || 0;
 
-  // Low-pass filter
   arSmoothed.alpha = arSmoothed.alpha * 0.8 + alpha * 0.2;
   arSmoothed.beta = arSmoothed.beta * 0.8 + beta * 0.2;
 }
@@ -411,18 +401,17 @@ function onDeviceOrientation(e) {
 function arLoop() {
   if (!arMode) return;
 
-  // Convertir orientación del dispositivo a coordenadas del cielo
-  // beta ~90 = horizontal (horizonte), beta ~0 = vertical (cénit)
   const azimuth = arSmoothed.alpha;
   const altitude = Math.max(0, Math.min(90, 90 - arSmoothed.beta));
 
-  // Proyectar a coordenadas normalizadas
   const proj = azimuthalProject(azimuth, altitude);
   astrolabe.setViewCenter(proj.x, proj.y);
   render();
 
   arFrameId = requestAnimationFrame(arLoop);
 }
+
+// === Init ===
 
 async function init() {
   try {
@@ -438,12 +427,11 @@ async function init() {
   setupInteraction(canvas, astrolabe, {
     onSelect: (target) => {
       hideTooltip();
+      closeDrawer();
       if (target.type === 'star') {
-        // Estrellas: mostrar tooltip, no zoom
-        showTooltip(target, target.px, target.py);
+        showTooltip(target);
       } else if (target.type === 'planet') {
-        // Planetas: tooltip + zoom
-        showTooltip(target, target.px, target.py);
+        showTooltip(target);
         enterDetail(target);
       } else if (target.type === 'sun' || target.type === 'moon' || target.type === 'constellation') {
         enterDetail(target);
@@ -451,6 +439,7 @@ async function init() {
     },
     onPan: () => {
       hideTooltip();
+      closeDrawer();
       const label = document.getElementById('detail-label');
       if (label) label.style.opacity = '0';
       render();
@@ -463,41 +452,47 @@ async function init() {
     exitDetail();
   });
 
-  // Flip button
+  // Menu tab
+  document.getElementById('menu-tab').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleDrawer();
+  });
+
+  // Drawer buttons
   document.getElementById('flip-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     flipAstrolabe();
   });
 
-  // Night mode button
-  document.getElementById('night-btn').addEventListener('click', (e) => {
+  document.getElementById('mode-btn').addEventListener('click', (e) => {
     e.stopPropagation();
-    toggleNightMode();
+    cycleMode();
   });
 
-  // Location button (click on top-right info)
-  document.getElementById('info-tr').addEventListener('click', () => {
+  document.getElementById('location-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
     requestGeolocation();
   });
 
-  // AR toggle (click on top-left info)
-  document.getElementById('info-tl').addEventListener('click', () => {
+  document.getElementById('ar-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
     toggleAR();
   });
 
-  // Aplicar modo noche guardado
-  if (nightMode) document.body.classList.add('night-mode');
+  // Close drawer when tapping canvas
+  canvas.addEventListener('mousedown', () => { if (drawerOpen) closeDrawer(); });
+  canvas.addEventListener('touchstart', () => { if (drawerOpen) closeDrawer(); }, { passive: true });
 
-  // Pedir geolocalización
+  // Apply saved mode
+  applyMode();
+
+  // Geolocation
   requestGeolocation();
 
-  // Render inicial
+  // Render
   render();
-
-  // Actualizar cada 30 segundos
   setInterval(render, 30000);
 
-  // Resize
   window.addEventListener('resize', () => {
     astrolabe.resize();
     render();

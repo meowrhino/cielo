@@ -20,7 +20,32 @@ body {
   letter-spacing: 0.3px;
 }
 
-/* === Astrolabe wrapper === */
+/* === Text buttons (meowrhino style) === */
+
+.text-btn {
+  font-family: 'Inknut Antiqua', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(0.7rem, 1.1dvw, 0.85rem);
+  color: rgba(255, 255, 255, 0.3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+  padding: 0.3em 0.1em;
+  transition: color 0.2s ease;
+}
+
+.text-btn:hover,
+.text-btn:active {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.text-btn.active {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* === Astrolabe === */
 
 #astrolabe-wrapper {
   position: fixed;
@@ -47,156 +72,81 @@ canvas {
   height: 100%;
 }
 
-/* === Flip button === */
+/* === Menu tab (always visible at bottom center) === */
 
-#flip-btn {
-  position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.3);
-  font-family: 'Inknut Antiqua', Georgia, serif;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 5;
-  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.4s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#flip-btn:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* Hide flip button during zoom */
-body.detail-mode #flip-btn {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* === Detail view (zoom overlay) === */
-
-#detail-view {
+#menu-tab {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100dvw;
-  height: 100dvh;
-  z-index: 3;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.4s ease;
-}
-
-#detail-view.hidden {
-  opacity: 0;
-}
-
-/* Watermark label — becasDigMeow style */
-#detail-label {
-  position: fixed;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Inknut Antiqua', Georgia, serif;
-  font-size: clamp(5rem, 18dvw, 16rem);
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.04);
-  text-transform: lowercase;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  white-space: nowrap;
-  user-select: none;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Back button */
-#back-btn {
-  position: fixed;
-  bottom: 1.5rem;
+  bottom: 0.8rem;
   left: 50%;
   transform: translateX(-50%);
-  font-family: 'Inknut Antiqua', Georgia, serif;
-  font-size: clamp(0.65rem, 1vw, 0.8rem);
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.3);
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 0.4rem 1.2rem;
-  cursor: pointer;
-  text-transform: lowercase;
-  letter-spacing: 0.5px;
-  transition: border-color 0.2s ease, color 0.2s ease;
-  pointer-events: auto;
-  z-index: 4;
+  z-index: 15;
+  font-size: clamp(0.8rem, 1.2dvw, 1rem);
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 2px;
+  padding: 0.5em 1.5em;
+  transition: color 0.2s ease, opacity 0.4s ease;
 }
 
-#back-btn:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.6);
+#menu-tab:hover {
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Zoom mode cursor */
-body.detail-mode canvas {
-  cursor: grab;
-}
-
-body.detail-mode canvas:active {
-  cursor: grabbing;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* === Info overlays === */
-
-.info-overlay {
-  position: fixed;
-  z-index: 10;
-  pointer-events: none;
-  line-height: 1.8;
-  transition: opacity 0.4s ease;
-}
-
-/* Hide overlays during zoom */
-body.detail-mode .info-overlay {
+body.detail-mode #menu-tab {
   opacity: 0;
+  pointer-events: none;
 }
 
-#info-tl {
-  top: 1.5rem;
-  left: 1.5rem;
+/* === Drawer menu === */
+
+.drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100dvw;
+  z-index: 20;
+  background: linear-gradient(to top, rgba(7, 4, 10, 0.95), rgba(7, 4, 10, 0.85) 70%, transparent);
+  padding: 2.5rem 1.5rem 1.5rem;
+  transform: translateY(0);
+  transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
-#info-tr {
-  top: 1.5rem;
-  right: 1.5rem;
+.drawer.hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.drawer-content {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.drawer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.4rem 0;
+}
+
+.drawer-right {
   text-align: right;
 }
 
-#info-bottom {
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
+.drawer-info {
+  color: rgba(255, 255, 255, 0.3);
+  gap: 2rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  margin: 0.3rem 0;
+}
+
+.drawer-actions {
   display: flex;
-  gap: 2.5rem;
-  white-space: nowrap;
+  justify-content: space-between;
+  padding-top: 0.6rem;
+  flex-wrap: wrap;
+  gap: 0.3rem;
 }
 
 #time-display {
@@ -218,13 +168,67 @@ body.detail-mode .info-overlay {
   font-size: 0.9em;
 }
 
+/* === Detail view (zoom overlay) === */
+
+#detail-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+#detail-view.hidden {
+  opacity: 0;
+}
+
+#detail-label {
+  position: fixed;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Inknut Antiqua', Georgia, serif;
+  font-size: clamp(5rem, 18dvw, 16rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.04);
+  text-transform: lowercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#back-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  z-index: 4;
+  font-size: clamp(0.7rem, 1.1dvw, 0.85rem);
+}
+
+body.detail-mode canvas {
+  cursor: grab;
+}
+
+body.detail-mode canvas:active {
+  cursor: grabbing;
+}
+
 /* === Tooltip === */
 
 .tooltip {
   position: fixed;
-  z-index: 20;
-  background: rgba(7, 4, 10, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 25;
+  background: rgba(7, 4, 10, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 4px;
   padding: 8px 14px;
   font-family: 'Inknut Antiqua', Georgia, serif;
@@ -241,45 +245,23 @@ body.detail-mode .info-overlay {
   opacity: 0;
 }
 
-/* === Night mode button === */
-
-#night-btn {
-  position: absolute;
-  bottom: 1.5rem;
-  right: 4.5rem;
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 16px;
-  cursor: pointer;
-  z-index: 5;
-  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.4s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#night-btn:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.6);
-}
-
-body.detail-mode #night-btn {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* === Night mode (red filter) === */
+/* === Visual modes === */
 
 body.night-mode {
   background: #0a0000;
 }
 
-body.night-mode .info-overlay {
-  color: rgba(255, 60, 60, 0.5);
+body.night-mode .drawer {
+  background: linear-gradient(to top, rgba(10, 0, 0, 0.95), rgba(10, 0, 0, 0.85) 70%, transparent);
+}
+
+body.night-mode .text-btn {
+  color: rgba(255, 60, 60, 0.3);
+}
+
+body.night-mode .text-btn:hover,
+body.night-mode .text-btn.active {
+  color: rgba(255, 60, 60, 0.6);
 }
 
 body.night-mode #time-display {
@@ -291,21 +273,18 @@ body.night-mode #location-coords {
   color: rgba(255, 40, 40, 0.3);
 }
 
-body.night-mode #flip-btn,
-body.night-mode #night-btn,
-body.night-mode #back-btn {
-  border-color: rgba(255, 40, 40, 0.15);
-  color: rgba(255, 60, 60, 0.4);
+body.night-mode .drawer-info {
+  color: rgba(255, 40, 40, 0.3);
+  border-color: rgba(255, 40, 40, 0.06);
 }
 
-body.night-mode #night-btn {
-  color: rgba(255, 80, 80, 0.7);
-  border-color: rgba(255, 60, 60, 0.3);
+body.night-mode #location-name {
+  color: rgba(255, 60, 60, 0.5);
 }
 
 body.night-mode .tooltip {
-  background: rgba(10, 0, 0, 0.9);
-  border-color: rgba(255, 40, 40, 0.15);
+  background: rgba(10, 0, 0, 0.92);
+  border-color: rgba(255, 40, 40, 0.1);
   color: rgba(255, 60, 60, 0.6);
 }
 
@@ -317,42 +296,16 @@ body.night-mode canvas {
   filter: saturate(0) brightness(0.7) sepia(1) hue-rotate(-30deg);
 }
 
-/* === Location button (clickable) === */
-
-#info-tr {
-  pointer-events: auto;
-  cursor: pointer;
+body.warm-mode canvas {
+  filter: sepia(0.3) brightness(0.95);
 }
 
-#info-tr:hover #location-name {
-  color: rgba(255, 255, 255, 0.7);
+body.blue-mode canvas {
+  filter: brightness(1.1) contrast(1.1) saturate(1.3);
 }
 
 /* === AR mode === */
 
-#info-tl {
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-#info-tl:hover #time-display {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-#ar-label {
-  font-size: 0.85em;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 1px;
-}
-
-#ar-label.hidden {
-  display: none;
-}
-
-body.ar-mode #info-tl {
-  color: rgba(100, 200, 255, 0.6);
-}
-
-body.ar-mode #ar-label {
-  color: rgba(100, 200, 255, 0.5);
+body.ar-mode #menu-tab {
+  color: rgba(100, 200, 255, 0.4);
 }

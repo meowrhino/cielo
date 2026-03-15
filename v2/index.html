@@ -12,37 +12,49 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Astrolabio (siempre fullscreen) -->
+  <!-- Astrolabio -->
   <div id="astrolabe-wrapper">
     <canvas id="astrolabe"></canvas>
-    <button id="flip-btn" title="girar al otro lado del mundo">↕</button>
-    <button id="night-btn" title="modo nocturno">☽</button>
   </div>
 
-  <!-- Overlay de zoom (nombre watermark + botón volver) -->
+  <!-- Overlay de zoom -->
   <div id="detail-view" class="hidden">
     <div id="detail-label"></div>
-    <button id="back-btn">volver</button>
+    <button id="back-btn" class="text-btn">volver</button>
   </div>
 
-  <!-- Tooltip para estrellas/planetas -->
+  <!-- Tooltip -->
   <div id="tooltip" class="tooltip hidden"></div>
 
-  <!-- Overlays de info -->
-  <div id="info-tl" class="info-overlay">
-    <div id="time-display"></div>
-    <div id="date-display"></div>
-    <div id="ar-label" class="hidden">visión mapa</div>
-  </div>
+  <!-- Pestaña del menú (siempre visible) -->
+  <button id="menu-tab" class="text-btn">cielo</button>
 
-  <div id="info-tr" class="info-overlay">
-    <div id="location-name">barcelona</div>
-    <div id="location-coords">41.4°N · 2.2°E</div>
-  </div>
+  <!-- Menú drawer -->
+  <div id="drawer" class="drawer hidden">
+    <div class="drawer-content">
+      <div class="drawer-row">
+        <div>
+          <div id="time-display"></div>
+          <div id="date-display"></div>
+        </div>
+        <div class="drawer-right">
+          <div id="location-name">barcelona</div>
+          <div id="location-coords">41.4°N · 2.2°E</div>
+        </div>
+      </div>
 
-  <div id="info-bottom" class="info-overlay">
-    <span id="sun-info"></span>
-    <span id="moon-info"></span>
+      <div class="drawer-row drawer-info">
+        <span id="sun-info"></span>
+        <span id="moon-info"></span>
+      </div>
+
+      <div class="drawer-row drawer-actions">
+        <button id="location-btn" class="text-btn">ubicación</button>
+        <button id="mode-btn" class="text-btn">normal</button>
+        <button id="flip-btn" class="text-btn">antípoda</button>
+        <button id="ar-btn" class="text-btn">visión mapa</button>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="app.js"></script>

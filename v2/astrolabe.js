@@ -302,9 +302,7 @@ export function createAstrolabe(canvas) {
   function drawConstellations(lines, lat, lon, time) {
     if (!lines) return;
 
-    const lineOpacity = zoom.level > 1.5 ? 0.15 : 0.07;
-    ctx.strokeStyle = `rgba(255, 255, 255, ${lineOpacity})`;
-    ctx.lineWidth = zoom.level > 1.5 ? 1 : 0.5;
+    const BELOW_HORIZON_LIMIT = -15; // mostrar hasta -15° bajo el horizonte
 
     for (const constellation of lines) {
       const { geometry, properties } = constellation;
@@ -314,20 +312,22 @@ export function createAstrolabe(canvas) {
 
       for (const lineCoords of geometry.coordinates) {
         const points = [];
-        let allVisible = true;
+        let anyTooLow = false;
+        let minAlt = 90;
 
         for (const [geoLon, geoLat] of lineCoords) {
           const { ra, dec } = geoJsonToRaDec(geoLon, geoLat);
           const { azimuth, altitude } = equatorialToHorizontal(ra, dec, lat, lon, time);
 
-          if (altitude < 0) { allVisible = false; break; }
+          if (altitude < BELOW_HORIZON_LIMIT) { anyTooLow = true; break; }
+          if (altitude < minAlt) minAlt = altitude;
 
-          const proj = azimuthalProject(azimuth, altitude);
+          const proj = azimuthalProject(azimuth, Math.max(altitude, 0.5));
           const { px, py } = toPixel(proj.x, proj.y);
-          points.push({ px, py });
+          points.push({ px, py, altitude });
         }
 
-        if (!allVisible || points.length < 2) continue;
+        if (anyTooLow || points.length < 2) continue;
 
         // Descartar líneas con saltos enormes (wrap-around)
         let hasGap = false;
@@ -341,6 +341,14 @@ export function createAstrolabe(canvas) {
         // Check if any point is on screen
         const onScreen = points.some(p => p.px > -100 && p.px < W + 100 && p.py > -100 && p.py < H + 100);
         if (!onScreen) continue;
+
+        // Opacidad según altitud mínima de la línea
+        const belowFactor = minAlt < 0 ? Math.max(0.15, 1 + minAlt / 15) : 1;
+        const baseOpacity = zoom.level > 1.5 ? 0.15 : 0.07;
+        const lineOpacity = baseOpacity * belowFactor;
+
+        ctx.strokeStyle = `rgba(255, 255, 255, ${lineOpacity})`;
+        ctx.lineWidth = zoom.level > 1.5 ? 1 : 0.5;
 
         // Dibujar línea
         ctx.beginPath();
@@ -357,13 +365,15 @@ export function createAstrolabe(canvas) {
       if (allPoints.length > 0) {
         const centX = allPoints.reduce((s, p) => s + p.px, 0) / allPoints.length;
         const centY = allPoints.reduce((s, p) => s + p.py, 0) / allPoints.length;
+        const avgAlt = allPoints.reduce((s, p) => s + p.altitude, 0) / allPoints.length;
+        const nameFade = avgAlt < 0 ? Math.max(0.15, 1 + avgAlt / 15) : 1;
 
         if (centX > -50 && centX < W + 50 && centY > -50 && centY < H + 50) {
           const fontSize = zoom.level > 1.5 ? 10 : 8;
           ctx.font = `${fontSize}px Inknut Antiqua, Georgia, serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          const nameOpacity = zoom.level > 1.5 ? 0.2 : 0.12;
+          const nameOpacity = (zoom.level > 1.5 ? 0.2 : 0.12) * nameFade;
           ctx.fillStyle = `rgba(255, 255, 255, ${nameOpacity})`;
           ctx.fillText(properties.name, centX, centY);
 
