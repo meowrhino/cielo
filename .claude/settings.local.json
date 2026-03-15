@@ -4,7 +4,14 @@
       "Bash(git add:*)",
       "Bash(git rebase:*)",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git rev-list:*)",
+      "Bash(git pull:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Read(//private/tmp/cielov0-tmp/**)",
+      "Bash(mkdir -p .github/workflows)"
     ]
   }
 }

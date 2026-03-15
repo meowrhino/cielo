@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>prueba 1 · canvas realista</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; overflow: hidden; font-family: system-ui, sans-serif; }
+  canvas { display: block; }
+  .label {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.4);
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="label">canvas realista-minimalista</div>
+<script>
+const canvas = document.getElementById('sky');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Generate random stars with magnitude
+const stars = [];
+for (let i = 0; i < 800; i++) {
+  stars.push({
+    x: Math.random(),
+    y: Math.random(),
+    mag: Math.random() * 6,
+    twinkleSpeed: 0.5 + Math.random() * 2,
+    twinkleOffset: Math.random() * Math.PI * 2
+  });
+}
+
+// A few bright stars with color
+const brightStars = [
+  { x: 0.3, y: 0.2, mag: -0.5, color: [255, 240, 220], name: 'Sirius' },
+  { x: 0.7, y: 0.35, mag: 0.2, color: [255, 200, 150], name: 'Betelgeuse' },
+  { x: 0.5, y: 0.15, mag: 0.5, color: [200, 220, 255], name: 'Vega' },
+  { x: 0.15, y: 0.6, mag: 0.8, color: [255, 230, 180], name: 'Arcturus' },
+  { x: 0.85, y: 0.5, mag: 0.3, color: [220, 230, 255], name: 'Rigel' },
+];
+
+// Constellation lines (Orion-ish)
+const constellationLines = [
+  [[0.62, 0.30], [0.65, 0.35]],
+  [[0.65, 0.35], [0.70, 0.35]],
+  [[0.70, 0.35], [0.73, 0.30]],
+  [[0.65, 0.35], [0.66, 0.42]],
+  [[0.70, 0.35], [0.69, 0.42]],
+  [[0.66, 0.42], [0.69, 0.42]],
+  [[0.66, 0.42], [0.63, 0.52]],
+  [[0.69, 0.42], [0.72, 0.52]],
+];
+
+// Moon
+const moon = { x: 0.2, y: 0.25, phase: 0.35 };
+
+function drawStar(x, y, radius, alpha, color = [255, 255, 255]) {
+  const px = x * canvas.width;
+  const py = y * canvas.height;
+
+  // Glow
+  const grd = ctx.createRadialGradient(px, py, 0, px, py, radius * 4);
+  grd.addColorStop(0, `rgba(${color[0]},${color[1]},${color[2]},${alpha})`);
+  grd.addColorStop(0.3, `rgba(${color[0]},${color[1]},${color[2]},${alpha * 0.3})`);
+  grd.addColorStop(1, `rgba(${color[0]},${color[1]},${color[2]},0)`);
+  ctx.fillStyle = grd;
+  ctx.beginPath();
+  ctx.arc(px, py, radius * 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Core
+  ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
+  ctx.beginPath();
+  ctx.arc(px, py, radius, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawMoon(x, y, r) {
+  const px = x * canvas.width;
+  const py = y * canvas.height;
+  const radius = r;
+
+  // Outer glow
+  const glow = ctx.createRadialGradient(px, py, radius * 0.8, px, py, radius * 5);
+  glow.addColorStop(0, 'rgba(200, 210, 230, 0.08)');
+  glow.addColorStop(1, 'rgba(200, 210, 230, 0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(px, py, radius * 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Moon disc
+  ctx.fillStyle = '#e8e4d8';
+  ctx.beginPath();
+  ctx.arc(px, py, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Shadow for phase (waxing crescent)
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(px + radius * 0.5, py, radius * 0.95, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function render(t) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Subtle sky gradient
+  const skyGrd = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  skyGrd.addColorStop(0, '#000005');
+  skyGrd.addColorStop(0.7, '#050510');
+  skyGrd.addColorStop(1, '#0a0a18');
+  ctx.fillStyle = skyGrd;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Constellation lines
+  ctx.strokeStyle = 'rgba(100, 140, 200, 0.15)';
+  ctx.lineWidth = 1;
+  constellationLines.forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(a[0] * canvas.width, a[1] * canvas.height);
+    ctx.lineTo(b[0] * canvas.width, b[1] * canvas.height);
+    ctx.stroke();
+  });
+
+  // Dim stars
+  stars.forEach(s => {
+    const twinkle = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(t * 0.001 * s.twinkleSpeed + s.twinkleOffset));
+    const radius = Math.max(0.3, (6 - s.mag) / 6 * 1.8);
+    const alpha = Math.max(0.1, (6 - s.mag) / 6 * 0.8) * twinkle;
+    drawStar(s.x, s.y, radius, alpha);
+  });
+
+  // Bright stars
+  brightStars.forEach(s => {
+    const twinkle = 0.7 + 0.3 * Math.sin(t * 0.0008 + s.x * 10);
+    const radius = (6 - s.mag) / 6 * 3.5;
+    drawStar(s.x, s.y, radius, twinkle, s.color);
+  });
+
+  // Moon
+  drawMoon(moon.x, moon.y, 25);
+
+  requestAnimationFrame(render);
+}
+
+requestAnimationFrame(render);
+</script>
+</body>
+</html>

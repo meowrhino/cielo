@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <title>cielo · barcelona</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="astrolabe"></canvas>
+
+  <div id="info-tl" class="info-overlay">
+    <div id="time-display"></div>
+    <div id="date-display"></div>
+  </div>
+
+  <div id="info-tr" class="info-overlay">
+    <div>Barcelona</div>
+    <div>41.4°N · 2.2°E</div>
+  </div>
+
+  <div id="info-bottom" class="info-overlay">
+    <span id="sun-info"></span>
+    <span id="moon-info"></span>
+  </div>
+
+  <div id="tooltip" class="tooltip hidden"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

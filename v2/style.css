@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  -webkit-font-smoothing: antialiased;
+}
+
+canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.info-overlay {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  line-height: 1.6;
+}
+
+#info-tl {
+  top: 1.5rem;
+  left: 1.5rem;
+}
+
+#info-tr {
+  top: 1.5rem;
+  right: 1.5rem;
+  text-align: right;
+}
+
+#info-bottom {
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2rem;
+  white-space: nowrap;
+}
+
+#time-display {
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.5px;
+}
+
+#date-display {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 20;
+  background: rgba(10, 10, 20, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  max-width: 200px;
+}
+
+.tooltip.hidden {
+  opacity: 0;
+}

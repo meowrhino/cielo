@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>prueba 3 · glassmorphism</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #020818;
+    color: #fff;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  canvas#stars-bg { position: fixed; top: 0; left: 0; z-index: 0; }
+
+  .panels {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    height: 100vh;
+  }
+
+  .panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  }
+
+  .panel-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    margin-bottom: 1rem;
+  }
+
+  .panel-value {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.2;
+  }
+
+  .panel-detail {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 0.5rem;
+    line-height: 1.6;
+  }
+
+  .moon-visual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sun-arc {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sky-panel {
+    grid-column: 1 / -1;
+    min-height: 0;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-right: 6px;
+    margin-top: 8px;
+  }
+
+  .now-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f0c040;
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(240, 192, 64, 0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(240, 192, 64, 0); }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars-bg"></canvas>
+
+<div class="panels">
+  <!-- Sun panel -->
+  <div class="panel">
+    <div class="panel-label">Sol</div>
+    <div class="sun-arc">
+      <svg viewBox="0 0 200 120" width="100%" style="max-width: 280px;">
+        <!-- Sun arc -->
+        <path d="M 20,100 Q 100,10 180,100" fill="none" stroke="rgba(255,200,60,0.15)" stroke-width="1"/>
+        <!-- Horizon -->
+        <line x1="10" y1="100" x2="190" y2="100" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <!-- Current sun position -->
+        <circle cx="130" cy="38" r="6" fill="rgba(255,200,60,0.9)"/>
+        <circle cx="130" cy="38" r="12" fill="rgba(255,200,60,0.1)"/>
+        <!-- Hour marks -->
+        <circle cx="35" cy="78" r="1.5" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="60" cy="45" r="1.5" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="100" cy="22" r="1.5" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="155" cy="55" r="1.5" fill="rgba(255,255,255,0.15)"/>
+        <text x="28" y="93" font-size="7" fill="rgba(255,255,255,0.2)" font-family="Inter, sans-serif">7:00</text>
+        <text x="165" y="93" font-size="7" fill="rgba(255,255,255,0.2)" font-family="Inter, sans-serif">19:00</text>
+      </svg>
+    </div>
+    <div class="panel-detail">
+      <span class="now-dot"></span>alt 52.3&deg; &middot; az 198.7&deg;
+    </div>
+    <div>
+      <span class="pill">sale 7:12</span>
+      <span class="pill">pone 18:48</span>
+    </div>
+  </div>
+
+  <!-- Moon panel -->
+  <div class="panel">
+    <div class="panel-label">Luna</div>
+    <div class="moon-visual">
+      <svg viewBox="0 0 100 100" width="100px">
+        <defs>
+          <radialGradient id="moonGlow">
+            <stop offset="0%" stop-color="rgba(200,210,230,0.15)"/>
+            <stop offset="100%" stop-color="rgba(200,210,230,0)"/>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="45" fill="url(#moonGlow)"/>
+        <circle cx="50" cy="50" r="22" fill="#c8cfe0"/>
+        <clipPath id="mc">
+          <circle cx="50" cy="50" r="22"/>
+        </clipPath>
+        <circle cx="60" cy="50" r="20" fill="#020818" clip-path="url(#mc)"/>
+      </svg>
+    </div>
+    <div class="panel-value" style="font-size: 1.5rem;">Creciente</div>
+    <div class="panel-detail">35% iluminada</div>
+    <div>
+      <span class="pill">sale 10:24</span>
+      <span class="pill">pone 01:15</span>
+    </div>
+  </div>
+
+  <!-- Sky panel (wide) -->
+  <div class="panel sky-panel">
+    <div class="panel-label">Cielo &middot; Barcelona &middot; ahora</div>
+    <canvas id="sky-canvas" style="flex:1; width:100%; border-radius: 12px;"></canvas>
+  </div>
+</div>
+
+<script>
+// Background stars
+const bgCanvas = document.getElementById('stars-bg');
+const bgCtx = bgCanvas.getContext('2d');
+
+function resizeBg() {
+  bgCanvas.width = window.innerWidth;
+  bgCanvas.height = window.innerHeight;
+}
+resizeBg();
+window.addEventListener('resize', resizeBg);
+
+const bgStars = Array.from({length: 300}, () => ({
+  x: Math.random(), y: Math.random(),
+  r: Math.random() * 1.2,
+  a: Math.random() * 0.3 + 0.05,
+  speed: 0.3 + Math.random() * 1.5,
+  offset: Math.random() * Math.PI * 2
+}));
+
+function renderBg(t) {
+  bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+  bgStars.forEach(s => {
+    const twinkle = 0.5 + 0.5 * Math.sin(t * 0.001 * s.speed + s.offset);
+    bgCtx.fillStyle = `rgba(180,200,255,${s.a * twinkle})`;
+    bgCtx.beginPath();
+    bgCtx.arc(s.x * bgCanvas.width, s.y * bgCanvas.height, s.r, 0, Math.PI * 2);
+    bgCtx.fill();
+  });
+  requestAnimationFrame(renderBg);
+}
+requestAnimationFrame(renderBg);
+
+// Sky panel mini canvas
+const skyCanvas = document.getElementById('sky-canvas');
+const skyCtx = skyCanvas.getContext('2d');
+
+function resizeSky() {
+  const rect = skyCanvas.getBoundingClientRect();
+  skyCanvas.width = rect.width * devicePixelRatio;
+  skyCanvas.height = rect.height * devicePixelRatio;
+  skyCtx.scale(devicePixelRatio, devicePixelRatio);
+  drawSky();
+}
+
+function drawSky() {
+  const w = skyCanvas.width / devicePixelRatio;
+  const h = skyCanvas.height / devicePixelRatio;
+  skyCtx.clearRect(0, 0, w, h);
+
+  // Stars
+  for (let i = 0; i < 200; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const r = Math.random() * 1.5;
+    skyCtx.fillStyle = `rgba(200,210,240,${Math.random() * 0.5 + 0.1})`;
+    skyCtx.beginPath();
+    skyCtx.arc(x, y, r, 0, Math.PI * 2);
+    skyCtx.fill();
+  }
+
+  // Constellation lines
+  skyCtx.strokeStyle = 'rgba(140,160,220,0.2)';
+  skyCtx.lineWidth = 0.5;
+  const lines = [
+    [w*0.3, h*0.3, w*0.35, h*0.25],
+    [w*0.35, h*0.25, w*0.42, h*0.28],
+    [w*0.42, h*0.28, w*0.4, h*0.38],
+    [w*0.4, h*0.38, w*0.3, h*0.3],
+    [w*0.6, h*0.5, w*0.65, h*0.45],
+    [w*0.65, h*0.45, w*0.72, h*0.48],
+    [w*0.72, h*0.48, w*0.7, h*0.58],
+    [w*0.7, h*0.58, w*0.6, h*0.5],
+  ];
+  lines.forEach(([x1,y1,x2,y2]) => {
+    skyCtx.beginPath();
+    skyCtx.moveTo(x1,y1);
+    skyCtx.lineTo(x2,y2);
+    skyCtx.stroke();
+  });
+}
+
+setTimeout(resizeSky, 100);
+window.addEventListener('resize', resizeSky);
+</script>
+
+</body>
+</html>
