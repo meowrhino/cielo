@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-02-28T01:18:57.225Z",
+  "generatedAt": "2026-03-20T07:05:18.457Z",
   "location": {
     "lat": 41.3851,
     "lon": 2.1734,
     "name": "Barcelona"
   },
-  "daysGenerated": 432,
-  "startDate": "2026-02-28",
-  "endDate": "2027-05-06"
+  "daysGenerated": 150,
+  "startDate": "2026-03-20",
+  "endDate": "2026-08-17"
 }
